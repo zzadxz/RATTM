@@ -30,7 +30,7 @@ theoretically `localhost:8000/api/upload` will upload a row to firebase, but we 
 and `localhost:8000/api/get` will load data from firebase\
 
 ## frontend
-**File Structure**
+**File Structure**\
 src/app\
 &nbsp;&nbsp;modules/ : contains subpages (ex: transaction section within main page - we prob won't have that but just for now it's there)\
 &nbsp;&nbsp;&nbsp;&nbsp;transactions/ : formats transaction data\
@@ -48,7 +48,7 @@ src/app\
 &nbsp;&nbsp;page.module.css : idk what this is for\
 &nbsp;&nbsp;page.tsx : main page at localhost:3000 (imports main-site)\
 
-**Running Code**
+**Running Code**\
 Write `npm run dev` while in the frontend folder\
 
 Access using `localhost:3000`
