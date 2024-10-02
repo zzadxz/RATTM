@@ -1,6 +1,6 @@
 import React from "react";
 import {Header} from "@/app/pages/main-site/index.styles";
-import Transactions from "@/app/modules/transactions";
+import Transactions from "@/app/components/transactions";
 
 const MainSite: React.FC = () => {
     return (
