@@ -40,4 +40,6 @@ htmlcov/
 # Ignore IDE specific files
 .vscode/
 .idea/
-*.iml
+
+# Ignore Firebase credentials
+*.imlbackend/django-api/RattmWeb/rattm-cred-firebase.json
