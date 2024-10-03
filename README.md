@@ -35,8 +35,9 @@ Run `python3 manage.py runserver` \
 This will run on `localhost:8000`\
 
 ## database
-theoretically `localhost:8000/api/upload` will upload a row to firebase, but we need to create the database + enable firestore first\
-and `localhost:8000/api/get` will load data from firebase\
+`localhost:8000/api/upload` will upload data to firebase\
+`localhost:8000/api/get` will show data in firebase\
+`https://console.cloud.google.com/firestore/databases/-default-/data/panel/transactions/1LpRig3D7NipgPG67P3O?project=rattm-tli` This is the link to the firestore project\
 
 ## frontend
 **File Structure**\

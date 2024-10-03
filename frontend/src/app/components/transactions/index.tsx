@@ -13,12 +13,13 @@ const Transactions = () => {
 
   return (
     <div>
-      <h1>View Your Recent Transactions</h1>
+      <h3>View Your Recent Transactions</h3>
+      <br></br>
       <ul>
         {transactions.map((transaction, index) => (
           <li key={index}>
             <strong>ID:</strong> {transaction['Transaction ID']} - 
-            <strong>Company Name:</strong> {transaction['Company Name']} - 
+            <strong> Company Name:</strong> {transaction['Company Name']} -  
             <strong> Amount:</strong> {transaction['Transaction Amount']}
           </li>
         ))}
