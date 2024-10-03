@@ -43,3 +43,4 @@ htmlcov/
 
 # Ignore Firebase credentials
 *.imlbackend/django-api/RattmWeb/rattm-cred-firebase.json
+backend/django-api/RattmWeb/rattm-cred-firebase.json
