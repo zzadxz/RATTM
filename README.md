@@ -1,7 +1,7 @@
 
 # RATTM
 
-**RATTM** is a project that integrates Firebase Firestore as the database and a Django backend to handle transactions. The frontend is built using Next.js, and communicates with the backend API to fetch and display transaction data.
+**RATTM** Rage Against the Turing Machine X Cash App
 
 ## Prerequisites
 
