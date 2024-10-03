@@ -1,0 +1,43 @@
+# Ignore .env file
+.env
+
+# Ignore virtual environment directory
+venv/
+VENV/
+env/
+ENV/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore Django migrations
+*/migrations/*
+
+# Ignore all local Python environment configuration files
+*.env
+*.venv
+
+# Ignore log files and other output
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore coverage reports
+htmlcov/
+.coverage
+.tox/
+.nox/
+*.cover
+*.coverage.*
+.cache
+
+# Ignore IDE specific files
+.vscode/
+.idea/
+*.iml
