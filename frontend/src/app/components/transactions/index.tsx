@@ -13,7 +13,8 @@ const Transactions = () => {
 
   return (
     <div>
-      <h1>View Your Recent Transactions</h1>
+      <h3>View Your Recent Transactions</h3>
+      <br></br>
       <ul>
         {transactions.map((transaction, index) => (
           <li key={index}>
