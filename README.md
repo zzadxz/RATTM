@@ -21,6 +21,8 @@ git clone https://github.com/zzadxz/RATTM.git
 cd RATTM
 ```
 
+The folder you should be now in will later be referred to as "the root"
+
 ### 2. Set Up a Virtual Environment
 
 Create and activate a Python virtual environment:
@@ -33,7 +35,7 @@ source .venv/bin/activate  # On MacOS/Linux
 
 ### 3. Install Python Dependencies
 
-With the virtual environment activated, install the required Python dependencies:
+Staying in the root, with the virtual environment activated, install the required Python dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -41,20 +43,22 @@ pip install -r requirements.txt
 
 ### 4. Add Firebase Credentials and Environment Variables
 
-- You will need to add a `rattm-cred-firebase.json` file for Firebase credentials. This file should not be committed to the repository. Ensure it is added locally and properly referenced in your `.env` file.
+- Create a `backend/django-api/Rattm/rattm-cred-firebase.json` file. This will store your Firebase credentials. Paste into the file the JSON in [this Discord message](https://discord.com/channels/1281256285618307082/1283811324018556938/1291457826463678505). This file should not be committed to the repository.
 
-- Example `.env` file:
+- Create a `.env` file (in the root directory). The file should be of this format:
 
     ```bash
-    FIREBASE_CREDENTIAL_PATH="backend/django-api/RattmWeb/rattm-cred-firebase.json"
-    MOCK_JSON_PATH="backend/django-api/resources/mockdata.csv"
+    FIREBASE_CREDENTIAL_PATH="[root project path]/backend/django-api/RattmWeb/rattm-cred-firebase.json"
+    MOCK_JSON_PATH="[root project path]/backend/django-api/resources/mockdata.csv"
     ```
 
-- Your `.env` file should also contain necessary Firebase configurations and other secrets (like API keys). Be sure to reference this `.env` in your Python scripts for loading environment variables.
+... where `[root project path]` is the absolute path to the root. You can find this by entering `pwd` into the terminal from the root directory.
+
+Alternatively, you could navigate to `rattm-cred-firebase.json` and `mockdata.csv` in the VS code file tree, right click on them, and click "Copy Path" to get the absolute paths to these files.
 
 ### 5. Install Next.js Dependencies
 
-Navigate to the frontend directory and install the necessary packages:
+Navigate to the `frontend` directory and install the necessary packages:
 
 ```bash
 cd frontend
@@ -70,7 +74,7 @@ cd backend/django-api
 python manage.py runserver
 ```
 
-This will run the backend on `http://localhost:8000`.
+This will run the backend on `http://localhost:8000` (unless there's a port conflict, in which case the console will tell you otherwise)
 
 ### 7. Run the Frontend (Next.js)
 
@@ -81,7 +85,7 @@ cd frontend
 npm run dev
 ```
 
-The frontend will be served on `http://localhost:3000`.
+The frontend will be served on `http://localhost:3000` (unless the console says otherwise).
 
 ## File Structure
 
