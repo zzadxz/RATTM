@@ -5,7 +5,7 @@ import Transactions from "@/app/components/transactions";
 const MainSite: React.FC = () => {
     return (
         <div>
-            <Header><h1>Welcome to RATTM's CO2 Calculator!</h1></Header>
+            <Header><h1>Welcome to RATTM&apos;s CO2 Calculator!</h1></Header>
             <Transactions/>
         </div>
     );
