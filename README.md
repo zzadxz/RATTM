@@ -49,12 +49,12 @@ pip install -r requirements.txt
 
     ```bash
     FIREBASE_CREDENTIAL_PATH="[root project path]/backend/django-api/RattmWeb/rattm-cred-firebase.json"
-    MOCK_JSON_PATH="[root project path]/backend/django-api/resources/mockdata.csv"
+    MOCK_JSON_PATH="[root project path]/backend/django-api/resources/mockdata.json"
     ```
 
 ... where `[root project path]` is the absolute path to the root. You can find this by entering `pwd` into the terminal from the root directory.
 
-Alternatively, you could navigate to `rattm-cred-firebase.json` and `mockdata.csv` in the VS code file tree, right click on them, and click "Copy Path" to get the absolute paths to these files.
+Alternatively, you could navigate to `rattm-cred-firebase.json` and `mockdata.json` in the VS code file tree, right click on them, and click "Copy Path" to get the absolute paths to these files.
 
 ### 5. Install Next.js Dependencies
 
