@@ -1,3 +1,4 @@
+# NOT IMPLEMENTED, converts django models/other complex data types into jsons/simple data types
 from rest_framework import serializers
 from .models import Transaction
 

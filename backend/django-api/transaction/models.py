@@ -1,3 +1,5 @@
+# NOT IMPLEMENTED
+# for storing data
 from django.db import models
 
 # define columns -> then we get actual data from Firebase?
