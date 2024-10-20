@@ -24,7 +24,7 @@ def upload_data_to_firestore(request):
 
 # Get data from Firestore
 # endpoint: /api/get
-def get_data_from_firestore():
+def get_data_from_firestore(request):
     try:
         transactions_ref = db.collection('transactions')
         docs = transactions_ref.stream()

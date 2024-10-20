@@ -43,13 +43,13 @@ pip install -r requirements.txt
 
 ### 4. Add Firebase Credentials and Environment Variables
 
-- Create a `backend/django-api/Rattm/rattm-cred-firebase.json` file. This will store your Firebase credentials. Paste into the file the JSON in [this Discord message](https://discord.com/channels/1281256285618307082/1283811324018556938/1291457826463678505). This file should not be committed to the repository.
+- Create a `backend/rattm-cred-firebase.json` file. This will store your Firebase credentials. Paste into the file the JSON in [this Discord message](https://discord.com/channels/1281256285618307082/1283811324018556938/1291457826463678505). This file should not be committed to the repository.
 
 - Create a `.env` file (in the root directory). The file should be of this format:
 
     ```bash
-    FIREBASE_CREDENTIAL_PATH="[root project path]/backend/django-api/RattmWeb/rattm-cred-firebase.json"
-    MOCK_JSON_PATH="[root project path]/backend/django-api/resources/mockdata.json"
+    FIREBASE_CREDENTIAL_PATH="[root project path]/backend/rattm-cred-firebase.json"
+    MOCK_JSON_PATH="[root project path]/backend/resources/mockdata.json"
     ```
 
 ... where `[root project path]` is the absolute path to the root. You can find this by entering `pwd` into the terminal from the root directory.
@@ -67,10 +67,10 @@ npm install
 
 ### 6. Run the Backend (Django API)
 
-Go to the `backend/django-api` folder and run the Django development server:
+Go to the `backend` folder and run the Django development server:
 
 ```bash
-cd backend/django-api
+cd backend
 python manage.py runserver
 ```
 
@@ -92,7 +92,7 @@ The frontend will be served on `http://localhost:3000` (unless the console says 
 ### Backend (Django API)
 
 ```plaintext
-django-api/
+backend/
 ├── RattmWeb/                # Project folder
 │   ├── asgi.py              # ASGI config (for async support)
 │   ├── firebase.py          # Loads Firebase DB

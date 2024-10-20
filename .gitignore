@@ -42,7 +42,7 @@ htmlcov/
 .idea/
 
 # Ignore Firebase credentials
-*.imlbackend/django-api/rattm-cred-firebase.json
-backend/django-api/rattm-cred-firebase.json
-*backend/django-api/rattm-cred-firebase.json
+*.imlbackend/rattm-cred-firebase.json
+backend/rattm-cred-firebase.json
+*backend/rattm-cred-firebase.json
 node_modules

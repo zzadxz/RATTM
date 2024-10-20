@@ -12,7 +12,7 @@ service cloud.firestore {
 
 ## backend
 **File Structure**\
-django-api/\
+backend/\
 &nbsp;&nbsp;RattmWeb/ : project folder\
 &nbsp;&nbsp;&nbsp;&nbsp;asgi.py : asgi config (idk what this is)\
 &nbsp;&nbsp;&nbsp;&nbsp;firebase.py : loads firebase db\
@@ -29,7 +29,7 @@ django-api/\
 &nbsp;&nbsp;routers.py : file i made following a tutorial (idk if we need it)\
 
 **Running Code**
-Go to `backend/django-api` folder\
+Go to `backend` folder\
 Run `python3 manage.py runserver` \
 
 This will run on `localhost:8000`\

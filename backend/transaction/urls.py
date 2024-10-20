@@ -1,5 +1,5 @@
 from django.urls import path
-from .view import upload_data_to_firestore, get_data_from_firestore
+from .views import upload_data_to_firestore, get_data_from_firestore
 
 urlpatterns = [
     path('upload/', upload_data_to_firestore, name='upload_data'),
