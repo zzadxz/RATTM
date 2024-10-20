@@ -46,3 +46,8 @@ htmlcov/
 backend/rattm-cred-firebase.json
 *backend/rattm-cred-firebase.json
 node_modules
+
+# Ignore database
+*.imlbackend/db.sqlite3
+backend/db.sqlite3
+*backend/db.sqlite3
