@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from django.http import JsonResponse
-from RattmWeb.firebase import db
+from utils.firebase import db
 from dotenv import load_dotenv
 import csv
 import json

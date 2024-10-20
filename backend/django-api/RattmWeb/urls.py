@@ -16,15 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import RedirectView
-from routers import router
-from .views import testing
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # defines a path that includes all URLs from the router, prefixed with 'api/'
-    #path('api/', include((router.urls, 'core_api', 'transaction.urls'), namespace='core_api')),
     path('api/', include('transaction.urls')),
-    path('', testing),
 ]
