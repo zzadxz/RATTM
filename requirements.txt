@@ -23,6 +23,7 @@ google-resumable-media==2.7.2
 googleapis-common-protos==1.65.0
 grpcio==1.66.2
 grpcio-status==1.66.2
+heroku==9.3.1
 httplib2==0.22.0
 idna==3.10
 jws==0.1.3

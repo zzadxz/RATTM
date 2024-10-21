@@ -138,3 +138,16 @@ frontend/
 
 You can view the Firestore project by going to:
 [Firestore Console](https://console.cloud.google.com/firestore/databases/-default-/data/panel/transactions/1LpRig3D7NipgPG67P3O?project=rattm-tli)
+
+# Hosting with Heroku Notes:
+In CLI, type heroku to see the help page. 
+Heroku commands are hierarchical: one or more subcommands after the colon. 
+
+To check running apps: heroku apps 
+
+Access the website: https://rattm.herokuapp.com/
+
+Install: 
+sudo apt-get install libpq-dev python-dev
+heroku 
+django-heroku 
