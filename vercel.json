@@ -3,8 +3,21 @@
   "builds": [
     {
       "src": "frontend/package.json",
-      "use": "@vercel/node"
+      "use": "@vercel/next"  // Use Next.js for React/Next.js projects
+    },
+    {
+      "src": "backend/django-api/**/*",
+      "use": "@vercel/python"  // Use Python for Django API
     }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "frontend/$1" }]
+  "routes": [
+    {
+      "src": "/api/(.*)",  // Routes API requests to the Django backend
+      "dest": "/backend/django-api/$1"
+    },
+    {
+      "src": "/(.*)",  // Routes other requests to the frontend
+      "dest": "/frontend/$1"
+    }
+  ]
 }
