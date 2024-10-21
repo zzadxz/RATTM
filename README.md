@@ -151,3 +151,11 @@ Install:
 sudo apt-get install libpq-dev python-dev
 heroku 
 django-heroku 
+
+If we want to store data in environment variables: 
+- "heroku config" command can be used to manage the environment variables 
+
+Heroku debug: 
+- if heroku local doesn't run -> check if .env file is updated with heroku secrete key 
+- note: our .env file is in the RATTM repo, not the backend directory
+    
