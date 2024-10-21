@@ -46,6 +46,7 @@ htmlcov/
 backend/rattm-cred-firebase.json
 *backend/rattm-cred-firebase.json
 node_modules
+backend/django-api/RattmWeb/rattm-cred-firebase.json
 
 # Ignore database
 *.imlbackend/db.sqlite3
