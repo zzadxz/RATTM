@@ -56,22 +56,33 @@ const MainSite: React.FC = () => {
   useEffect(() => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     console.log('API URL:', apiUrl);
+    if (!apiUrl) {
+        console.error("API URL is not defined in production");
+        setError("API URL is not defined");
+        setLoading(false);
+        return;
+      }
 
     const fetchData = async () => {
-      try {
-        const response = await fetch(apiUrl); 
+    try {
+        const response = await fetch(apiUrl);
         if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
         }
         const result = await response.json();
-        setData(result); 
-        setLoading(false); 
-      } catch (err: unknown) {
+        setData(result);
+    } catch (err: unknown) {
         if (err instanceof Error) {
-          setError(err.message);
+        setError(err.message);
+        } else {
+        setError("An unknown error occurred");
         }
-      }      
+    } finally {
+        setLoading(false);
+    }
     };
+      
+
     fetchData();
   }, []);
 
