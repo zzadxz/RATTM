@@ -5,7 +5,7 @@ const Transactions = () => {
 
   useEffect(() => {
     // Fetch transactions data from backend
-    fetch('http://localhost:8000/api/get/')
+    fetch('https://rattm-f300025e7172.herokuapp.com/api/get/')
       .then((response) => response.json())
       .then((data) => setTransactions(data))
       .catch((error) => console.error('Error fetching transactions:', error));
