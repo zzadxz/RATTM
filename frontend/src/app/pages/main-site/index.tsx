@@ -66,11 +66,11 @@ const MainSite: React.FC = () => {
         const result = await response.json();
         setData(result); 
         setLoading(false); 
-      } catch (err: any) {
-        console.error('Fetch error:', err);
-        setError(err.message);
-        setLoading(false);
-      }
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        }
+      }      
     };
     fetchData();
   }, []);
