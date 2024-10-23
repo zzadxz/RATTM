@@ -152,6 +152,10 @@ sudo apt-get install libpq-dev python-dev
 heroku 
 django-heroku 
 
+(On Mac)
+brew tap heroku/brew && brew install heroku
+pip install django-heroku
+
 If we want to store data in environment variables: 
 - "heroku config" command can be used to manage the environment variables 
 
