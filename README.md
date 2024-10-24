@@ -3,7 +3,7 @@
 
 **RATTM** Rage Against the Turing Machine X Cash App
 
-Backend Services with [Heroku]([url](https://github.com/jnnchi/rattm-backend))
+Backend Services with [Heroku](https://github.com/jnnchi/rattm-backend)
 
 ## Prerequisites
 
