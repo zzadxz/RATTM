@@ -1,44 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import styled from 'styled-components';
+import { MainContainer, MainHeading, SubHeading, TransactionsWrapper } from './styles';
+import { GlobalStyle } from '@/app/styles/globalStyles';
 import Transactions from "@/app/components/transactions";
-
-const MainContainer = styled.div`
-  background: linear-gradient(135deg, #5500ff 0%, #30009c 100%);
-  padding: 60px 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const MainHeading = styled.h1`
-  color: #00d632;
-  font-size: 3.5rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-  text-align: center;
-`;
-
-const SubHeading = styled.h2`
-  color: #ffffff;
-  font-size: 1.5rem;
-  font-weight: 400;
-  margin-bottom: 40px;
-  text-align: center;
-`;
-
-const TransactionsWrapper = styled.div`
-  width: 90%;
-  max-width: 1200px;
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0px 16px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid #e0e0e0;
-`;
 
 interface Transaction {
   "Transaction ID": string;
@@ -87,23 +52,26 @@ const MainSite: React.FC = () => {
   }, []);
 
   return (
-    <MainContainer>
-      <MainHeading>Welcome to RATTM&apos;s CO2 Calculator!</MainHeading>
-      <SubHeading>View Your Recent Transactions</SubHeading>
+    <>
+      <GlobalStyle /> {/* Apply the global styles */}
+      <MainContainer>
+        <MainHeading>Welcome to RATTM&apos;s CO2 Calculator!</MainHeading>
+        <SubHeading>View Your Recent Transactions</SubHeading>
 
-      {/* if there is an error, show it here */}
-      {error && <p>Error: {error}</p>}
+        {/* if there is an error, show it here */}
+        {error && <p>Error: {error}</p>}
 
-      {/* if still loading, show a loading message */}
-      {loading && <p>Loading...</p>}
+        {/* if still loading, show a loading message */}
+        {loading && <p>Loading...</p>}
 
-      {/* ONLY ONLY render the Transactions component if the data is successfully fetched */}
-      {!loading && !error && data && (
-        <TransactionsWrapper>
-          <Transactions transactions={data} />
-        </TransactionsWrapper>
-      )}
-    </MainContainer>
+        {/* ONLY ONLY render the Transactions component if the data is successfully fetched */}
+        {!loading && !error && data && (
+          <TransactionsWrapper>
+            <Transactions transactions={data} />
+          </TransactionsWrapper>
+        )}
+      </MainContainer>
+    </>
   );
 };
 

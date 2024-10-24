@@ -1,5 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
+import {
+  TableContainer,
+  TransactionsTable,
+  TableHeader,
+  TableRow,
+  TableData
+} from './transactions.styles';
 
 interface Transaction {
   "Transaction ID": string;
@@ -8,52 +14,6 @@ interface Transaction {
   Date: string;
   rating: number;
 }
-
-const TableContainer = styled.div`
-  width: 100%;
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #f8f9fa; /* Light background for contrast */
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); /* Deeper shadow */
-`;
-
-const TransactionsTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: white;
-`;
-
-const TableHeader = styled.th`
-  background-color: #00D632; /* Cash App green */
-  color: white;
-  padding: 15px;
-  text-align: left;
-  font-size: 1.3rem;
-  font-weight: 600;
-`;
-
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #F9F9F9; /* Slightly different color for striped rows */
-  }
-  
-  &:hover {
-    background-color: #e1f7e5; /* Subtle green hover effect */
-  }
-`;
-
-const TableData = styled.td`
-  padding: 15px;
-  text-align: left;
-  font-size: 1rem;
-  color: #333;
-  border-bottom: 1px solid #eaeaea;
-  font-family: 'Roboto', sans-serif;
-`;
 
 const Transactions: React.FC<{ transactions: Transaction[] }> = ({ transactions }) => {
   return (
