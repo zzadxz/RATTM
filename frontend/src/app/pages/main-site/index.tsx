@@ -89,7 +89,7 @@ const MainSite: React.FC = () => {
 
   return (
     <MainContainer>
-      <MainHeading>Welcome to RATTM &apos;s CO2 Calculator!</MainHeading>
+      <MainHeading>Welcome to RATTM&apos;s CO2 Calculator!</MainHeading>
       <SubHeading>View Your Recent Transactions</SubHeading>
 
       {/* if there is an error, show it here */}
