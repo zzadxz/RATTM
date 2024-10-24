@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 import Transactions from "@/app/components/transactions";
 
 const MainContainer = styled.div`
@@ -55,40 +55,41 @@ const MainSite: React.FC = () => {
 
   useEffect(() => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    console.log('API URL:', apiUrl);
+    console.log("API URL:", apiUrl);
     if (!apiUrl) {
-        console.error("API URL is not defined in production");
-        setError("API URL is not defined");
-        setLoading(false);
-        return;
-      }
+      console.error("API URL is not defined in production");
+      setError("API URL is not defined");
+      setLoading(false);
+      return;
+    }
 
     const fetchData = async () => {
-    try {
+      try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch data: ${response.status} ${response.statusText}`
+          );
         }
         const result = await response.json();
         setData(result);
-    } catch (err: unknown) {
+      } catch (err: unknown) {
         if (err instanceof Error) {
-        setError(err.message);
+          setError(err.message);
         } else {
-        setError("An unknown error occurred");
+          setError("An unknown error occurred");
         }
-    } finally {
+      } finally {
         setLoading(false);
-    }
+      }
     };
-      
 
     fetchData();
   }, []);
 
   return (
     <MainContainer>
-      <MainHeading>Welcome to TLI &apos;s CO2 Calculator!</MainHeading>
+      <MainHeading>Welcome to RATTM &apos;s CO2 Calculator!</MainHeading>
       <SubHeading>View Your Recent Transactions</SubHeading>
 
       {/* if there is an error, show it here */}
