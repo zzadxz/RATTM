@@ -1,17 +1,26 @@
 // src/app/main-site/auth/SignInWithGoogle/page.tsx
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { signInWithGoogle } from "@/app/firebase/authService";
 import { useRouter } from "next/navigation";
+import { auth } from "@/app/firebase/firebaseConfig";
 
 const SignInWithGoogle: React.FC = () => {
   const router = useRouter();
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        router.push("/dashboard");
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
-      router.push("/dashboard");
     } catch (error) {
       console.error("Google sign-in error:", error);
     }
