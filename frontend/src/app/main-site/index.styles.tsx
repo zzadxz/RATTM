@@ -1,3 +1,4 @@
+// src/app/pages/main-site/index.styles.tsx
 import styled from "styled-components";
 
 const Header = styled.div`

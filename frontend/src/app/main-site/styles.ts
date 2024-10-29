@@ -1,3 +1,4 @@
+// src/app/pages/main-site/styles.ts
 import styled from 'styled-components';
 
 export const MainContainer = styled.div`
