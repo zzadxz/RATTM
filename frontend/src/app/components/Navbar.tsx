@@ -1,4 +1,5 @@
 // src/app/components/Navbar.tsx
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -9,15 +10,19 @@ import { User } from "firebase/auth";
 
 const Navbar: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
+      setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
+
+  if (loading) return null;
 
   const handleSignOut = async () => {
     try {

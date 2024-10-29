@@ -1,7 +1,7 @@
 // frontend/__mocks__/firebaseConfig.ts
 
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 
 const firebaseConfig = {
@@ -16,6 +16,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+// Set session persistence
+setPersistence(auth, browserSessionPersistence).catch((error) => {
+  console.error("Persistence error:", error);
+});
 
 let analytics = null;
 if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'test') {
