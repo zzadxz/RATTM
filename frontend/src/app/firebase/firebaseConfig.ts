@@ -1,7 +1,15 @@
 // src/app/firebase/firebaseConfig.ts
 
-console.log("Firebase API Key:", process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
-console.log("Firebase Auth Domain:", process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN);
+console.log('Firebase Config:', {
+  //do keys exist? boolean
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? true :
+    console.error("Firebase API Key not found"),
+});
+console.log('Firebase Config:', {
+  //do keys exist? boolean
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ? true :
+    console.error("Firebase Auth Domain not found"),
+});
 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";

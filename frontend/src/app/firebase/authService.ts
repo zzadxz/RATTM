@@ -1,4 +1,5 @@
 // src/app/firebase/authService.ts
+
 import { auth } from "./firebaseConfig";
 import { GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 

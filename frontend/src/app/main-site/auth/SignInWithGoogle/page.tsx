@@ -1,6 +1,6 @@
 // src/app/main-site/auth/SignInWithGoogle/page.tsx
-"use client";
 
+"use client";
 import React, { useEffect, useState } from "react";
 import { signInWithGoogle } from "@/app/firebase/authService";
 import { useRouter } from "next/navigation";
@@ -13,18 +13,18 @@ const SignInWithGoogle: React.FC = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        router.push("/dashboard");
-      } else {
-        setLoading(false); 
+        router.replace("/dashboard"); // Use replace instead of push
       }
+      setLoading(false);
     });
     return () => unsubscribe();
   }, [router]);
 
   const handleGoogleSignIn = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       await signInWithGoogle();
+      // Don't redirect here - let the auth state listener handle it
     } catch (error) {
       console.error("Google sign-in error:", error);
       setLoading(false);
@@ -32,11 +32,9 @@ const SignInWithGoogle: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <p>Loading...</p>
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <p>Loading...</p>
+    </div>;
   }
 
   return (

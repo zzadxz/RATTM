@@ -1,6 +1,6 @@
 // src/app/dashboard/page.tsx
-"use client";
 
+"use client";
 import React, { useEffect, useState } from "react";
 import { auth } from "@/app/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
@@ -11,18 +11,25 @@ const Dashboard: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      setDisplayName(user.displayName || "User");
-      setLoading(false);
-    } else {
-      router.push("/main-site/auth/SignInWithGoogle");
-    }
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setDisplayName(user.displayName || "User");
+        setLoading(false);
+      } else {
+        router.replace("/main-site/auth/SignInWithGoogle"); // Use replace instead of push
+      }
+    });
+
+    return () => unsubscribe();
   }, [router]);
 
   const handleSignOut = async () => {
-    await auth.signOut(); // back to default directory
-    router.push("/");
+    try {
+      await auth.signOut();
+      router.replace("/"); // Use replace instead of push
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
   };
 
   if (loading) {
