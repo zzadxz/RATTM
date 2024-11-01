@@ -42,6 +42,13 @@ htmlcov/
 .idea/
 
 # Ignore Firebase credentials
-*.imlbackend/django-api/RattmWeb/rattm-cred-firebase.json
-backend/django-api/RattmWeb/rattm-cred-firebase.json
+*.imlrattm-cred-firebase.json
+rattm-cred-firebase.json
+*rattm-cred-firebase.json
 node_modules
+rattm-cred-firebase.json
+
+# Ignore database
+*.imlbackend/db.sqlite3
+backend/db.sqlite3
+*backend/db.sqlite3
