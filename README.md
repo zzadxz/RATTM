@@ -32,9 +32,14 @@ The folder you should be now in will later be referred to as "the root"
 Create and activate a Python virtual environment:
 
 ```bash
+# One of the below for .venv
 python -m venv .venv
-source .venv/bin/activate  # On MacOS/Linux
-# For Windows use: .venv\Scripts\activate
+python3 -m venv .venv
+
+# On MacOS/Linux:
+source .venv/bin/activate  
+# For Windows use:
+.venv\Scripts\activate
 ```
 
 ### 3. Install Python Dependencies
