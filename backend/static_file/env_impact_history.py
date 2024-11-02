@@ -87,7 +87,24 @@ def get_user_transactions(all_transactions: dict[int, dict], userID: int):
             user_transactions[transaction_id] = transactions[transaction_id]
     return user_transactions
 
-def calculate_scores(frequency: str, current_date: datetime, user_transactions: dict[int, dict], esg_scores: dict[str, dict]):
+def get_start_end_dates(frequency: str, current_date: datetime):
+    if frequency == "weekly":
+        # Get the start of the week (Monday)
+        start_date = current_date - timedelta(days=current_date.weekday())
+        # Get the end of the week (Sunday)
+        end_date = start_date + timedelta(days=6)
+    elif frequency == "monthly":
+        # Get the first day of the month
+        start_date = current_date.replace(day=1)
+        # Get the last day of the month
+        last_day = monthrange(current_date.year, current_date.month)[1]
+        end_date = current_date.replace(day=last_day)
+    else:
+        raise ValueError("Frequency must be 'weekly' or 'monthly'")
+    
+    return start_date, end_date
+
+def calculate_historical_scores(frequency: str, current_date: datetime, user_transactions: dict[int, dict], esg_scores: dict[str, dict]):
     scores = []
 
     if frequency == "weekly":
@@ -97,17 +114,19 @@ def calculate_scores(frequency: str, current_date: datetime, user_transactions: 
     else:
         raise ValueError("Frequency must be 'weekly' or 'monthly'")
 
-    # Loop to calculate scores for the specified frequency
     for _ in range(12):
-        start_date = current_date - timedelta(days=delta_days)
+        # Get start and end dates based on frequency
+        start_date, end_date = get_start_end_dates(frequency, current_date)
         
         # Calculate the score for the current period
-        score = get_score(user_transactions, start_date, current_date, esg_scores)
+        score = get_score(user_transactions, start_date, end_date, esg_scores)
         
-        # Append the score
         scores.append(score)
         
-        # Move to the previous period
-        current_date = start_date
-    
+        # Increment current date
+        if frequency == "weekly":
+            current_date = start_date - timedelta(days=1)
+        elif frequency == "monthly":
+            current_date = start_date - timedelta(days=start_date.day)
+
     return scores

@@ -1,6 +1,6 @@
 from utils.firebase import db
 from static_file.company_esg_score import company_name_matching, get_company_score
-from static_file.env_impact_history import get_score, get_ESG_score_of_transaction_companies, get_total_green_transactions, get_most_purchased_companies, get_user_transactions, calculate_scores
+from static_file.env_impact_history import get_score, get_ESG_score_of_transaction_companies, get_total_green_transactions, get_most_purchased_companies, get_user_transactions, calculate_historical_scores
 from static_file.map import get_user_all_locations
 from datetime import date
 
@@ -24,6 +24,7 @@ def return_user_data(request):
     if user_id is None:
         return {"error": "User ID not found in session"}
 
+    # instead of doing this here, we will directly pull from Users table
     # TRANSACTIONS SPECIFIC TO THIS USER
     all_transactions = get_table_from_firebase('transactions')
     user_transactions = get_user_transactions(all_transactions, user_id)
@@ -51,8 +52,8 @@ def return_user_data(request):
     
     current_date = date.today()
 
-    weekly_carbon_scores = calculate_scores("weekly", current_date, user_transactions, userID, esg_scores)
-    monthly_carbon_scores = calculate_scores("monthly", current_date, user_transactions, userID, esg_scores)
+    weekly_carbon_scores = calculate_historical_scores("weekly", current_date, user_transactions, userID, esg_scores)
+    monthly_carbon_scores = calculate_historical_scores("monthly", current_date, user_transactions, userID, esg_scores)
 
     user_data["environmental_impact_info"]["past_carbon_scores"]["weekly"] = weekly_carbon_scores
     user_data["environmental_impact_info"]["past_carbon_scores"]["monthly"] = monthly_carbon_scores
