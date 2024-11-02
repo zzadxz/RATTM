@@ -86,10 +86,32 @@ def esg_data_normalization(collection_data: list[dict]):
         normalized_data.append(data)
     return normalized_data
 
-# def populate_user_transactions(tranaction_data: )
+def populate_user_transactions(tranaction_data: list[dict], User_data: dict) -> None:
+    for transaction in tranaction_data:
+        if transaction['customerID'] not in User_data:
+            User_data[transaction['customerID']] = {}
+            User_data[transaction['customerID']]['transactions'] = [transaction]
+        else:
+            User_data[transaction['customerID']]['transactions'].append(transaction)
 
 
-
+def upload_user_data(User_data: dict) -> None:
+    if User_data:
+        # Testing for connection to firebase
+        try: 
+            doc = db.collection('test').document('testDoc')
+            doc.set({'connected': True})
+            print("Firebase is connected, and data was written successfully.")
+        except Exception as e:
+            print("Connection Error:", e)
+        # Now we're uploading the User data
+        try:
+            for user_id in User_data:
+                print(User_data[user_id])
+                db.collection('Users').document(str(user_id)).set(User_data[user_id])
+            print("User data uploaded successfully.")
+        except Exception as e:
+            print("Error:", e)
         
 if __name__ == '__main__':
     esg_collection = db.collection('esg')
@@ -104,8 +126,18 @@ if __name__ == '__main__':
     # {'company_name': 'A O Smith Corp', 'environment_grade': 'A', 'environment_score': 510.0, 'normalized_score': 0.38461538461538464}, 
     # {'company_name': 'ABIOMED Inc', 'environment_grade': 'A', 'environment_score': 500.0, 'normalized_score': 0.0}]
     transaction_collection = db.collection('transactions')
-    transaction_data = collection_to_list_limited(transaction_collection, limit=3)
+    transaction_data = collection_to_list_limited(transaction_collection, limit=20)
     print("\nRaw transaction data:\n")
     print(transaction_data)
-    User_data = {}
+    # [{'action': 'declined', 'time_completed': '2024-08-31T06:02:27.687Z', 'longitude': -113.807658, 'merchant_name': 'Starbucks', 'latitude': -42.372604, 'customerID': 52, 'amount': 860.27, 'ip_address': '179.152.194.186', 'id': '0'}, 
+    #  {'action': 'declined', 'time_completed': '2023-12-07T08:07:20.451Z', 'longitude': -1.121183, 'merchant_name': 'Target', 'latitude': 11.962175, 'customerID': 74, 'amount': 144.53, 'ip_address': '173.64.65.25', 'id': '1'}, 
+    #  {'action': 'approved', 'time_completed': '2023-12-13T10:22:26.700Z', 'longitude': 176.909716, 'merchant_name': 'Walmart', 'latitude': 61.823301, 'customerID': 47, 'amount': 962.7, 'ip_address': '46.201.218.108', 'id': '10'}]
     
+    User_data = {} # We're going to upload this later
+    
+    populate_user_transactions(transaction_data, User_data)
+    print("\nUser data:\n")
+    print(User_data)
+    #----------------------------------------------------------------
+    print("\nUploading user data to Firestore...\n")
+    upload_user_data(User_data) # testing uploading to firebase
