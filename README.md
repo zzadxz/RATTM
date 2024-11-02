@@ -143,5 +143,9 @@ frontend/
 You can view the Firestore project by going to:
 [Firestore Console](https://console.cloud.google.com/firestore/databases/-default-/data/panel/transactions/1LpRig3D7NipgPG67P3O?project=rattm-tli)
 
-## Backend as submodule 
-The backend is 
+## Backend in directory of main repository 
+The backend is in backend/, hosted on heroku. 
+To configure the new backend path: 
+- heroku config:set PYTHONPATH=backend 
+- Procfile edit
+- update requirement.txt
