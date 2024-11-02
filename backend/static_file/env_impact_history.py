@@ -4,7 +4,7 @@ from datetime import datetime
 
 # Assuming that the ESG_scores is a dictionary, 
 # whose key is the company's name and the value is the ESG score of the company
-def get_score(user: ..., start: datetime, end: datetime, ESG_scores: dict) -> float:
+def get_score(transactions: list[dict], start: datetime, end: datetime, ESG_scores: dict) -> float:
     """
     Calculate the environmental impact score of a user
     """
@@ -13,7 +13,7 @@ def get_score(user: ..., start: datetime, end: datetime, ESG_scores: dict) -> fl
     # the company names, so each entry is a dictionary with the company name as the key
     # and the transaction amount as the value
     lst_of_transactions = [
-        transaction for transaction in user.transactions
+        transaction for transaction in transactions
         if start <= transaction['time'] <= end
     ]
     # Env_Contribution
@@ -27,40 +27,38 @@ def get_score(user: ..., start: datetime, end: datetime, ESG_scores: dict) -> fl
     
     return env_contribution / total_spending
 
-def get_ESG_score_of_transaction_companies(user: ..., ESG_scores: dict) -> list[dict[str, float]]:
+def get_ESG_score_of_transaction_companies(transactions: list[dict], ESG_scores: dict) -> list[dict[str, float]]:
     """
     Calculate the ESG score of the companies that the user has made transactions with
     """
-    lst_of_transactions = user.transactions
     company_ESG_scores = []
-    for transaction in lst_of_transactions:
+    for transaction in transactions:
         company_env_score = ESG_scores[transaction['Company Name']]
         company_ESG_scores.append({transaction['Company Name']: company_env_score})
     
     return company_ESG_scores
 
-def get_total_green_transactions(user: ..., ESG_scores: dict) -> int:
+def get_total_green_transactions(transactions: list[dict], ESG_scores: dict) -> int:
     """
     25th percentile: 245.0
     50th percentile: 500.0
     75th percentile: 520.0
     90th percentile: 560.0
     """
-    lst_of_transactions = user.transactions
     green_transactions = 0
-    for transaction in lst_of_transactions:
+    for transaction in transactions:
         company_env_score = ESG_scores[transaction['Company Name']]
         if company_env_score > 500:
             green_transactions += 1
     
     return green_transactions
 
-def get_most_purchased_companies(user: ..., ESG_scores: dict) -> list[dict[str, float]]:
+def get_most_purchased_companies(transactions: list[dict], ESG_scores: dict) -> list[dict[str, float]]:
     """
     Gets most purchased companies of all time, returns a list of dictionary, where dictionaries 
     contain the company name, the ESG score of the company and the amount spent on that company
     """
-    sorted_transactions = sorted(user.transactions, key=lambda dic: dic['Amount'], reverse=True)
+    sorted_transactions = sorted(transactions, key=lambda dic: dic['Amount'], reverse=True)
     top_5_companies = []
     for transaction in sorted_transactions[:5]:
         company_env_score = ESG_scores[transaction['Company Name']]
@@ -71,5 +69,3 @@ def get_most_purchased_companies(user: ..., ESG_scores: dict) -> list[dict[str, 
         })
     
     return top_5_companies
-
-    
