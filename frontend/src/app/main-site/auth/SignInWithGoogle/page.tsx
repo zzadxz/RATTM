@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { signInWithGoogle } from "@/app/firebase/authService";
 import { useRouter } from "next/navigation";
 import { auth } from "@/app/firebase/firebaseConfig";
-import { send } from "process";
 
 function SendEmail(userEmail: string) {
 
