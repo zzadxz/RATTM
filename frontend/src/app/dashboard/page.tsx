@@ -1,9 +1,22 @@
 // src/app/dashboard/page.tsx
 
 "use client";
+import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { auth } from "@/app/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
+import FootprintLineGraph from "@/app/components/charts/FootprintLineGraph";
+import MonthSummary from "@/app/components/charts/MonthSummary";
+import AboutYourScore from "@/app/components/AboutYourScore";
+import TableOne from "@/app/components/TopCompaniesTable";
+import CardDataStats from "@/app/components/CardDataStats";
+
+const CompaniesPieChart = dynamic(
+  () => import("@/app/components/charts/CompaniesPieChart"),
+  {
+    ssr: false,
+  }
+);
 
 const Dashboard: React.FC = () => {
   const [displayName, setDisplayName] = useState<string | null>(null);
@@ -35,24 +48,38 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p className="text-2xl font-bold animate-pulse text-gray-600">Loading...</p>
+        <p className="text-2xl font-bold animate-pulse text-gray-600">
+          Loading...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-indigo-700 flex flex-col items-center justify-center p-6">
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full text-center">
-        <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
-          Welcome, {displayName}!
+    <div className="mt-4 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-12 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+      <div className="dashboard-box rounded-2xl md:col-span-8">
+        <h1 className="text-3xl font-extrabold text-black dark:text-white">
+          Overview of your carbon footprint
         </h1>
-        <p className="text-gray-600 mb-6">This is your personalized dashboard.</p>
-        <button
-          onClick={handleSignOut}
-          className="px-6 py-3 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition duration-300"
-        >
-          Sign Out
-        </button>
+        <p className="pt-4 text-xl">
+          See how your carbon footprint varied in the last 12 months
+        </p>
+        <br />
+        <FootprintLineGraph />
+        <MonthSummary />
+        <TableOne />
+      </div>
+
+      <div className="col-span-12 rounded-2xl bg-white pt-5 md:col-span-4 lg:pl-10 lg:pr-10">
+        <CardDataStats title="(out of 850)" total="840" rate="23" levelUp>
+          <p className="text-center text-xl font-black text-black">
+            Carbon Score
+          </p>
+        </CardDataStats>
+        <AboutYourScore />
+        <div className="mt-5">
+          <CompaniesPieChart />
+        </div>
       </div>
     </div>
   );

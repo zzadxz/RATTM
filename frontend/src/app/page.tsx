@@ -1,81 +1,62 @@
-// src/app/page.tsx
-
 "use client";
-
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import Navbar from "@/app/components/Navbar"; // Import Navbar
-import { MainContainer, MainHeading, SubHeading, TransactionsWrapper } from './main-site/styles';
-import { GlobalStyle } from '@/app/styles/globalStyles';
-import Transactions from "@/app/components/transactions";
+import Link from "next/link";
+import { auth } from "@/app/firebase/firebaseConfig";
+import { useRouter } from "next/navigation";
+import { User } from "firebase/auth";
+import { Metadata } from "next";
 
-interface Transaction {
-  "Transaction ID": string;
-  "Company Name": string;
-  "Transaction Amount": string;
-  Date: string;
-  rating: number;
-}
-
-const MainSite: React.FC = () => {
-  const [data, setData] = useState<Transaction[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    console.log('API URL:', apiUrl);
-    if (!apiUrl) {
-        console.error("API URL is not defined in production");
-        setError("API URL is not defined");
-        setLoading(false);
-        return;
-      }
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
 
-    const fetchData = async () => {
-    try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-        throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
-        }
-        const result = await response.json();
-        setData(result);
-    } catch (err: unknown) {
-        if (err instanceof Error) {
-        setError(err.message);
-        } else {
-        setError("An unknown error occurred");
-        }
-    } finally {
-        setLoading(false);
-    }
-    };
-
-    fetchData();
+    return () => unsubscribe();
   }, []);
 
+  if (loading) return null;
+
   return (
-    <>
-      <GlobalStyle /> {/* Apply the global styles */}
-      <Navbar /> {/* Add Navbar here */}
-      <MainContainer>
-        <MainHeading>Welcome to RATTM&apos;s CO2 Calculator!</MainHeading>
-        <SubHeading>View Your Recent Transactions</SubHeading>
-
-        {/* if there is an error, show it here */}
-        {error && <p>Error: {error}</p>}
-
-        {/* if still loading, show a loading message */}
-        {loading && <p>Loading...</p>}
-
-        {/* ONLY ONLY render the Transactions component if the data is successfully fetched */}
-        {!loading && !error && data && (
-          <TransactionsWrapper>
-            <Transactions transactions={data} />
-          </TransactionsWrapper>
+    <div className="ml-20 mr-20 mt-4 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-12 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+      <div id="left-col" className="rounded-2xl md:col-span-6">
+        <img
+          src="/images/logo/rootpage-logo.png"
+          alt="RATTM CO2 Calculator"
+          className="w-full"
+        />
+      </div>
+      <div
+        id="right-col"
+        className="flex h-full flex-col items-center justify-center rounded-2xl md:col-span-6"
+      >
+        <div className="max-w-sm rounded-lg bg-green-100 p-6 text-center shadow-md">
+          <h1 className="text-xl font-bold text-gray-900">
+            Welcome to RATTM&apos;s CO2 Calculator!
+          </h1>
+          <p className="mt-2 text-gray-700">Improve your carbon score today!</p>
+        </div>
+        {user ? (
+          <Link href="/dashboard">
+            <button className="mt-4 rounded-lg bg-green-500 px-8 py-3 font-bold text-white transition duration-200 hover:bg-green-600">
+              DASHBOARD
+            </button>
+          </Link>
+        ) : (
+          <Link href="/main-site/auth/SignInWithGoogle">
+            <button className="mt-4 rounded-lg bg-green-500 px-8 py-3 font-bold text-white transition duration-200 hover:bg-green-600">
+              SIGN IN
+            </button>
+          </Link>
         )}
-      </MainContainer>
-    </>
+      </div>
+    </div>
   );
-};
-
-export default MainSite;
+}
