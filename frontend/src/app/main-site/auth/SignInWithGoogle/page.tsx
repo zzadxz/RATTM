@@ -11,7 +11,7 @@ function SendEmail(userEmail: string) {
 
   const sendEmailToBackend = async (userEmail: string) => {
     try {
-      const response = await fetch('http://localhost:8000/login/get_email/', {
+      const response = await fetch('https://rattm-f300025e7172.herokuapp.com/login/get_email/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

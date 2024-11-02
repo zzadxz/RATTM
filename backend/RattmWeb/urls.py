@@ -25,4 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('transaction/', include('transaction.urls')),
     path('esg/', include('esg.urls')),
+    path('login/', include('login.urls')),
 ]
