@@ -5,6 +5,33 @@ import React, { useEffect, useState } from "react";
 import { signInWithGoogle } from "@/app/firebase/authService";
 import { useRouter } from "next/navigation";
 import { auth } from "@/app/firebase/firebaseConfig";
+import { send } from "process";
+
+function SendEmail(userEmail: string) {
+
+  const sendEmailToBackend = async (userEmail: string) => {
+    try {
+      const response = await fetch('http://localhost:8000/login/get_email/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userEmail }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.message);
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error sending number:', error);
+      alert('An error occurred while sending the number.');
+    }
+  };
+  return sendEmailToBackend(userEmail);
+}
 
 const SignInWithGoogle: React.FC = () => {
   const router = useRouter();
@@ -23,7 +50,15 @@ const SignInWithGoogle: React.FC = () => {
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true);
-      await signInWithGoogle();
+      const user_credential = await signInWithGoogle();
+      
+      if (user_credential) {
+        const email = user_credential.user.email;
+        if (email) {
+          SendEmail(email);
+        }
+        console.log("User's email:", email);
+      }
       // Don't redirect here - let the auth state listener handle it
     } catch (error) {
       console.error("Google sign-in error:", error);
