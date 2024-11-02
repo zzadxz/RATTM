@@ -8,7 +8,7 @@ const options: ApexOptions = {
     type: "donut",
   },
   colors: ["#62e371", "#40c74f", "#2cb03b", "#158f23"],
-  labels: ["Label 1", "Label 2", "Label 3", "Label 4"],
+  labels: ["521-560", "501-520", "246-500", "0-245"],
   legend: {
     show: false,
     position: "bottom",
@@ -46,7 +46,7 @@ const options: ApexOptions = {
 };
 
 const CompaniesPieChart: React.FC = () => {
-  const series = [65, 34, 12, 56];
+  const series = [100, 34, 12, 56];
 
   return (
     <div className="col-span-12 rounded-2xl border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">

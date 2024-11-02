@@ -124,13 +124,13 @@ const options: ApexOptions = {
 const FootprintLineGraph: React.FC = () => {
   const series = [
     {
-      name: "Dollars Purchased",
+      name: "Green Transactions",
       data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
       color: "#7d91f5",
     },
 
     {
-      name: "Carbon Footprint",
+      name: "Carbon Score",
       data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
       color: "#08d116",
     },
@@ -168,14 +168,11 @@ const FootprintLineGraph: React.FC = () => {
           ))}
           <div className="flex w-full max-w-45 justify-end">
             <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
+              <button className="rounded px-3 py-1 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
+                By Week
+              </button>
               <button className="rounded bg-white px-3 py-1 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark">
-                Day
-              </button>
-              <button className="rounded px-3 py-1 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
-                Week
-              </button>
-              <button className="rounded px-3 py-1 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
-                Month
+                By Month
               </button>
             </div>
           </div>
