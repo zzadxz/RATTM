@@ -94,6 +94,11 @@ def populate_user_transactions(tranaction_data: list[dict], User_data: dict) -> 
         else:
             User_data[transaction['customerID']]['transactions'].append(transaction)
 
+def populate_map_data(User_data: dict, esg_data: list[dict]) -> None:
+    return None
+
+def populate_environmental_impact_info(User_data: dict, esg_data: list[dict]) -> None:
+    return None
 
 def upload_user_data(User_data: dict) -> None:
     if User_data:
@@ -140,4 +145,4 @@ if __name__ == '__main__':
     print(User_data)
     #----------------------------------------------------------------
     print("\nUploading user data to Firestore...\n")
-    upload_user_data(User_data) # testing uploading to firebase
+    upload_user_data(User_data) # testing uploading to firebase, it works!
