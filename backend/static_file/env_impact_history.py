@@ -1,6 +1,26 @@
-# Assuming that all the transactions in a user is stored in a dict with transaction ID as key
-# transactions = {123: {"company": "Apple", "amount": 100, "time":2024-03-06}}
 from datetime import datetime
+from rapidfuzz import process
+
+def get_closest_match(query: str, choices: dict, score_cutoff: int = 75) -> str:
+    """
+    Returns the best match for query in the keys of choices dict if the score 
+    is above the score_cutoff.
+    """
+    match, score = process.extractOne(query, choices.keys())
+    if score >= score_cutoff:
+        return match
+    return None
+
+def get_company_env_score(transaction: dict, ESG_scores: dict[str, dict]):
+    """
+    Returns environmental score for a transaction's company IF the company is in the ESG_scores dict.
+    Otherwise, return 0.
+    """
+    company_name = get_closest_match(transaction['merchant_name'], ESG_scores)
+    if company_name is not None:
+        return ESG_scores[company_name]['environment_score']
+    else:
+        return 0
 
 # Assuming that the ESG_scores is a dictionary, 
 # whose key is the company's name and the value is the ESG score of the company
@@ -22,7 +42,7 @@ def get_score(transactions: dict[int, dict], start: datetime, end: datetime, ESG
     env_contribution = 0
     total_spending = 0
     for transaction in lst_of_transactions:
-        company_env_score = ESG_scores[transaction['merchant_name']]['environment_score']
+        company_env_score = get_company_env_score(transaction, ESG_scores)
         transaction_amount = transaction['amount']
         env_contribution += company_env_score * transaction_amount
         total_spending += transaction_amount
@@ -35,7 +55,7 @@ def get_ESG_score_of_transaction_companies(transactions: dict[int, dict], ESG_sc
     """
     company_ESG_scores = []
     for transaction in transactions:
-        company_env_score = ESG_scores[transaction['merchant_name']]['environment_score']
+        company_env_score = get_company_env_score(transaction, ESG_scores)
         company_ESG_scores.append({transaction['merchant_name']: company_env_score})
     
     return company_ESG_scores
@@ -49,7 +69,7 @@ def get_total_green_transactions(transactions: dict[int, dict], ESG_scores: dict
     """
     green_transactions = 0
     for transaction in transactions:
-        company_env_score = ESG_scores[transaction['merchant_name']]['environment_score']
+        company_env_score = get_company_env_score(transaction, ESG_scores)
         if company_env_score > 500:
             green_transactions += 1
     
@@ -63,7 +83,7 @@ def get_most_purchased_companies(transactions: dict[int, dict], ESG_scores: dict
     sorted_transactions = sorted(transactions, key=lambda dic: dic['Amount'], reverse=True)
     top_5_companies = []
     for transaction in sorted_transactions[:5]:
-        company_env_score = ESG_scores[transaction['merchant_name']]['environment_score']
+        company_env_score = get_company_env_score(transaction, ESG_scores)
         top_5_companies.append({
             'Company Name': transaction['merchant_name'],
             'ESG Score': company_env_score,
@@ -72,6 +92,8 @@ def get_most_purchased_companies(transactions: dict[int, dict], ESG_scores: dict
     
     return top_5_companies
 
+
+# THIS CAN BE REMOVED
 def get_user_transactions(all_transactions: dict[int, dict], userID: int):
     """
     Based on a dict containing transactions for all users, return a dict containing 
@@ -87,7 +109,10 @@ def get_user_transactions(all_transactions: dict[int, dict], userID: int):
             user_transactions[transaction_id] = transactions[transaction_id]
     return user_transactions
 
-def get_start_end_dates(frequency: str, current_date: datetime):
+def _get_start_end_dates(frequency: str, current_date: datetime) -> tuple(datetime, datetime):
+    """
+    Helper function, get start and end dates of the week or month of the current_date.
+    """
     if frequency == "weekly":
         # Get the start of the week (Monday)
         start_date = current_date - timedelta(days=current_date.weekday())
@@ -104,7 +129,10 @@ def get_start_end_dates(frequency: str, current_date: datetime):
     
     return start_date, end_date
 
-def calculate_historical_scores(frequency: str, current_date: datetime, user_transactions: dict[int, dict], esg_scores: dict[str, dict]):
+def calculate_historical_scores(frequency: str, current_date: datetime, user_transactions: dict[int, dict], esg_scores: dict[str, dict]) -> list[int]:
+    """
+    Return list of environmental scores for the past 12 weeks or months.
+    """
     scores = []
 
     if frequency == "weekly":
@@ -116,7 +144,7 @@ def calculate_historical_scores(frequency: str, current_date: datetime, user_tra
 
     for _ in range(12):
         # Get start and end dates based on frequency
-        start_date, end_date = get_start_end_dates(frequency, current_date)
+        start_date, end_date = _get_start_end_dates(frequency, current_date)
         
         # Calculate the score for the current period
         score = get_score(user_transactions, start_date, end_date, esg_scores)
@@ -130,3 +158,4 @@ def calculate_historical_scores(frequency: str, current_date: datetime, user_tra
             current_date = start_date - timedelta(days=start_date.day)
 
     return scores
+

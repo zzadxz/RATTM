@@ -24,10 +24,8 @@ def return_user_data(request):
     if user_id is None:
         return {"error": "User ID not found in session"}
 
-    # instead of doing this here, we will directly pull from Users table
-    # TRANSACTIONS SPECIFIC TO THIS USER
-    all_transactions = get_table_from_firebase('transactions')
-    user_transactions = get_user_transactions(all_transactions, user_id)
+    # Pull from 
+    user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
 
     # ESG DATA
     esg_data = get_table_from_firebase('esg')
