@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from calendar import monthrange
 from rapidfuzz import process
 
 def get_closest_match(query: str, choices: dict, score_cutoff: int = 75) -> str:
@@ -80,7 +81,7 @@ def get_most_purchased_companies(transactions: dict[int, dict], ESG_scores: dict
     Gets most purchased companies of all time, returns a list of dictionary, where dictionaries 
     contain the company name, the ESG score of the company and the amount spent on that company
     """
-    sorted_transactions = sorted(transactions, key=lambda dic: dic['Amount'], reverse=True)
+    sorted_transactions = sorted(transactions, key=lambda dic: dic['amount'], reverse=True)
     top_5_companies = []
     for transaction in sorted_transactions[:5]:
         company_env_score = get_company_env_score(transaction, ESG_scores)
@@ -102,14 +103,14 @@ def get_user_transactions(all_transactions: dict[int, dict], userID: int):
     user_transactions = {}
     
     # iterate through all transactions
-    for transaction_id in transactions:
+    for transaction_id in all_transactions:
         # if the customer ID is this user
-        if transactions[transaction_id]["customerID"] == userID:
+        if all_transactions[transaction_id]["customerID"] == userID:
             # add the transaction to the dict specific to this user
-            user_transactions[transaction_id] = transactions[transaction_id]
+            user_transactions[transaction_id] = all_transactions[transaction_id]
     return user_transactions
 
-def _get_start_end_dates(frequency: str, current_date: datetime) -> tuple(datetime, datetime):
+def _get_start_end_dates(frequency: str, current_date: datetime) -> tuple[datetime]:
     """
     Helper function, get start and end dates of the week or month of the current_date.
     """
@@ -158,4 +159,3 @@ def calculate_historical_scores(frequency: str, current_date: datetime, user_tra
             current_date = start_date - timedelta(days=start_date.day)
 
     return scores
-
