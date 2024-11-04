@@ -35,6 +35,11 @@ def get_user_email_from_frontend(request):
 
 # top 10 companies purchased from, their esg score, and amount purchased from them
 
-# total user score
+# total CO2 score
 
 # number of companies from each tier
+
+# percent increase/decrease of CO2 score
+
+# percent increase/decrease of green transactions
+
