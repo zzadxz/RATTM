@@ -76,6 +76,21 @@ def get_total_green_transactions(transactions: dict[int, dict], ESG_scores: dict
     
     return green_transactions
 
+def company_tier(company_env_score: int) -> int:
+    """
+    Returns the tier of the company based on its environmental score, 
+    worst tier is 4 and best tier is 1.
+    """
+    if company_env_score < 245:
+        return 4
+    elif company_env_score < 500:
+        return 3
+    elif company_env_score < 520:
+        return 2
+    else:
+        return 1
+    
+
 def get_most_purchased_companies(transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[dict[str, float]]:
     """
     Gets most purchased companies of all time, returns a list of dictionary, where dictionaries 

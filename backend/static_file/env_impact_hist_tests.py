@@ -145,5 +145,13 @@ class TestFunctions(unittest.TestCase):
         result = calculate_historical_scores("weekly", current_date, user_transactions, esg_scores)
         self.assertEqual(result[:3], [100, 200, 300])  # Check first three results
     
+    def test_company_tier(self):
+        self.assertEqual(company_tier(244), 4)
+        self.assertEqual(company_tier(245), 3)
+        self.assertEqual(company_tier(500), 3)
+        self.assertEqual(company_tier(501), 2)
+        self.assertEqual(company_tier(520), 2)
+        self.assertEqual(company_tier(521), 1)
+    
 if __name__ == "__main__":
     unittest.main()
