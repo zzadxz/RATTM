@@ -1,5 +1,5 @@
 # get latitude and longitude of transactions of user
-from utils.firebase import db
+from backend.utils.firebase import db
 from django.http import JsonResponse
 from login.use_cases import get_table_from_firebase
 from env_impact_history import get_company_env_score, get_closest_match, company_tier
