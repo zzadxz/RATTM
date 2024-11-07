@@ -26,8 +26,8 @@ export default function Home() {
         <Image
           src="/images/logo/rootpage-logo.png"
           alt="RATTM CO2 Calculator"
-          width={100} // These are placeholders, overriden by className
-          height={100}
+          width={872} // These just describe the resolution
+          height={774}
           className="w-full"
         />
       </div>

@@ -40,8 +40,8 @@ export default function About() {
         <Image
           src="/images/logo/woman-holding-grlobe.svg"
           alt="RATTM CO2 Calculator"
-          width={100} // These are placeholders, overriden by className
-          height={100}
+          width={634} // These just describe the resolution
+          height={538}
           className="w-full"
         />
       </div>
