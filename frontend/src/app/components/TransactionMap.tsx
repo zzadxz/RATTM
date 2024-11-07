@@ -14,7 +14,7 @@ const TransactionMap: React.FC = () => {
   useEffect(() => {
     // Initialize the Mapbox map
     const map = new mapboxgl.Map({
-      container: mapContainer.current || "",
+      container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11", // Map style
       center: [-74.5, 40], // Initial position [lng, lat]
       zoom: 9, // Initial zoom level

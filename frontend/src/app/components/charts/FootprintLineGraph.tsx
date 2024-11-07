@@ -147,7 +147,7 @@ const FootprintLineGraph: React.FC = () => {
       <br />
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-          {series.map(({ name, color }) => (
+          {series.map(({ name, data, color }) => (
             <div className="flex min-w-47.5" key={name}>
               <span
                 className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border"
