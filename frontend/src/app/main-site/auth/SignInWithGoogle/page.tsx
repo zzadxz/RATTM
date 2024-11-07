@@ -1,22 +1,25 @@
 // src/app/main-site/auth/SignInWithGoogle/page.tsx
-
 "use client";
+
+import { log } from "../../../../utils/log";
 import React, { useEffect, useState } from "react";
 import { signInWithGoogle } from "@/app/firebase/authService";
 import { useRouter } from "next/navigation";
 import { auth } from "@/app/firebase/firebaseConfig";
 
 function SendEmail(userEmail: string) {
-
   const sendEmailToBackend = async (userEmail: string) => {
     try {
-      const response = await fetch('https://rattm-f300025e7172.herokuapp.com/login/get_email/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userEmail }),
-      });
+      const response = await fetch(
+        "https://rattm-f300025e7172.herokuapp.com/login/get_email/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userEmail }),
+        }
+      );
       const data = await response.json();
 
       if (response.ok) {
@@ -25,8 +28,8 @@ function SendEmail(userEmail: string) {
         alert(`Error: ${data.error}`);
       }
     } catch (error) {
-      console.error('Error sending number:', error);
-      alert('An error occurred while sending the number.');
+      console.error("Error sending number:", error);
+      alert("An error occurred while sending the number.");
     }
   };
   return sendEmailToBackend(userEmail);
@@ -50,13 +53,13 @@ const SignInWithGoogle: React.FC = () => {
     try {
       setLoading(true);
       const user_credential = await signInWithGoogle();
-      
+
       if (user_credential) {
         const email = user_credential.user.email;
         if (email) {
           SendEmail(email);
         }
-        console.log("User's email:", email);
+        log("User's email:", email);
       }
       // Don't redirect here - let the auth state listener handle it
     } catch (error) {
@@ -66,9 +69,11 @@ const SignInWithGoogle: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <p>Loading...</p>
-    </div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
