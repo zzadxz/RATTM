@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title:
@@ -36,9 +37,11 @@ export default function About() {
         id="right-col"
         className="flex h-full flex-col items-center justify-center rounded-2xl md:col-span-6"
       >
-        <img
+        <Image
           src="/images/logo/woman-holding-grlobe.svg"
           alt="RATTM CO2 Calculator"
+          width={100} // These are placeholders, overriden by className
+          height={100}
           className="w-full"
         />
       </div>

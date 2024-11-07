@@ -12,7 +12,7 @@ export default function Transactions() {
       <h1 className="mb-5 mt-5 text-center text-3xl font-extrabold text-black dark:text-white">
         All recent transactions
       </h1>
-      <p className="text-center">I'll put stuff here later</p>
+      <p className="text-center">I&apos;ll put stuff here later</p>
     </div>
   );
 }
