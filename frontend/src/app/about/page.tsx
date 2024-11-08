@@ -39,6 +39,8 @@ export default function About() {
         <img
           src="/images/logo/woman-holding-grlobe.svg"
           alt="RATTM CO2 Calculator"
+          width={634} // These just describe the resolution
+          height={538}
           className="w-full"
         />
       </div>

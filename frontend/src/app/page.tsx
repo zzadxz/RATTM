@@ -30,6 +30,8 @@ export default function Home() {
         <img
           src="/images/logo/rootpage-logo.png"
           alt="RATTM CO2 Calculator"
+          width={872}
+          height={774}
           className="w-full"
         />
       </div>
