@@ -1,5 +1,4 @@
 // src/app/components/Navbar.tsx
-
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";

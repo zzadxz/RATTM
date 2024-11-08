@@ -19,31 +19,20 @@ const CompaniesPieChart = dynamic(
 );
 
 const Dashboard: React.FC = () => {
-  const [displayName, setDisplayName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setDisplayName(user.displayName || "User");
         setLoading(false);
       } else {
-        router.replace("/main-site/auth/SignInWithGoogle"); // Use replace instead of push
+        router.replace("/main-site/auth/SignInWithGoogle");
       }
     });
 
     return () => unsubscribe();
   }, [router]);
-
-  const handleSignOut = async () => {
-    try {
-      await auth.signOut();
-      router.replace("/"); // Use replace instead of push
-    } catch (error) {
-      console.error("Sign out error:", error);
-    }
-  };
 
   if (loading) {
     return (
