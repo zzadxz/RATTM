@@ -3,7 +3,7 @@ import "jsvectormap/dist/jsvectormap.css";
 import "flatpickr/dist/flatpickr.min.css";
 import "@/css/satoshi.css";
 import "@/css/style.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/app/components/Navbar";
 
 export default function RootLayout({
@@ -11,6 +11,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>

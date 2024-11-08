@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Image from "next/image";
 
 export const metadata: Metadata = {
   title:
@@ -37,7 +36,7 @@ export default function About() {
         id="right-col"
         className="flex h-full flex-col items-center justify-center rounded-2xl md:col-span-6"
       >
-        <Image
+        <img
           src="/images/logo/woman-holding-grlobe.svg"
           alt="RATTM CO2 Calculator"
           width={634} // These just describe the resolution

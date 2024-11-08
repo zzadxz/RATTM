@@ -1,3 +1,5 @@
+// src/app/components/Navbar.tsx
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -62,7 +64,7 @@ const Navbar = () => {
                 </li>
               ) : null
             )}
-            <li>
+            <li className="flex items-center gap-2 2xsm:gap-6">
               {user ? (
                 <button
                   onClick={handleSignOut}
@@ -71,12 +73,20 @@ const Navbar = () => {
                   <Link href="/">SIGN OUT</Link>
                 </button>
               ) : (
-                <Link
-                  href="/main-site/auth/SignInWithGoogle"
-                  className="text-sm font-extrabold text-black"
-                >
-                  SIGN IN
-                </Link>
+                <>
+                  <Link
+                    href="/main-site/auth/SignInWithGoogle"
+                    className="text-sm font-extrabold text-black"
+                  >
+                    SIGN IN
+                  </Link>
+                  <Link
+                    href="/main-site/auth/SignInWithGoogle"
+                    className="text-sm font-extrabold text-black"
+                  >
+                    SIGN UP
+                  </Link>
+                </>
               )}
             </li>
           </ul>

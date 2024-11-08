@@ -1,13 +1,17 @@
 "use client";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { auth } from "@/app/firebase/firebaseConfig";
+import { useRouter } from "next/navigation";
 import { User } from "firebase/auth";
+import { Metadata } from "next";
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -23,10 +27,10 @@ export default function Home() {
   return (
     <div className="ml-20 mr-20 mt-4 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-12 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
       <div id="left-col" className="rounded-2xl md:col-span-6">
-        <Image
+        <img
           src="/images/logo/rootpage-logo.png"
           alt="RATTM CO2 Calculator"
-          width={872} // These just describe the resolution
+          width={872}
           height={774}
           className="w-full"
         />
