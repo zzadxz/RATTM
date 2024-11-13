@@ -5,11 +5,10 @@ from static_file.env_impact_history import (
     get_ESG_score_of_transaction_companies, 
     get_total_green_transactions, 
     get_most_purchased_companies, 
-    get_user_transactions, 
     calculate_historical_scores,
     calculate_historical_green_transactions,
     companies_in_each_tier)
-from static_file.map import get_user_all_locations_and_company
+from static_file.map import get_all_locations_and_company
 from datetime import date
 
 def get_table_from_firebase(table_to_access: str):
@@ -184,3 +183,9 @@ def get_green_transaction_change(user_id) -> int:
 
 
 # Note that get_map is not needed here beacuse it can be imported from static.get_user_all_locations_and_company
+
+# Added this function here from static_file.map
+def get_user_all_locations_and_company(user_id):
+    user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
+    esg_data = get_table_from_firebase('esg')
+    get_all_locations_and_company(user_transactions, esg_data)

@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from static_file.map import get_user_all_locations_and_company
 from .use_cases import (
     get_past_12_month_names,
     get_weekly_green_transactions,
@@ -9,13 +8,15 @@ from .use_cases import (
     get_monthly_green_transactions,
     get_monthly_carbon_score,
     get_total_green_transactions,
-    get_top_companies,
+    get_top_5_companies,
     get_total_co2_score,
     get_company_tiers,
     get_co2_score_change,
-    get_green_transaction_change
+    get_green_transaction_change,
+    get_user_all_locations_and_company
     # Note that get_map_data is not imported here because it is from the static_file/map.py file
 )
+from random import randint
 
 # endpoint is /login/user_email
 @api_view(['POST'])
@@ -32,7 +33,7 @@ def get_user_email_from_frontend(request):
     if request.data in email_to_user_id.keys():
         user_id = email_to_user_id[request.data]
     else:
-        user_id = 99
+        user_id = randint(0,99)
 
     request.session["user_id"] = user_id
     return Response({"message": f"Got user's email {request.data}", "data": user_id})
@@ -91,6 +92,6 @@ def get_green_transaction_change(request):
     return Response(get_user_green_transaction_change(user_id))
 
 # map data
-def get_map_data(request): # IMPLEMENTED
+def get_map_data(request):
     user_id = request.session.get("user_id") 
     return Response(get_user_all_locations_and_company(user_id))
