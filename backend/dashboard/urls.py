@@ -10,7 +10,6 @@ from .views import (
     get_company_tiers,
     get_co2_score_change,
     get_green_transaction_change,
-    get_map_data
 )
     
 
@@ -25,5 +24,4 @@ urlpatterns = [
     path('get_company_tiers/', get_company_tiers, name='get_company_tiers'),
     path('get_co2_score_change/', get_co2_score_change, name='get_co2_score_change'),
     path('get_green_transaction_change/', get_green_transaction_change, name='get_green_transaction_change'),
-    path('get_map_data/', get_map_data, name='get_map_data')
 ]

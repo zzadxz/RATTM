@@ -1,19 +1,17 @@
 from utils.firebase import db
 from utils.data_access import get_table_from_firebase
-from static_file.company_esg_score import company_name_matching, get_company_score
-from static_file.env_impact_history import (
-    get_score, 
-    get_ESG_score_of_transaction_companies, 
-    get_total_green_transactions, 
-    get_most_purchased_companies, 
+from .calculations import (
+    calculate_score, 
+    calculate_company_esg_scores, 
+    calculate_total_green_transactions, 
+    find_most_purchased_companies, 
     calculate_historical_scores,
     calculate_historical_green_transactions,
-    companies_in_each_tier
-    )
-from static_file.map import get_all_locations_and_company
+    find_companies_in_each_tier
+)
 from datetime import date
 
-def get_past_12_month_names() -> list[str]:
+def past_12_month_names() -> list[str]:
     """
     Returns a reordering of ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] based on the current month
     """
@@ -27,7 +25,7 @@ def get_past_12_month_names() -> list[str]:
     
     return reordered_months
 
-def get_weekly_carbon_score(user_id) -> list[int]:
+def weekly_carbon_scores(user_id) -> list[int]:
     """
     Returns list of length 12 of carbon scores each week.
     """
@@ -36,7 +34,7 @@ def get_weekly_carbon_score(user_id) -> list[int]:
     # reverse the list so that the most recent data point is the last element
     return calculate_historical_scores("weekly", user_transactions, esg_data)[::-1]
 
-def get_monthly_carbon_score(user_id) -> list[int]:
+def monthly_carbon_scores(user_id) -> list[int]:
     """
     Returns list of length 12 of carbon scores each month.
     """
@@ -45,7 +43,7 @@ def get_monthly_carbon_score(user_id) -> list[int]:
     # reverse the list so that the most recent data point is the last element
     return calculate_historical_scores("monthly", user_transactions, esg_data)[::-1]
 
-def get_weekly_green_transactions(user_id) -> list[int]:
+def weekly_green_transactions(user_id) -> list[int]:
     """
     Returns list of length 12 of # of green transactions each week.
     """
@@ -53,7 +51,7 @@ def get_weekly_green_transactions(user_id) -> list[int]:
     esg_data = get_table_from_firebase('esg')
     return calculate_historical_green_transactions("weekly", user_transactions, esg_data)[::-1]
 
-def get_monthly_green_transactions(user_id) -> list[int]:
+def monthly_green_transactions(user_id) -> list[int]:
     """
     Returns list of length 12 of # of green transactions each month.
     """
@@ -61,23 +59,23 @@ def get_monthly_green_transactions(user_id) -> list[int]:
     esg_data = get_table_from_firebase('esg')
     return calculate_historical_scores("monthly", user_transactions, esg_data)[::-1]
     
-def get_total_green_transactions(user_id) -> int:
+def total_green_transactions(user_id) -> int:
     """
     Return total number of green transactions ever. 
     """
     user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
     esg_data = get_table_from_firebase('esg')
-    return get_total_green_transactions(user_transactions, esg_data)
+    return calculate_total_green_transactions(user_transactions, esg_data)
     
-def get_top_5_companies(user_id) -> dict:
+def top_5_companies(user_id) -> dict:
     """
     Returns in dict format:  { 'Company Name' : str, 'ESG Score' : int, 'Amount Spent' : int }
     """
     user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
     esg_data = get_table_from_firebase('esg')
-    return get_most_purchased_companies(user_transactions, esg_data)
+    return find_most_purchased_companies(user_transactions, esg_data)
 
-def get_total_co2_score(user_id) -> int:
+def total_co2_score(user_id) -> int:
     """
     Returns CO2 score for this month.
     """
@@ -85,15 +83,15 @@ def get_total_co2_score(user_id) -> int:
     esg_data = get_table_from_firebase('esg')
     return calculate_historical_scores("monthly", user_transactions, esg_data)[0]
 
-def get_company_tiers(user_id) -> list[int]:
+def company_tiers(user_id) -> list[int]:
     """
     Returns list of length 4, where the first index is the number of companies in the highest tier.
     """
     user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
     esg_data = get_table_from_firebase('esg')
-    return companies_in_each_tier(user_transactions, esg_data)
+    return find_companies_in_each_tier(user_transactions, esg_data)
 
-def get_co2_score_change(user_id) -> int:
+def co2_score_change(user_id) -> int:
     """
     Returns the difference between last month and this month's CO2 score.
     """
@@ -102,7 +100,7 @@ def get_co2_score_change(user_id) -> int:
     monthly_scores = calculate_historical_scores("monthly", user_transactions, esg_data)
     return monthly_scores[0] - monthly_scores[1]
     
-def get_green_transaction_change(user_id) -> int:
+def green_transaction_change(user_id) -> int:
     """
     Returns the difference between last month and this month's # of green transactions.
     """
@@ -111,12 +109,3 @@ def get_green_transaction_change(user_id) -> int:
     monthly_green_transactions = calculate_historical_scores("monthly", user_transactions, esg_data)
     return monthly_green_transactions[0] - monthly_green_transactions[1]
     
-
-
-# Note that get_map is not needed here beacuse it can be imported from static.get_user_all_locations_and_company
-
-# Added this function here from static_file.map
-def get_user_all_locations_and_company(user_id):
-    user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
-    esg_data = get_table_from_firebase('esg')
-    get_all_locations_and_company(user_transactions, esg_data)
