@@ -1,3 +1,4 @@
+// src/app/components/Navbar.tsx
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -6,11 +7,11 @@ import { useRouter } from "next/navigation";
 import { User } from "firebase/auth";
 
 const navBarLinks = [
-  { name: "Home", link: "/" },
-  { name: "About", link: "/about" },
-  { name: "Carbon Dashboard", link: "/dashboard" },
-  { name: "Transactions", link: "/transactions" },
-  { name: "Map", link: "/map" },
+  { name: "Home", link: "/", access_restricted: false },
+  { name: "About", link: "/about", access_restricted: false },
+  { name: "Carbon Dashboard", link: "/dashboard", access_restricted: true },
+  { name: "Transactions", link: "/transactions", access_restricted: true },
+  { name: "Map", link: "/map", access_restricted: true },
 ];
 
 const Navbar = () => {
@@ -53,14 +54,16 @@ const Navbar = () => {
 
         <div className="hidden max-w-full flex-grow justify-end overflow-clip sm:flex">
           <ul className="flex items-center gap-2 2xsm:gap-6">
-            {navBarLinks.map(({ name, link }) => (
-              <li key={name}>
-                <a href={link} className="text-sm font-extrabold text-black">
-                  {name.toUpperCase()}
-                </a>
-              </li>
-            ))}
-            <li>
+            {navBarLinks.map(({ name, link, access_restricted }) =>
+              user || !access_restricted ? (
+                <li key={name}>
+                  <a href={link} className="text-sm font-extrabold text-black">
+                    {name.toUpperCase()}
+                  </a>
+                </li>
+              ) : null
+            )}
+            <li className="flex items-center gap-2 2xsm:gap-6">
               {user ? (
                 <button
                   onClick={handleSignOut}
@@ -69,12 +72,20 @@ const Navbar = () => {
                   <Link href="/">SIGN OUT</Link>
                 </button>
               ) : (
-                <Link
-                  href="/main-site/auth/SignInWithGoogle"
-                  className="text-sm font-extrabold text-black"
-                >
-                  SIGN IN
-                </Link>
+                <>
+                  <Link
+                    href="/main-site/auth/SignInWithGoogle"
+                    className="text-sm font-extrabold text-black"
+                  >
+                    SIGN IN
+                  </Link>
+                  <Link
+                    href="/main-site/auth/SignInWithGoogle"
+                    className="text-sm font-extrabold text-black"
+                  >
+                    SIGN UP
+                  </Link>
+                </>
               )}
             </li>
           </ul>
