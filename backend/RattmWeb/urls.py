@@ -26,4 +26,5 @@ urlpatterns = [
     path('transaction/', include('transaction.urls')),
     path('esg/', include('esg.urls')),
     path('login/', include('login.urls')),
+    path('dashboard/', include('dashboard.urls')),
 ]
