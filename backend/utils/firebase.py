@@ -29,7 +29,6 @@ firebase_credentials = {
 
 # Initialize the Firebase app using the credentials
 cred = credentials.Certificate(firebase_credentials)
-logging.info(f"put into Certificate")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()

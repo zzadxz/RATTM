@@ -120,7 +120,9 @@ def upload_user_data(User_data: dict) -> None:
         
 if __name__ == '__main__':
     esg_collection = db.collection('esg')
-    esg_data = collection_to_list_limited(esg_collection, limit=3)
+    
+    esg_data = collection_to_list_limited(esg_collection) # can set limit=3
+
     print("\nRaw esg_data:\n")
     print(esg_data)
     #[{'environment_level': 'High', 'social_grade': 'BB', 'governance_level': 'Medium', 'social_level': 'Medium', 'total_score': 1141, 'total_grade': 'BBB', 'social_score': 310, 'weburl': 'https://www.3m.com/', 'exchange': 'NEW YORK STOCK EXCHANGE, INC.', 'cik': 66740, 'logo': 'https://static.finnhub.io/logo/2a1802fa-80ec-11ea-a0f5-00000000092a.png', 'industry': 'Industrial Conglomerates', 'governance_score': 305, 'total_level': 'High', 'currency': 'USD', 'governance_grade': 'BB', 'environment_score': 526, 'last_processing_date': '16-04-2022', 'environment_grade': 'A', 'ticker': 'mmm', 'id': '3M Co'}, {'environment_level': 'High', 'social_grade': 'BB', 'governance_level': 'Medium', 'social_level': 'Medium', 'total_score': 1135, 'total_grade': 'BBB', 'social_score': 315, 'weburl': 'https://www.aosmith.com/', 'exchange': 'NEW YORK STOCK EXCHANGE, INC.', 'cik': 91142, 'logo': 'https://static.finnhub.io/logo/73381be8-80eb-11ea-b385-00000000092a.png', 'industry': 'Building', 'governance_score': 310, 'total_level': 'High', 'currency': 'USD', 'governance_grade': 'BB', 'environment_score': 510, 'last_processing_date': '16-04-2022', 'environment_grade': 'A', 'ticker': 'aos', 'id': 'A O Smith Corp'}, {'environment_level': 'High', 'social_grade': 'BB', 'governance_level': 'Medium', 'social_level': 'Medium', 'total_score': 1129, 'total_grade': 'BBB', 'social_score': 324, 'weburl': 'https://www.abiomed.com/', 'exchange': 'NASDAQ NMS - GLOBAL MARKET', 'cik': 815094, 'logo': 'https://static.finnhub.io/logo/8b2cc7cc-80df-11ea-b8c7-00000000092a.png', 'industry': 'Health Care', 'governance_score': 305, 'total_level': 'High', 'currency': 'USD', 'governance_grade': 'BB', 'environment_score': 500, 'last_processing_date': '16-04-2022', 'environment_grade': 'A', 'ticker': 'abmd', 'id': 'ABIOMED Inc'}]
@@ -131,14 +133,16 @@ if __name__ == '__main__':
     # {'company_name': 'A O Smith Corp', 'environment_grade': 'A', 'environment_score': 510.0, 'normalized_score': 0.38461538461538464}, 
     # {'company_name': 'ABIOMED Inc', 'environment_grade': 'A', 'environment_score': 500.0, 'normalized_score': 0.0}]
     transaction_collection = db.collection('transactions')
-    transaction_data = collection_to_list_limited(transaction_collection, limit=20)
+
+    transaction_data = collection_to_list_limited(transaction_collection) # can set limit=20
+
     print("\nRaw transaction data:\n")
     print(transaction_data)
     # [{'action': 'declined', 'time_completed': '2024-08-31T06:02:27.687Z', 'longitude': -113.807658, 'merchant_name': 'Starbucks', 'latitude': -42.372604, 'customerID': 52, 'amount': 860.27, 'ip_address': '179.152.194.186', 'id': '0'}, 
     #  {'action': 'declined', 'time_completed': '2023-12-07T08:07:20.451Z', 'longitude': -1.121183, 'merchant_name': 'Target', 'latitude': 11.962175, 'customerID': 74, 'amount': 144.53, 'ip_address': '173.64.65.25', 'id': '1'}, 
     #  {'action': 'approved', 'time_completed': '2023-12-13T10:22:26.700Z', 'longitude': 176.909716, 'merchant_name': 'Walmart', 'latitude': 61.823301, 'customerID': 47, 'amount': 962.7, 'ip_address': '46.201.218.108', 'id': '10'}]
-    
-    User_data = {} # We're going to upload this later
+    User_data = {} # We're going to upload this 
+
     
     populate_user_transactions(transaction_data, User_data)
     print("\nUser data:\n")
