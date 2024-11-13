@@ -44,7 +44,7 @@ def get_months_for_line_graph(request):
 # weekly green transactions for each month - return the last 5 data points as a list
 def get_weekly_green_transactions(request):
     user_id = request.session.get("user_id") 
-    return Response(get_green_transactions(user_id))
+    return Response(get_user_weekly_green_transactions(user_id))
 
 # weekly carbon score for each month - return the last 5 data points as a list
 def get_weekly_carbon_score(request):
