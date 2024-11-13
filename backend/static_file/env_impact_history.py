@@ -27,10 +27,6 @@ def get_score(transactions: dict[int, dict], start: datetime, end: datetime, ESG
     """
     Calculate the environmental impact score of a user
     """
-    # Assuming that we are able to get the transaction history of the user from
-    # start date to end date as a list, and we have figured out how to parse through the
-    # the company names, so each entry is a dictionary with the company name as the key
-    # and the transaction amount as the value
     lst_of_transactions = []
     for transaction in transactions.values():
         transaction_date = datetime.strptime(transaction['time_completed'], "%Y-%m-%dT%H:%M:%S.%fZ")
@@ -129,6 +125,15 @@ def _get_start_end_dates(frequency: str, current_date: datetime) -> tuple[dateti
     
     return start_date, end_date
 
+def _increment_current_date(frequency: str, start_date: datetime) -> datetime:
+    # Increment current date
+    if frequency == "weekly":
+        current_date = start_date - timedelta(days=1)
+    elif frequency == "monthly":
+        current_date = start_date - timedelta(days=start_date.day)
+    
+    return current_date
+
 def calculate_historical_scores(frequency: str, transactions: dict[int, dict], esg_scores: dict[str, dict]) -> list[int]:
     """
     Return list of environmental scores for the past 12 weeks or months.
@@ -153,11 +158,7 @@ def calculate_historical_scores(frequency: str, transactions: dict[int, dict], e
         
         scores.append(score)
         
-        # Increment current date
-        if frequency == "weekly":
-            current_date = start_date - timedelta(days=1)
-        elif frequency == "monthly":
-            current_date = start_date - timedelta(days=start_date.day)
+        current_date = _increment_current_date(frequency, start_date)
 
     return scores
 
@@ -189,10 +190,7 @@ def calculate_historical_green_transactions(frequency: str, transactions: dict[i
         
         green_transaction_counts.append(green_count)
         
-        if frequency == "weekly":
-            current_date = start_date - timedelta(days=1)
-        elif frequency == "monthly":
-            current_date = start_date - timedelta(days=start_date.day)
+        current_date = _increment_current_date(frequency, start_date)
 
     return green_transaction_counts
 
