@@ -166,7 +166,7 @@ const FootprintLineGraph: React.FC = () => {
               </div>
             </div>
           ))}
-          <div className="flex w-full max-w-45 justify-end">
+          {/* <div className="flex w-full max-w-45 justify-end">
             <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
               <button className="rounded px-3 py-1 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
                 By Week
@@ -175,7 +175,7 @@ const FootprintLineGraph: React.FC = () => {
                 By Month
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
