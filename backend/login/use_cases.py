@@ -15,4 +15,4 @@ def match_email_to_id(email):
     else:
         user_id = randint(0,99)
     
-    return user_id
+    return str(user_id)

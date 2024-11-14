@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta
 from calendar import monthrange
 from rapidfuzz import process
+from dateutil.relativedelta import relativedelta
 
 def _get_closest_match(query: str, choices: dict, score_cutoff: int = 75) -> str:
     """
     Returns the best match for query in the keys of choices dict if the score 
     is above the score_cutoff.
     """
-    match, score = process.extractOne(query, choices.keys())
+    match, score, _ = process.extractOne(query, choices.keys())
     if score >= score_cutoff:
         return match
     return None
@@ -23,7 +24,7 @@ def _get_company_env_score(transaction: dict, ESG_scores: dict[str, dict]):
     else:
         return 0
 
-def _is_green(transactions: dict[int, dict], ESG_scores: dict[str,dict]):
+def _is_green(transaction: dict, ESG_scores: dict[str,dict]):
     company_env_score = _get_company_env_score(transaction, ESG_scores)
     return company_env_score > 500
 
@@ -73,38 +74,36 @@ def _increment_current_date(frequency: str, start_date: datetime) -> datetime:
     return current_date
 
 
-def _count_green_transactions_in_period(transactions: dict[int, dict], start_date: datetime, end_date: datetime, ESG_scores: dict[str,dict]) -> int:
+def _count_green_transactions_in_period(transactions: list[dict], start_date: datetime, end_date: datetime, ESG_scores: dict[str,dict]) -> int:
     """
     Helper function that counts green transactions within a specified date range.
     """
     return sum(
-        1 for transaction in transactions.values()
+        1 for transaction in transactions
         if start_date <= datetime.strptime(transaction['time_completed'], "%Y-%m-%dT%H:%M:%S.%fZ") <= end_date
         and _is_green(transaction, ESG_scores)
     )
 
 
-def _get_unique_companies(start_date, end_date):
+def _get_unique_companies(transactions: list[dict], ESG_scores: dict[str, dict]):
     """
-    Return set of companies shopped at this month.
+    Return set of top companies shopped at for all time
     """
-    unique_companies_this_month = set()
+    unique_companies = set()
 
-    for transaction in transactions.values():
-        transaction_date = datetime.strptime(transaction['time_completed'], "%Y-%m-%dT%H:%M:%S.%fZ")
-        if start_date <= transaction_date <= end_date:
-            company_name = _get_closest_match(transaction['merchant_name'], ESG_scores)
-            if company_name:
-                unique_companies_this_month.add(company_name)
-    return unique_companies_this_month
+    for transaction in transactions:
+        company_name = _get_closest_match(transaction['merchant_name'], ESG_scores)
+        if company_name:
+            unique_companies.add(company_name)
+    return unique_companies
 
 
-def calculate_score(transactions: dict[int, dict], start: datetime, end: datetime, ESG_scores: dict[str, dict]) -> float:
+def calculate_score(transactions: list[dict], start: datetime, end: datetime, ESG_scores: dict[str, dict]) -> float:
     """
     Calculate the environmental impact score of a user
     """
     lst_of_transactions = []
-    for transaction in transactions.values():
+    for transaction in transactions:
         transaction_date = datetime.strptime(transaction['time_completed'], "%Y-%m-%dT%H:%M:%S.%fZ")
         if start <= transaction_date <= end:
             lst_of_transactions.append(transaction)
@@ -118,7 +117,7 @@ def calculate_score(transactions: dict[int, dict], start: datetime, end: datetim
         env_contribution += company_env_score * transaction_amount
         total_spending += transaction_amount
     
-    return env_contribution / total_spending
+    return int(env_contribution / total_spending) if total_spending != 0 else None
 
 
 def calculate_company_esg_scores(transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[dict[str, float]]:
@@ -133,7 +132,7 @@ def calculate_company_esg_scores(transactions: dict[int, dict], ESG_scores: dict
     return company_ESG_scores
 
 
-def calculate_total_green_transactions(transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> int:
+def calculate_total_green_transactions(transactions: list[dict], ESG_scores: dict[str,dict]) -> int:
     """
     25th percentile: 245.0
     50th percentile: 500.0
@@ -142,7 +141,7 @@ def calculate_total_green_transactions(transactions: dict[int, dict], ESG_scores
     """
     green_transactions = 0
     for transaction in transactions:
-        if _is_green(transactions, ESG_scores):
+        if _is_green(transaction, ESG_scores):
             green_transactions += 1
     
     return green_transactions
@@ -172,7 +171,7 @@ def calculate_historical_scores(frequency: str, transactions: dict[int, dict], e
     The scores go from most to least recent! So scores[0] is this month, scores[-1] is 10 months ago
     """
     scores = []
-    current_date =  datetime.now()
+    current_date =  datetime.now() - relativedelta(months=1)
 
     if frequency == "weekly":
         delta_days = 7
@@ -201,7 +200,7 @@ def calculate_historical_green_transactions(frequency: str, transactions: dict[i
     List goes from most recent as first element to least recent as last element.
     """
     green_transaction_counts = []
-    current_date =  datetime.now()
+    current_date =  datetime.now() - relativedelta(months=1)
 
     for _ in range(12):
         # Get start and end dates for this period
@@ -217,15 +216,13 @@ def calculate_historical_green_transactions(frequency: str, transactions: dict[i
     return green_transaction_counts
 
 
-def find_companies_in_each_tier(transactions: dict[int, dict], ESG_scores: dict[str, dict]) -> list[int]:
+def find_companies_in_each_tier(transactions: list[dict], ESG_scores: dict[str, dict]) -> list[int]:
     """
     Returns list of length 4, where the first element is the number of companies in the highest tier
-    that the user shopped at this month.
+    that the user shopped at for all time.
     """
-    start_date, end_date = _get_start_end_dates("monthly", datetime.now())
-    
     # Set of unique companies transacted with this month
-    unique_companies_this_month = _get_unique_companies(start_date, end_date)
+    unique_companies_this_month = _get_unique_companies(transactions, ESG_scores)
 
     # Indices correspond to tiers 1-4
     company_tier_counts = [0, 0, 0, 0]  

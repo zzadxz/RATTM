@@ -1,5 +1,6 @@
 from utils.firebase import db
 from utils.data_access import get_table_from_firebase
+from static_file.company_esg_score import company_name_matching, get_company_score
 from .calculations import (
     calculate_score, 
     calculate_company_esg_scores, 
@@ -81,7 +82,9 @@ def total_co2_score(user_id) -> int:
     """
     user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
     esg_data = get_table_from_firebase('esg')
-    return calculate_historical_scores("monthly", user_transactions, esg_data)[0]
+    monthly_scores = [score for score in calculate_historical_scores("monthly", user_transactions, esg_data)
+                        if score is not None]
+    return int(sum(monthly_scores) / len(monthly_scores))
 
 def company_tiers(user_id) -> list[int]:
     """
@@ -98,7 +101,10 @@ def co2_score_change(user_id) -> int:
     user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
     esg_data = get_table_from_firebase('esg')
     monthly_scores = calculate_historical_scores("monthly", user_transactions, esg_data)
-    return monthly_scores[0] - monthly_scores[1]
+
+    if monthly_scores[0] is None or monthly_scores[1] is None:
+        return 0
+    return int(monthly_scores[0] - monthly_scores[1])
     
 def green_transaction_change(user_id) -> int:
     """
@@ -106,6 +112,7 @@ def green_transaction_change(user_id) -> int:
     """
     user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
     esg_data = get_table_from_firebase('esg')
-    monthly_green_transactions = calculate_historical_scores("monthly", user_transactions, esg_data)
-    return monthly_green_transactions[0] - monthly_green_transactions[1]
-    
+    monthly_green_transactions = calculate_historical_green_transactions("monthly", user_transactions, esg_data)
+    if monthly_green_transactions[0] is None or monthly_green_transactions[1] is None:
+        return 0
+    return int(monthly_green_transactions[0] - monthly_green_transactions[1])
