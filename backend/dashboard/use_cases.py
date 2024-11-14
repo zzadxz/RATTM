@@ -49,11 +49,20 @@ def monthly_green_transactions(user_id) -> list[int]:
 
 def total_green_transactions(user_id) -> int:
     """
-    Return total number of green transactions ever. 
+    Return total number of green transactions this month. 
     """
     user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
     esg_data = get_table_from_firebase('esg')
     return calculate_total_green_transactions(user_transactions, esg_data)
+    
+
+def this_month_green_transactions(user_id) -> int:
+    """
+    Return total number of green transactions this month. 
+    """
+    user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
+    esg_data = get_table_from_firebase('esg')
+    return calculate_historical_green_transactions(user_transactions, esg_data)[0]
     
 
 def top_5_companies(user_id) -> dict:
@@ -67,13 +76,22 @@ def top_5_companies(user_id) -> dict:
 
 def total_co2_score(user_id) -> int:
     """
-    Returns CO2 score for this month.
+    Returns CO2 score for the past year.
     """
     user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
     esg_data = get_table_from_firebase('esg')
     monthly_scores = [score for score in calculate_historical_scores(user_transactions, esg_data)
                         if score is not None]
     return int(sum(monthly_scores) / len(monthly_scores))
+
+
+def this_month_co2_score(user_id) -> int:
+    """
+    Returns CO2 score for this month.
+    """
+    user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
+    esg_data = get_table_from_firebase('esg')
+    return calculate_historical_scores(user_transactions, esg_data)[0]
 
 
 def company_tiers(user_id) -> list[int]:
