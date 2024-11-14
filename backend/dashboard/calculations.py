@@ -43,35 +43,18 @@ def _company_tier(company_env_score: int) -> int:
         return 4
     
 
-def _get_start_end_dates(frequency: str, current_date: datetime) -> tuple[datetime]:
+def _get_start_end_dates(current_date: datetime) -> tuple[datetime]:
     """
-    Helper function, get start and end dates of the week or month of the current_date.
+    Helper function, get start and end dates of the month of the current_date.
     """
-    if frequency == "weekly":
-        # Get the start of the week (Monday)
-        start_date = current_date - timedelta(days=current_date.weekday())
-        # Get the end of the week (Sunday)
-        end_date = start_date + timedelta(days=6)
-    elif frequency == "monthly":
-        # Get the first day of the month
-        start_date = current_date.replace(day=1)
-        # Get the last day of the month
-        last_day = monthrange(current_date.year, current_date.month)[1]
-        end_date = current_date.replace(day=last_day)
-    else:
-        raise ValueError("Frequency must be 'weekly' or 'monthly'")
+    # Get the first day of the month
+    start_date = current_date.replace(day=1)
+    # Get the last day of the month
+    last_day = monthrange(current_date.year, current_date.month)[1]
+    end_date = current_date.replace(day=last_day)
     
     return start_date, end_date
 
-
-def _increment_current_date(frequency: str, start_date: datetime) -> datetime:
-    # Increment current date
-    if frequency == "weekly":
-        current_date = start_date - timedelta(days=1)
-    elif frequency == "monthly":
-        current_date = start_date - timedelta(days=start_date.day)
-    
-    return current_date
 
 
 def _count_green_transactions_in_period(transactions: list[dict], start_date: datetime, end_date: datetime, ESG_scores: dict[str,dict]) -> int:
@@ -165,38 +148,32 @@ def find_most_purchased_companies(transactions: dict[int, dict], ESG_scores: dic
     return top_5_companies
 
 
-def calculate_historical_scores(frequency: str, transactions: dict[int, dict], esg_scores: dict[str, dict]) -> list[int]:
+def calculate_historical_scores(transactions: dict[int, dict], esg_scores: dict[str, dict]) -> list[int]:
     """
-    Return list of environmental scores for the past 12 weeks or months.
+    Return list of environmental scores for the past 12 months.
     The scores go from most to least recent! So scores[0] is this month, scores[-1] is 10 months ago
     """
     scores = []
     current_date =  datetime.now() - relativedelta(months=1)
-
-    if frequency == "weekly":
-        delta_days = 7
-    elif frequency == "monthly":
-        delta_days = 30
-    else:
-        raise ValueError("Frequency must be 'weekly' or 'monthly'")
+    delta_days = 30
 
     for _ in range(12):
-        # Get start and end dates based on frequency
-        start_date, end_date = _get_start_end_dates(frequency, current_date)
+        # Get start and end dates
+        start_date, end_date = _get_start_end_dates(current_date)
         
         # Calculate the score for the current period
         score = calculate_score(transactions, start_date, end_date, esg_scores)
         
         scores.append(score)
         
-        current_date = _increment_current_date(frequency, start_date)
+        current_date = start_date - timedelta(days=start_date.day)
 
     return scores
 
 
-def calculate_historical_green_transactions(frequency: str, transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[int]:
+def calculate_historical_green_transactions(transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[int]:
     """
-    Return a list of green transaction counts for the past 12 weeks or months.
+    Return a list of green transaction counts for the past months.
     List goes from most recent as first element to least recent as last element.
     """
     green_transaction_counts = []
@@ -204,14 +181,14 @@ def calculate_historical_green_transactions(frequency: str, transactions: dict[i
 
     for _ in range(12):
         # Get start and end dates for this period
-        start_date, end_date = _get_start_end_dates(frequency, current_date)
+        start_date, end_date = _get_start_end_dates(current_date)
         
         # Get the number of green transactions for the current period
         green_count = _count_green_transactions_in_period(transactions, start_date, end_date, ESG_scores)
         
         green_transaction_counts.append(green_count)
         
-        current_date = _increment_current_date(frequency, start_date)
+        current_date = start_date - timedelta(days=start_date.day)
 
     return green_transaction_counts
 
