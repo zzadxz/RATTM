@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from datetime import datetime, timedelta
-from env_impact_history import (
+from .env_impact_history import (
     get_closest_match,
     get_company_env_score,
     get_score,
