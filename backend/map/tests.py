@@ -16,8 +16,6 @@ class TestMapFunctions(unittest.TestCase):
             "Company B": {"environment_score": 200}
         }
 
-    @patch('/Users/chongwan/vscode/RATTM/backend/utils/firebase.py.db')
-    @patch('/Users/chongwan/vscode/RATTM/backend/login/use_cases.py')
     def test_get_user_all_locations_and_company(self, mock_company_tier, mock_get_closest_match, mock_get_table_from_firebase, mock_db):
         # Mock the user document retrieval
         mock_user_doc = MagicMock()
