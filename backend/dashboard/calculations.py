@@ -70,7 +70,7 @@ def _count_green_transactions_in_period(transactions: list[dict], start_date: da
 
 def _get_unique_companies(transactions: list[dict], ESG_scores: dict[str, dict]):
     """
-    Return set of top companies shopped at for all time
+    Return set of unique companies in transaction
     """
     unique_companies = set()
 
