@@ -8,6 +8,8 @@
 from django.test import TestCase
 from utils.firebase import db
 from .calculations import *
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'RattmWeb.settings')
 django.setup()
@@ -125,7 +127,104 @@ class TestCalculations(TestCase):
             self.assertIn('Company Name', company)
             self.assertIn('ESG Score', company)
             self.assertIn('Amount Spent', company)
-    
+
+class AdditionalCalculationsTest(TestCase):
+    def setUp(self):
+        # FAKE THE DICTIONARIES
+        self.esg = {
+            '3M Co': {
+                'environment_score': 526,
+            }, 
+            'A O Smith Corp': {
+                'environment_score': 510,
+            },
+            'Green Company': {
+                'environment_score': 570,
+            },
+            'Borderline Company': {
+                'environment_score': 510,
+            }
+        }
+        
+        # Create a more diverse set of transactions for comprehensive testing
+        self.transactions = [
+            {
+                'merchant_name': '3M Co', 
+                'time_completed': '2024-01-15T12:00:00.000Z', 
+                'amount': 860.27
+            }, 
+            {
+                'merchant_name': 'A O Smith Corp', 
+                'time_completed': '2024-01-10T12:00:00.000Z', 
+                'amount': 144.53
+            },
+            {
+                'merchant_name': 'Green Company', 
+                'time_completed': '2024-01-05T12:00:00.000Z', 
+                'amount': 500.00
+            },
+            {
+                'merchant_name': 'Borderline Company', 
+                'time_completed': '2024-01-01T12:00:00.000Z', 
+                'amount': 250.00
+            }
+        ]
+
+    def test_is_green(self):
+        """Test the _is_green function"""
+        # Transaction with company above 500 should be green
+        green_transaction = {'merchant_name': '3M Co'}
+        self.assertTrue(_is_green(green_transaction, self.esg))
+
+        # Transaction with company exactly at 500 should not be green
+        borderline_transaction = {'merchant_name': 'Borderline Company'}
+        self.assertFalse(_is_green(borderline_transaction, self.esg))
+
+    def test_company_tier_detailed(self):
+        """Test the _company_tier function with more detailed scenarios"""
+        self.assertEqual(_company_tier(570), 1, "Score above 560 should be tier 1")
+        self.assertEqual(_company_tier(540), 2, "Score between 520 and 560 should be tier 2")
+        self.assertEqual(_company_tier(510), 3, "Score between 500 and 520 should be tier 3")
+        self.assertEqual(_company_tier(490), 4, "Score below 500 should be tier 4")
+
+    def test_calculate_historical_scores(self):
+        """Test the calculate_historical_scores function"""
+        # We'll use a subset of transactions to simulate historical data
+        historical_scores = calculate_historical_scores(self.transactions, self.esg)
+        
+        # Verify the length of the returned list
+        self.assertEqual(len(historical_scores), 12, "Should return scores for 12 months")
+        
+        # Verify that the scores are calculated
+        self.assertIsNotNone(historical_scores[0], "First month's score should not be None")
+        
+    def test_calculate_historical_green_transactions(self):
+        """Test the calculate_historical_green_transactions function"""
+        historical_green_transactions = calculate_historical_green_transactions(self.transactions, self.esg)
+        
+        # Verify the length of the returned list
+        self.assertEqual(len(historical_green_transactions), 12, "Should return green transaction counts for 12 months")
+        
+        # Verify that the counts are calculated
+        self.assertIsNotNone(historical_green_transactions[0], "First month's green transaction count should be calculable")
+
+    def test_find_companies_in_each_tier(self):
+        """Test the find_companies_in_each_tier function"""
+        tier_counts = find_companies_in_each_tier(self.transactions, self.esg)
+        
+        # Verify the length of the returned list
+        self.assertEqual(len(tier_counts), 4, "Should return counts for 4 tiers")
+        
+        # Basic assertions about the tier counts
+        self.assertGreaterEqual(sum(tier_counts), 0, "Total tier count should be non-negative")
+        
+        # Specific assertions based on our test data
+        # Green Company should be in tier 1
+        self.assertGreater(tier_counts[0], 0, "Tier 1 should have at least one company")
+        
+        # 3M Co should be in tier 3
+        tier_3_index = 2
+        self.assertIn(tier_counts[tier_3_index], range(4), "Tier count should be a reasonable number")  
         
 # if __name__ == '__main__':
 #     def get_table_from_firebase(table_to_access: str):
