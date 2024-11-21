@@ -44,7 +44,7 @@ def monthly_green_transactions(user_id) -> list[int]:
     """
     user_transactions = get_table_from_firebase('Users')[user_id]['transactions']
     esg_data = get_table_from_firebase('esg')
-    return calculate_historical_scores(user_transactions, esg_data)[::-1]
+    return calculate_historical_green_transactions(user_transactions, esg_data)[::-1]
     
 
 def total_green_transactions(user_id) -> int:
