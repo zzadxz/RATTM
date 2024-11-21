@@ -1,21 +1,18 @@
-from utils.firebase import db
+from datetime import datetime
 from utils.data_access import get_table_from_firebase
-from static_file.company_esg_score import company_name_matching, get_company_score
 from .calculations import (
-    calculate_score,
-    calculate_company_esg_scores,
     calculate_total_green_transactions,
     find_most_purchased_companies,
     calculate_historical_scores,
     calculate_historical_green_transactions,
     find_companies_in_each_tier,
 )
-from datetime import date, datetime
 
 
 def past_12_month_names() -> list[str]:
     """
-    Returns a reordering of ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] based on the current month
+    Returns a reordering of ["Jan", "Feb", "Mar", "Apr", "May", 
+    "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] based on the current month
     """
     months = [
         "Jan",
@@ -138,9 +135,9 @@ def green_transaction_change(user_id) -> int:
     """
     user_transactions = get_table_from_firebase("Users")[user_id]["transactions"]
     esg_data = get_table_from_firebase("esg")
-    monthly_green_transactions = calculate_historical_green_transactions(
+    monthly_green_trans = calculate_historical_green_transactions(
         user_transactions, esg_data
     )
-    if monthly_green_transactions[0] is None or monthly_green_transactions[1] is None:
+    if monthly_green_trans[0] is None or monthly_green_trans[1] is None:
         return 0
-    return int(monthly_green_transactions[0] - monthly_green_transactions[1])
+    return int(monthly_green_trans[0] - monthly_green_trans[1])

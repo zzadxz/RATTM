@@ -17,14 +17,13 @@ def _get_closest_match(query: str, choices: dict, score_cutoff: int = 75) -> str
 
 def _get_company_env_score(transaction: dict, ESG_scores: dict[str, dict]):
     """
-    Returns environmental score for a transaction's company IF the company is in the ESG_scores dict.
-    Otherwise, return 0.
+    Returns environmental score for a transaction's company IF the company is 
+    in the ESG_scores dict. Otherwise, return 0.
     """
     company_name = _get_closest_match(transaction["merchant_name"], ESG_scores)
     if company_name is not None:
         return ESG_scores[company_name]["environment_score"]
-    else:
-        return 0
+    return 0
 
 
 def _is_green(transaction: dict, ESG_scores: dict[str, dict]):
@@ -43,8 +42,7 @@ def _company_tier(company_env_score: int) -> int:
         return 2
     elif company_env_score > 500:
         return 3
-    else:
-        return 4
+    return 4
 
 
 def _get_start_end_dates(current_date: datetime) -> tuple[datetime]:
@@ -64,7 +62,7 @@ def _count_green_transactions_in_period(
     transactions: list[dict],
     start_date: datetime,
     end_date: datetime,
-    ESG_scores: dict[str, dict],
+    esg_scores: dict[str, dict],
 ) -> int:
     """
     Helper function that counts green transactions within a specified date range.
@@ -75,18 +73,18 @@ def _count_green_transactions_in_period(
         if start_date
         <= datetime.strptime(transaction["time_completed"], "%Y-%m-%dT%H:%M:%S.%fZ")
         <= end_date
-        and _is_green(transaction, ESG_scores)
+        and _is_green(transaction, esg_scores)
     )
 
 
-def _get_unique_companies(transactions: list[dict], ESG_scores: dict[str, dict]):
+def _get_unique_companies(transactions: list[dict], esg_scores: dict[str, dict]):
     """
     Return set of top companies shopped at for all time
     """
     unique_companies = set()
 
     for transaction in transactions:
-        company_name = _get_closest_match(transaction["merchant_name"], ESG_scores)
+        company_name = _get_closest_match(transaction["merchant_name"], esg_scores)
         if company_name:
             unique_companies.add(company_name)
     return unique_companies
@@ -96,7 +94,7 @@ def calculate_score(
     transactions: list[dict],
     start: datetime,
     end: datetime,
-    ESG_scores: dict[str, dict],
+    esg_scores: dict[str, dict],
 ) -> float:
     """
     Calculate the environmental impact score of a user
@@ -113,7 +111,7 @@ def calculate_score(
     env_contribution = 0
     total_spending = 0
     for transaction in lst_of_transactions:
-        company_env_score = _get_company_env_score(transaction, ESG_scores)
+        company_env_score = _get_company_env_score(transaction, esg_scores)
         transaction_amount = transaction["amount"]
         env_contribution += company_env_score * transaction_amount
         total_spending += transaction_amount
@@ -122,21 +120,21 @@ def calculate_score(
 
 
 def calculate_company_esg_scores(
-    transactions: dict[int, dict], ESG_scores: dict[str, dict]
+    transactions: dict[int, dict], esg_scores: dict[str, dict]
 ) -> list[dict[str, float]]:
     """
     Calculate the ESG score of the companies that the user has made transactions with
     """
-    company_ESG_scores = []
+    company_esg_scores = []
     for transaction in transactions:
-        company_env_score = _get_company_env_score(transaction, ESG_scores)
-        company_ESG_scores.append({transaction["merchant_name"]: company_env_score})
+        company_env_score = _get_company_env_score(transaction, esg_scores)
+        company_esg_scores.append({transaction["merchant_name"]: company_env_score})
 
-    return company_ESG_scores
+    return company_esg_scores
 
 
 def calculate_total_green_transactions(
-    transactions: list[dict], ESG_scores: dict[str, dict]
+    transactions: list[dict], esg_scores: dict[str, dict]
 ) -> int:
     """
     25th percentile: 245.0
@@ -146,14 +144,14 @@ def calculate_total_green_transactions(
     """
     green_transactions = 0
     for transaction in transactions:
-        if _is_green(transaction, ESG_scores):
+        if _is_green(transaction, esg_scores):
             green_transactions += 1
 
     return green_transactions
 
 
 def find_most_purchased_companies(
-    transactions: dict[int, dict], ESG_scores: dict[str, dict]
+    transactions: dict[int, dict], esg_scores: dict[str, dict]
 ) -> list[dict[str, float]]:
     """
     Gets most purchased companies of all time, returns a list of dictionary, where dictionaries
@@ -164,7 +162,7 @@ def find_most_purchased_companies(
     )
     top_5_companies = []
     for transaction in sorted_transactions[:5]:
-        company_env_score = _get_company_env_score(transaction, ESG_scores)
+        company_env_score = _get_company_env_score(transaction, esg_scores)
         top_5_companies.append(
             {
                 "Company Name": transaction["merchant_name"],
@@ -185,7 +183,6 @@ def calculate_historical_scores(
     """
     scores = []
     current_date = datetime.now() - relativedelta(months=1)
-    delta_days = 30
 
     for _ in range(12):
         # Get start and end dates

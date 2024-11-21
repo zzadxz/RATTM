@@ -1,5 +1,6 @@
 from .firebase import db
 
+
 def get_table_from_firebase(table_to_access: str):
     """
     Return a dict mapping the key of the firestore collection to the data within its rows.
