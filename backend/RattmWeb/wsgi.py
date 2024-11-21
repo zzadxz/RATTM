@@ -14,6 +14,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'RattmWeb.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "RattmWeb.settings")
 
 application = get_wsgi_application()

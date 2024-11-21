@@ -13,17 +13,30 @@ from .env_impact_history import (
     calculate_historical_scores,
 )
 
+
 class TestFunctions(unittest.TestCase):
     # FAKE THE DICTIONARIES
     def setUp(self):
         self.transactions = {
-            1: {"merchant_name": "Walmart", "amount": 150, "time_completed": "2024-03-06T10:00:00.000Z"},
-            2: {"merchant_name": "Starbucks", "amount": 50, "time_completed": "2024-03-07T11:00:00.000Z"},
-            3: {"merchant_name": "Uber", "amount": 100, "time_completed": "2024-03-08T12:00:00.000Z"},
+            1: {
+                "merchant_name": "Walmart",
+                "amount": 150,
+                "time_completed": "2024-03-06T10:00:00.000Z",
+            },
+            2: {
+                "merchant_name": "Starbucks",
+                "amount": 50,
+                "time_completed": "2024-03-07T11:00:00.000Z",
+            },
+            3: {
+                "merchant_name": "Uber",
+                "amount": 100,
+                "time_completed": "2024-03-08T12:00:00.000Z",
+            },
         }
         self.ESG_scores = {
             "Walmart Inc": {"environment_score": 400},
-            "Starbucks Corp": {"environment_score": 550}
+            "Starbucks Corp": {"environment_score": 550},
         }
 
     # TEST FUZZY MATCHING
@@ -34,7 +47,7 @@ class TestFunctions(unittest.TestCase):
         result = get_closest_match("Walmart", self.ESG_scores)
         self.assertEqual(result, "Walmart Inc")
         mock_extractOne.assert_called_once_with("Walmart", self.ESG_scores.keys())
-    
+
     @patch("env_impact_history.process.extractOne")
     def test_get_closest_match(self, mock_extractOne):
         # Test matching "Starbucks" to "Starbucks Corp"
@@ -42,7 +55,7 @@ class TestFunctions(unittest.TestCase):
         result = get_closest_match("Starbucks", self.ESG_scores)
         self.assertEqual(result, "Starbucks Corp")
         mock_extractOne.assert_called_once_with("Starbucks", self.ESG_scores.keys())
-    
+
     @patch("env_impact_history.process.extractOne")
     def test_get_closest_match(self, mock_extractOne):
         # Test when there's no match
@@ -63,7 +76,7 @@ class TestFunctions(unittest.TestCase):
         transaction = {"merchant_name": "Starbucks"}
         result = get_company_env_score(transaction, self.ESG_scores)
         self.assertEqual(result, 550)
-        
+
         # Test matching with "Uber" which should have no match
         mock_get_closest_match.return_value = None
         transaction = {"merchant_name": "Uber"}
@@ -80,19 +93,25 @@ class TestFunctions(unittest.TestCase):
         start = datetime(2024, 3, 5)
         end = datetime(2024, 3, 8)
         result = get_score(self.transactions, start, end, self.ESG_scores)
-        self.assertAlmostEqual(result, 466.67, places=1)  # Weighted average of the scores
-    
+        self.assertAlmostEqual(
+            result, 466.67, places=1
+        )  # Weighted average of the scores
+
     @patch("env_impact_history.get_company_env_score")
     def test_get_ESG_score_of_transaction_companies(self, mock_get_company_env_score):
         mock_get_company_env_score.side_effect = [400, 550, 0]
-        result = get_ESG_score_of_transaction_companies(self.transactions.values(), self.ESG_scores)
+        result = get_ESG_score_of_transaction_companies(
+            self.transactions.values(), self.ESG_scores
+        )
         expected = [{"Walmart": 400}, {"Starbucks": 550}, {"Uber": 0}]
         self.assertEqual(result, expected)
-    
+
     @patch("env_impact_history.get_company_env_score")
     def test_get_total_green_transactions(self, mock_get_company_env_score):
         mock_get_company_env_score.side_effect = [400, 550, 0]
-        result = get_total_green_transactions(self.transactions.values(), self.ESG_scores)
+        result = get_total_green_transactions(
+            self.transactions.values(), self.ESG_scores
+        )
         self.assertEqual(result, 1)  # Only Starbucks meets the threshold of 500
 
     @patch("env_impact_history.get_company_env_score")
@@ -119,7 +138,7 @@ class TestFunctions(unittest.TestCase):
         user_transactions = get_user_transactions(all_transactions, 1)
         expected = {1: {"customerID": 1, "merchant_name": "Walmart", "amount": 150}}
         self.assertEqual(user_transactions, expected)
-    
+
     def test_get_start_end_dates_weekly(self):
         current_date = datetime(2024, 3, 7)  # Thursday
         start_date, end_date = _get_start_end_dates("weekly", current_date)
@@ -142,9 +161,11 @@ class TestFunctions(unittest.TestCase):
         current_date = datetime(2024, 3, 15)
         user_transactions = MagicMock()
         esg_scores = MagicMock()
-        result = calculate_historical_scores("weekly", current_date, user_transactions, esg_scores)
+        result = calculate_historical_scores(
+            "weekly", current_date, user_transactions, esg_scores
+        )
         self.assertEqual(result[:3], [100, 200, 300])  # Check first three results
-    
+
     def test_company_tier(self):
         self.assertEqual(company_tier(244), 4)
         self.assertEqual(company_tier(245), 3)
@@ -152,6 +173,7 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(company_tier(501), 2)
         self.assertEqual(company_tier(520), 2)
         self.assertEqual(company_tier(521), 1)
-    
+
+
 if __name__ == "__main__":
     unittest.main()

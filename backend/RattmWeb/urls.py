@@ -18,14 +18,15 @@ Including another URLconf
 URL request.
 ----------------------------------------------------------------------------
 """
+
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('transaction/', include('transaction.urls')),
-    path('esg/', include('esg.urls')),
-    path('login/', include('login.urls')),
-    path('dashboard/', include('dashboard.urls')),
-    path('map/', include('map.urls')),
+    path("admin/", admin.site.urls),
+    path("transaction/", include("transaction.urls")),
+    path("esg/", include("esg.urls")),
+    path("login/", include("login.urls")),
+    path("dashboard/", include("dashboard.urls")),
+    path("map/", include("map.urls")),
 ]

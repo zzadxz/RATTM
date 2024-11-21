@@ -103,4 +103,4 @@ class MockDoc:
 
     def to_dict(self):
         return self.data
-''' 
+'''
