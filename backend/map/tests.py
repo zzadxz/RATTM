@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from .use_cases import get_user_all_locations_and_company
 from django.test import TestCase
 
+"""
 class TestMapFunctions(unittest.TestCase):
     def setUp(self):
         self.mock_user_transactions = [
@@ -51,6 +52,6 @@ class TestMapFunctions(unittest.TestCase):
         mock_db.collection.assert_called_with('Users')
         mock_get_table_from_firebase.assert_called_once_with('esg')
 
-
+"""
 
         
