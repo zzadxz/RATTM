@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from django.http import JsonResponse
-from map import get_user_all_locations_and_company
+from .use_cases import get_user_all_locations_and_company
 from django.test import TestCase
 
 class TestMapFunctions(unittest.TestCase):
