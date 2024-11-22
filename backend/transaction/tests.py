@@ -14,9 +14,9 @@ class TransactionTestCase(TestCase):
     # Mock Firestore database
     @patch('transaction.views.db')
     def test_get_data_success(self, mock_db):
-        """
+        "
         Test that data is correctly fetched from Firestore and returned as a JSON response.
-        """
+        "
         # Mock Firestore returning data
         mock_db.collection.return_value.stream.return_value = [
             MockDoc({
