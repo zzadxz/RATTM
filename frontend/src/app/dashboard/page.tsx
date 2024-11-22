@@ -20,11 +20,27 @@ const CompaniesPieChart = dynamic(
 
 const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
+  const [totalCO2Score, setTotalCO2Score] = useState<string>("Loading...");
+  const [circleColor, setCircleColor] = useState<string>("#7d91f5");
+  const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    const fetchTotalCO2Score = async () => {
+      try {
+        const response = await fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_total_co2_score/");
+        const data = await response.text();
+        setTotalCO2Score(data); 
+        
+        const totalValue = parseFloat(data);
+        setCircleColor(totalValue > 200 ? "#08d116" : "#FE4A49");
+      } catch (error) {
+        console.error("Failed to fetch total CO2 score:", error);
+      }
+    };
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+        fetchTotalCO2Score();
         setLoading(false);
       } else {
         router.replace("/main-site/auth/SignInWithGoogle");
@@ -60,12 +76,17 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="col-span-12 rounded-2xl bg-white pt-5 md:col-span-4 lg:pl-10 lg:pr-10">
-        <CardDataStats title="(out of 850)" total="840" rate="23" levelUp>
+        <CardDataStats
+          title="(out of 500)"
+          total={totalCO2Score}
+          circleColor={circleColor}
+          onHoverChange={setIsHovered}
+        >
           <p className="text-center text-xl font-black text-black">
             Carbon Score
           </p>
         </CardDataStats>
-        <AboutYourScore />
+        <AboutYourScore isHovered={isHovered} />
         <div className="mt-5">
           <CompaniesPieChart />
         </div>
