@@ -9,14 +9,14 @@ from transaction.models import Transaction
 
 # To test locally: heroku local:run python manage.py test
 
-'''
 class TransactionTestCase(TestCase):
+    """
     # Mock Firestore database
     @patch('transaction.views.db')
     def test_get_data_success(self, mock_db):
-        """
+        "
         Test that data is correctly fetched from Firestore and returned as a JSON response.
-        """
+        "
         # Mock Firestore returning data
         mock_db.collection.return_value.stream.return_value = [
             MockDoc({
@@ -67,7 +67,8 @@ class TransactionTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), expected_response)
-
+        """
+    
     def test_esg_rating(self):
         """
         Test that the esg_rating() function is applied to each transaction.
@@ -103,4 +104,3 @@ class MockDoc:
 
     def to_dict(self):
         return self.data
-''' 
