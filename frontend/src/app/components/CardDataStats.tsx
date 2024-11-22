@@ -3,15 +3,14 @@ import React, { ReactNode } from "react";
 interface CardDataStatsProps {
   title: string;
   total: string;
-  circleColor: string;
   children: ReactNode;
+  circleColor: string;
   onHoverChange: (isHovered: boolean) => void;
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({
   title,
   total,
-  circleColor,
   children,
   onHoverChange,
 }) => {
