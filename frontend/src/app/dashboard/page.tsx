@@ -21,26 +21,56 @@ const CompaniesPieChart = dynamic(
 const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [totalCO2Score, setTotalCO2Score] = useState<string>("Loading...");
+  const [monthlyCO2Score, setMonthlyCO2Score] = useState<number>(0);
+  const [monthlyCO2ScoreChange, setMonthlyCO2ScoreChange] = useState<number>(0);
+  const [monthlyGreenTransactions, setMonthlyGreenTransactions] = useState<number>(0);
+  const [monthlyGreenTransactionsChange, setMonthlyGreenTransactionsChange] = useState<number>(0);
   const [circleColor, setCircleColor] = useState<string>("#7d91f5");
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchTotalCO2Score = async () => {
+    const fetchDashboardData = async () => {
       try {
-        const response = await fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_total_co2_score/");
-        const data = await response.text();
-        setTotalCO2Score(data); 
+        const [
+          totalCO2Response,
+          monthlyCO2Response,
+          co2ChangeResponse,
+          greenTransactionsResponse,
+          greenTransactionsChangeResponse
+        ] = await Promise.all([
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_total_co2_score/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_co2_score/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_co2_score_change/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_green_transactions/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_green_transaction_change/")
+        ]);
+
+        const [totalCO2Data, monthlyCO2Data, co2ChangeData, greenTransactionsData, greenTransactionsChangeData] = 
+          await Promise.all([
+            totalCO2Response.text(),
+            monthlyCO2Response.text(),
+            co2ChangeResponse.text(),
+            greenTransactionsResponse.text(),
+            greenTransactionsChangeResponse.text()
+          ]);
+
+        setTotalCO2Score(totalCO2Data);
+        setMonthlyCO2Score(Number(monthlyCO2Data));
+        setMonthlyCO2ScoreChange(Number(co2ChangeData));
+        setMonthlyGreenTransactions(Number(greenTransactionsData));
+        setMonthlyGreenTransactionsChange(Number(greenTransactionsChangeData));
         
-        const totalValue = parseFloat(data);
+        const totalValue = parseFloat(totalCO2Data);
         setCircleColor(totalValue > 200 ? "#08d116" : "#FE4A49");
       } catch (error) {
-        console.error("Failed to fetch total CO2 score:", error);
+        console.error("Failed to fetch dashboard data:", error);
       }
     };
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        fetchTotalCO2Score();
+        fetchDashboardData();
         setLoading(false);
       } else {
         router.replace("/main-site/auth/SignInWithGoogle");
@@ -71,7 +101,12 @@ const Dashboard: React.FC = () => {
         </p>
         <br />
         <FootprintLineGraph />
-        <MonthSummary />
+        <MonthSummary 
+          monthlyCO2Score={monthlyCO2Score}
+          monthlyCO2ScoreChange={monthlyCO2ScoreChange}
+          monthlyGreenTransactions={monthlyGreenTransactions}
+          monthlyGreenTransactionsChange={monthlyGreenTransactionsChange}
+        />
         <TableOne />
       </div>
 
