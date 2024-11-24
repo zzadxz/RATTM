@@ -2,7 +2,6 @@ from django.test import SimpleTestCase
 from rest_framework.test import APIClient
 from unittest.mock import patch
 from .use_cases import match_email_to_id
-from django.urls import reverse
 
 
 class MatchEmailToIdTests(SimpleTestCase):
@@ -66,7 +65,7 @@ class MatchEmailToIdTests(SimpleTestCase):
 class GetUserEmailFromFrontendTests(SimpleTestCase):
     def setUp(self):
         self.client = APIClient()
-        self.url = reverse("login:get_user_email")  
+        self.url = "/login/get_email/"
 
     @patch("login.use_cases.match_email_to_id")  # Mock the use case function
     def test_existing_email(self, mock_match_email_to_id):
