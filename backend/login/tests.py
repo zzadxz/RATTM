@@ -1,6 +1,6 @@
 from unittest.mock import patch
 from rest_framework.test import APIClient
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 from .use_case import LoginUseCase
 
 
@@ -69,7 +69,7 @@ class MatchEmailToIdTests(SimpleTestCase):
             mock_randint.assert_called_once_with(0, 99)
 
 
-class GetUserEmailFromFrontendTests(SimpleTestCase):
+class GetUserEmailFromFrontendTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.url = "/login/get_email/"
@@ -84,8 +84,8 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
 
         response = self.client.post(
             self.url,
-            data=email,  # Send raw email as plain text
-            content_type="text/plain",  # Indicate the content type
+            data=email,
+            format="json"
         )
 
         self.assertEqual(response.status_code, 200)
@@ -105,8 +105,8 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
 
         response = self.client.post(
             self.url,
-            data=email,  # Send raw email as plain text
-            content_type="text/plain",  # Indicate the content type
+            data=email,
+            format="json"
         )
 
         self.assertEqual(response.status_code, 200)
@@ -114,7 +114,7 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
             response.data,
             {"message": f"Got user's email {email}", "data": "42"},
         )
-        mock_match_email_to_id.assert_called_once_with(email)  # Pass plain email string
+        mock_match_email_to_id.assert_called_once_with(email)
 
     def test_invalid_request_method(self):
         """
