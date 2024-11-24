@@ -74,7 +74,7 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
         self.client = APIClient()
         self.url = "/login/get_email/"
 
-    @patch("login.use_case.match_email_to_id")  # Mock the use case function
+    @patch("login.use_case.LoginUseCase.match_email_to_id")  # Mock the use case function
     def test_existing_email(self, mock_match_email_to_id):
         """
         Test that the view returns the correct user ID for an existing email.
@@ -95,7 +95,7 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
         )
         mock_match_email_to_id.assert_called_once_with(email)  # Pass plain email string
 
-    @patch("login.use_case.match_email_to_id")
+    @patch("login.use_case.LoginUseCase.match_email_to_id")
     def test_non_existing_email(self, mock_match_email_to_id):
         """
         Test that the view handles non-existing emails and returns a random user ID.
