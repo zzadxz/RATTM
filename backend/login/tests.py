@@ -101,4 +101,4 @@ class GetUserEmailFromFrontendTests(TestCase):
         """
         response = self.client.get(self.url)
         # Method Not Allowed
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 405)
