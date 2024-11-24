@@ -1,8 +1,11 @@
 from django.test import SimpleTestCase
 from rest_framework.test import APIClient
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+from django.contrib.sessions.middleware import SessionMiddleware
+from django.http import HttpRequest
 from .use_cases import match_email_to_id
 from .views import get_user_email_from_frontend
+
 
 class MatchEmailToIdTests(SimpleTestCase):
     def test_match_existing_email(self):
@@ -65,6 +68,14 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
         self.client = APIClient()
         self.url = "/login/get_email/"
 
+    def _add_session_to_request(self, request):
+        """
+        Helper method to add a session to a request.
+        """
+        middleware = SessionMiddleware()
+        middleware.process_request(request)
+        request.session.save()
+
     @patch("login.use_cases.match_email_to_id")  # Mock use case function so it's a unit test
     def test_existing_email(self, mock_match_email_to_id):
         """
@@ -72,13 +83,17 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
         """
         mock_match_email_to_id.return_value = "21"
         email = "liuyimeng01@gmail.com"
-        # Mock session
-        with patch("django.http.HttpRequest.session", new_callable=MagicMock) as mock_session:
-            response = self.client.post(self.url, data=email, format="json")
-            # Assertions
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.data, {"message": f"Got user's email {email}", "data": "21"})
-            mock_session.__setitem__.assert_called_with("user_id", "21")
+
+        # Create a mock request with a session
+        request = HttpRequest()
+        self._add_session_to_request(request)
+
+        response = self.client.post(self.url, data=email, format="json")
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"message": f"Got user's email {email}", "data": "21"})
+        self.assertEqual(request.session["user_id"], "21")
         mock_match_email_to_id.assert_called_once_with(email)
 
     @patch("login.use_cases.match_email_to_id")
@@ -88,12 +103,16 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
         """
         mock_match_email_to_id.return_value = "42"
         email = "nonexistentemail@gmail.com"
-        # Mock session
-        with patch("django.http.HttpRequest.session", new_callable=MagicMock) as mock_session:
-            response = self.client.post(self.url, data=email, format="json")
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.data, {"message": f"Got user's email {email}", "data": "42"})
-            mock_session.__setitem__.assert_called_with("user_id", "42")
+
+        # Create a mock request with a session
+        request = HttpRequest()
+        self._add_session_to_request(request)
+
+        response = self.client.post(self.url, data=email, format="json")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"message": f"Got user's email {email}", "data": "42"})
+        self.assertEqual(request.session["user_id"], "42")
         mock_match_email_to_id.assert_called_once_with(email)
 
     def test_invalid_request_method(self):
