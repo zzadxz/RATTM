@@ -20,7 +20,7 @@ class MatchEmailToIdTests(SimpleTestCase):
         """
         login_use_case = LoginUseCase()
         email = "nonexistentemail@gmail.com"
-        with patch("login.use_cases.randint") as mock_randint:
+        with patch("login.use_case.randint") as mock_randint:
             mock_randint.return_value = 42  # Mock randint to return a predictable value
             user_id = login_use_case.match_email_to_id(email)
             self.assertEqual(user_id, "42")
@@ -48,7 +48,7 @@ class MatchEmailToIdTests(SimpleTestCase):
         """
         login_use_case = LoginUseCase()
         email = ""
-        with patch("login.use_cases.randint") as mock_randint:
+        with patch("login.use_case.randint") as mock_randint:
             mock_randint.return_value = 99
             user_id = login_use_case.match_email_to_id(email)
             self.assertEqual(user_id, "99")
@@ -60,7 +60,7 @@ class MatchEmailToIdTests(SimpleTestCase):
         """
         login_use_case = LoginUseCase()
         email = "Liuyimeng01@gmail.com"
-        with patch("login.use_cases.randint") as mock_randint:
+        with patch("login.use_case.randint") as mock_randint:
             mock_randint.return_value = 57
             user_id = login_use_case.match_email_to_id(email)
             self.assertEqual(
@@ -74,7 +74,7 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
         self.client = APIClient()
         self.url = "/login/get_email/"
 
-    @patch("login.use_cases.match_email_to_id")  # Mock the use case function
+    @patch("login.use_case.match_email_to_id")  # Mock the use case function
     def test_existing_email(self, mock_match_email_to_id):
         """
         Test that the view returns the correct user ID for an existing email.
@@ -95,7 +95,7 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
         )
         mock_match_email_to_id.assert_called_once_with(email)  # Pass plain email string
 
-    @patch("login.use_cases.match_email_to_id")
+    @patch("login.use_case.match_email_to_id")
     def test_non_existing_email(self, mock_match_email_to_id):
         """
         Test that the view handles non-existing emails and returns a random user ID.
