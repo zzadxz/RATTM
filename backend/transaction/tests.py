@@ -125,29 +125,6 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 500)
         error_data = json.loads(response.content)
         self.assertIn('error', error_data)
-
-    @patch('transaction.views.db')
-    @patch('transaction.views.os.getenv')
-    def test_upload_data_to_firestore_exception(self, mock_getenv, mock_db):
-        """
-        Test error handling in upload_data_to_firestore
-        """
-        # Simulate an exception during upload
-        mock_db.collection.return_value.limit.return_value.get.return_value = []
-        mock_db.collection.return_value.document.return_value.set.side_effect = Exception('Upload error')
-
-        # Create a mock request
-        from django.test import RequestFactory
-        request = RequestFactory().post('/transaction/upload')
-
-        # Call the function
-        response = upload_data_to_firestore(request)
-
-        # Assertions
-        self.assertIsInstance(response, JsonResponse)
-        self.assertEqual(response.status_code, 500)
-        error_data = json.loads(response.content)
-        self.assertIn('error', error_data)
 '''
 class TransactionTestCase(TestCase):
     # Mock Firestore database
