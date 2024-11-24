@@ -5,7 +5,7 @@ import { Transaction, TransactionService } from "@/services/transactionService";
 
 /**
  * useTransactions Hook
- * 
+ *
  * This custom hook manages the fetching and state of transaction data.
  * It abstracts the logic for data retrieval, making it reusable across
  * different components or pages.
@@ -20,7 +20,7 @@ const useTransactions = () => {
   useEffect(() => {
     /**
      * fetchData
-     * 
+     *
      * Fetches transaction data using the TransactionService.
      * Updates state based on the success or failure of the fetch.
      */
@@ -28,11 +28,14 @@ const useTransactions = () => {
       try {
         const data = await TransactionService.fetchTransactions();
         setTransactions(data);
-      } catch (err) { // 'err' is now used
+      } catch (err) {
+        // 'err' is now used
         console.warn("Failed to fetch transactions. Using mock data.", err);
         const mockData = TransactionService.getMockTransactions();
         setTransactions(mockData);
-        setError("Failed to fetch real transactions. Displaying mock data.");
+        setError(
+          "Failed to fetch real transactions. Displaying mock data below:"
+        );
       } finally {
         setLoading(false);
       }

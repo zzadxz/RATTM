@@ -1,11 +1,11 @@
 // src/app/transactions/page.tsx
-'use client';
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import TransactionsTable from '@/app/components/TransactionsTable';
-import useTransactions from '@/hooks/useTransactions';
-import Datepicker from 'react-tailwindcss-datepicker';
-import dayjs from 'dayjs';
+import React, { useState, useMemo } from "react";
+import TransactionsTable from "@/app/components/TransactionsTable";
+import useTransactions from "@/hooks/useTransactions";
+import Datepicker from "react-tailwindcss-datepicker";
+import dayjs from "dayjs";
 
 // Define the structure for filters
 interface FilterState {
@@ -23,14 +23,16 @@ const LOAD_MORE_INCREMENT = 20;
 const TransactionsPage: React.FC = () => {
   const { transactions, loading, error } = useTransactions();
   const [filters, setFilters] = useState<FilterState>({
-    action: 'All',
-    company: '',
+    action: "All",
+    company: "",
     dateRange: {
       startDate: null,
       endDate: null,
     },
   });
-  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_VISIBLE_COUNT);
+  const [visibleCount, setVisibleCount] = useState<number>(
+    INITIAL_VISIBLE_COUNT
+  );
 
   // Handle filter updates
   const updateFilter = <K extends keyof FilterState>(
@@ -63,7 +65,7 @@ const TransactionsPage: React.FC = () => {
 
       // Action Filter
       const matchesAction =
-        filters.action === 'All' ||
+        filters.action === "All" ||
         txn.action.toLowerCase() === filters.action.toLowerCase();
 
       // Company Filter
@@ -74,9 +76,9 @@ const TransactionsPage: React.FC = () => {
       // Date Range Filter
       const { startDate, endDate } = filters.dateRange;
       const afterStartDate =
-        !startDate || txnDate.isAfter(dayjs(startDate).subtract(1, 'day'));
+        !startDate || txnDate.isAfter(dayjs(startDate).subtract(1, "day"));
       const beforeEndDate =
-        !endDate || txnDate.isBefore(dayjs(endDate).add(1, 'day'));
+        !endDate || txnDate.isBefore(dayjs(endDate).add(1, "day"));
 
       return matchesAction && matchesCompany && afterStartDate && beforeEndDate;
     });
@@ -105,13 +107,16 @@ const TransactionsPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:gap-6 w-full sm:w-2/3">
           {/* Action Filter */}
           <div className="relative w-full sm:w-1/2">
-            <label htmlFor="action" className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
+            <label
+              htmlFor="action"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1"
+            >
               Action
             </label>
             <select
               id="action"
               value={filters.action}
-              onChange={(e) => updateFilter('action', e.target.value)}
+              onChange={(e) => updateFilter("action", e.target.value)}
               className="block w-full appearance-none rounded-md border border-stroke bg-white px-3 py-2 pr-10 shadow-default focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-boxdark dark:border-strokedark dark:text-gray-200"
             >
               <option value="All">All Actions</option>
@@ -138,14 +143,17 @@ const TransactionsPage: React.FC = () => {
 
           {/* Company Name Filter */}
           <div className="relative w-full sm:w-1/2">
-            <label htmlFor="company" className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
+            <label
+              htmlFor="company"
+              className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1"
+            >
               Company
             </label>
             <input
               type="text"
               id="company"
               value={filters.company}
-              onChange={(e) => updateFilter('company', e.target.value)}
+              onChange={(e) => updateFilter("company", e.target.value)}
               placeholder="Search by company name"
               className="block w-full rounded-md border border-stroke bg-white px-3 py-2 shadow-default focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-boxdark dark:border-strokedark dark:text-gray-200"
             />
@@ -154,11 +162,14 @@ const TransactionsPage: React.FC = () => {
 
         {/* Date Range Picker */}
         <div className="relative w-full sm:w-1/3">
-          <label htmlFor="dateRange" className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
+          <label
+            htmlFor="dateRange"
+            className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1"
+          >
             Date Range
           </label>
           <div className="relative overflow-visible z-50">
-          <Datepicker
+            <Datepicker
               primaryColor={"green"}
               asSingle={false}
               value={filters.dateRange}
@@ -182,12 +193,40 @@ const TransactionsPage: React.FC = () => {
       )}
 
       {error && (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center mb-5">
+          <svg
+            width="20"
+            height="20"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#9b3628"
+            strokeWidth="2"
+            className="inline-block mr-2"
+          >
+            <circle cx="12" cy="12" r="10" fill="#c04532" />
+            <line
+              x1="12"
+              y1="8"
+              x2="12"
+              y2="13"
+              stroke="#fff"
+              strokeLinecap="round"
+            />
+            <line
+              x1="12"
+              y1="16"
+              x2="12"
+              y2="16"
+              stroke="#fff"
+              strokeLinecap="round"
+            />
+          </svg>
           <p className="text-lg text-red-600">{error}</p>
         </div>
       )}
 
-      {!loading && !error && (
+      {!loading && (
         <>
           {filteredTransactions.length > 0 ? (
             <>
@@ -206,7 +245,9 @@ const TransactionsPage: React.FC = () => {
             </>
           ) : (
             <div className="flex items-center justify-center">
-              <p className="text-lg text-gray-500">No transactions match the filters.</p>
+              <p className="text-lg text-gray-500">
+                No transactions match the filters.
+              </p>
             </div>
           )}
         </>
