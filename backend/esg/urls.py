@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import upload_data_to_firestore, get_data_from_firestore
+from .views import ESGView
 
+esg_views = ESGView()
 urlpatterns = [
-    path('upload/', upload_data_to_firestore, name='upload_data'),
-    path('get/', get_data_from_firestore, name='get_data'),
+    path('upload/', esg_views.upload_data_to_firestore, name='upload_data'),
+    path('get/', esg_views.get_data_from_firestore, name='get_data'),
     # individual score will be in static_file
 ]
