@@ -1,4 +1,4 @@
-''' This file is used to test the core, important functions in calculations.py'''
+''' This file is used to test the core, important functions in calculations.py.'''
 
 from django.test import TestCase
 from utils.firebase import db
