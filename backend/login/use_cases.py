@@ -1,6 +1,6 @@
 from random import randint
 
-def match_email_to_id(email):
+def match_email_to_id(email) -> str:
     email_to_user_id = {
         "liuyimeng01@gmail.com": 21,
         "gabrielezrathompson@gmail.com": 1,
