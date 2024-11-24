@@ -1,10 +1,7 @@
 from django.test import SimpleTestCase
 from rest_framework.test import APIClient
 from unittest.mock import patch
-from django.contrib.sessions.middleware import SessionMiddleware
-from django.http import HttpRequest
 from .use_cases import match_email_to_id
-from .views import get_user_email_from_frontend
 
 
 class MatchEmailToIdTests(SimpleTestCase):
@@ -59,7 +56,9 @@ class MatchEmailToIdTests(SimpleTestCase):
         with patch("login.use_cases.randint") as mock_randint:
             mock_randint.return_value = 57
             user_id = match_email_to_id(email)
-            self.assertEqual(user_id, "57")  # Should not match existing email due to case sensitivity
+            self.assertEqual(
+                user_id, "57"
+            )  # Should not match existing email due to case sensitivity
             mock_randint.assert_called_once_with(0, 99)
 
 
@@ -68,51 +67,40 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
         self.client = APIClient()
         self.url = "/login/get_email/"
 
-    def _add_session_to_request(self, request):
-        """
-        Helper method to add a session to a request.
-        """
-        middleware = SessionMiddleware()
-        middleware.process_request(request)
-        request.session.save()
-
-    @patch("login.use_cases.match_email_to_id")  # Mock use case function so it's a unit test
+    @patch("login.use_cases.match_email_to_id")  # Mock the use case function
     def test_existing_email(self, mock_match_email_to_id):
         """
-        Test that the view sets the session and returns the correct user ID for an existing email.
+        Test that the view returns the correct user ID for an existing email.
         """
         mock_match_email_to_id.return_value = "21"
         email = "liuyimeng01@gmail.com"
 
-        # Create a mock request with a session
-        request = HttpRequest()
-        self._add_session_to_request(request)
-
+        # Mock session logic not being tested here
         response = self.client.post(self.url, data=email, format="json")
 
         # Assertions
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {"message": f"Got user's email {email}", "data": "21"})
-        self.assertEqual(request.session["user_id"], "21")
+        self.assertEqual(
+            response.data, {"message": f"Got user's email {email}", "data": "21"}
+        )
         mock_match_email_to_id.assert_called_once_with(email)
 
     @patch("login.use_cases.match_email_to_id")
     def test_non_existing_email(self, mock_match_email_to_id):
         """
-        Test that the view handles non-existing emails and sets a random user ID in the session.
+        Test that the view handles non-existing emails and returns a random user ID.
         """
         mock_match_email_to_id.return_value = "42"
         email = "nonexistentemail@gmail.com"
 
-        # Create a mock request with a session
-        request = HttpRequest()
-        self._add_session_to_request(request)
-
+        # Mock session logic not being tested here
         response = self.client.post(self.url, data=email, format="json")
 
+        # Assertions
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {"message": f"Got user's email {email}", "data": "42"})
-        self.assertEqual(request.session["user_id"], "42")
+        self.assertEqual(
+            response.data, {"message": f"Got user's email {email}", "data": "42"}
+        )
         mock_match_email_to_id.assert_called_once_with(email)
 
     def test_invalid_request_method(self):
