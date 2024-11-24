@@ -13,6 +13,7 @@ from .calculations import (
 from datetime import date, datetime
 
 
+
 def past_12_month_names() -> list[str]:
     """
     Returns a reordering of ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] based on the current month
