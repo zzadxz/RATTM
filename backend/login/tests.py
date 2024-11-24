@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from rest_framework.test import APIClient
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from .use_cases import match_email_to_id
 
 
@@ -68,45 +68,47 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
         self.url = "/login/get_email/"
 
     @patch("login.use_cases.match_email_to_id")  # Mock the use case function
-    def test_existing_email(self, mock_match_email_to_id):
+    @patch(
+        "django.http.HttpRequest.session", new_callable=MagicMock
+    )  # Mock the session
+    def test_existing_email(self, mock_session, mock_match_email_to_id):
         """
         Test that the view returns the correct user ID for an existing email.
         """
         mock_match_email_to_id.return_value = "21"
         email = "liuyimeng01@gmail.com"
 
-        # Mock session logic not being tested here
         response = self.client.post(self.url, data=email, format="json")
 
-        # Assertions
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.data, {"message": f"Got user's email {email}", "data": "21"}
         )
         mock_match_email_to_id.assert_called_once_with(email)
+        mock_session.__setitem__.assert_called_once_with("user_id", "21")
 
     @patch("login.use_cases.match_email_to_id")
-    def test_non_existing_email(self, mock_match_email_to_id):
+    @patch("django.http.HttpRequest.session", new_callable=MagicMock)
+    def test_non_existing_email(self, mock_session, mock_match_email_to_id):
         """
         Test that the view handles non-existing emails and returns a random user ID.
         """
         mock_match_email_to_id.return_value = "42"
         email = "nonexistentemail@gmail.com"
 
-        # Mock session logic not being tested here
         response = self.client.post(self.url, data=email, format="json")
 
-        # Assertions
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.data, {"message": f"Got user's email {email}", "data": "42"}
         )
         mock_match_email_to_id.assert_called_once_with(email)
+        mock_session.__setitem__.assert_called_once_with("user_id", "42")
 
     def test_invalid_request_method(self):
         """
         Test that the view rejects non-POST requests.
         """
         response = self.client.get(self.url)
-        # Method Not Allowed
+
         self.assertEqual(response.status_code, 405)
