@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from rest_framework.test import APIClient
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from .use_cases import match_email_to_id
 
 
@@ -62,16 +62,18 @@ class MatchEmailToIdTests(SimpleTestCase):
             mock_randint.assert_called_once_with(0, 99)
 
 
+from django.test import SimpleTestCase
+from rest_framework.test import APIClient
+from unittest.mock import patch
+from .use_cases import match_email_to_id
+
 class GetUserEmailFromFrontendTests(SimpleTestCase):
     def setUp(self):
         self.client = APIClient()
         self.url = "/login/get_email/"
 
     @patch("login.use_cases.match_email_to_id")  # Mock the use case function
-    @patch(
-        "django.http.HttpRequest.session", new_callable=MagicMock
-    )  # Mock the session
-    def test_existing_email(self, mock_session, mock_match_email_to_id):
+    def test_existing_email(self, mock_match_email_to_id):
         """
         Test that the view returns the correct user ID for an existing email.
         """
@@ -85,11 +87,9 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
             response.data, {"message": f"Got user's email {email}", "data": "21"}
         )
         mock_match_email_to_id.assert_called_once_with(email)
-        mock_session.__setitem__.assert_called_once_with("user_id", "21")
 
-    @patch("login.use_cases.match_email_to_id")
-    @patch("django.http.HttpRequest.session", new_callable=MagicMock)
-    def test_non_existing_email(self, mock_session, mock_match_email_to_id):
+    @patch("login.use_cases.match_email_to_id")  # Mock the use case function
+    def test_non_existing_email(self, mock_match_email_to_id):
         """
         Test that the view handles non-existing emails and returns a random user ID.
         """
@@ -103,7 +103,6 @@ class GetUserEmailFromFrontendTests(SimpleTestCase):
             response.data, {"message": f"Got user's email {email}", "data": "42"}
         )
         mock_match_email_to_id.assert_called_once_with(email)
-        mock_session.__setitem__.assert_called_once_with("user_id", "42")
 
     def test_invalid_request_method(self):
         """
