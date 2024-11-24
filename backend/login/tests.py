@@ -60,17 +60,17 @@ class MatchEmailToIdTests(TestCase):
             mock_randint.assert_called_once_with(0, 99)
 
 
-"""
+
 class GetUserEmailFromFrontendTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.url = "https://rattm-f300025e7172.herokuapp.com/login/get_email" 
+        self.url = "/login/get_email/" 
 
     @patch("login.use_cases.match_email_to_id")  # Mock use case function so it's a unit test
     def test_existing_email(self, mock_match_email_to_id):
-
-        #Test that the view sets the session and returns the correct user ID for an existing email.
-
+        """
+        Test that the view sets the session and returns the correct user ID for an existing email.
+        """
         mock_match_email_to_id.return_value = "21"
         email = "liuyimeng01@gmail.com"
         response = self.client.post(self.url, data=email, format="json")
@@ -83,9 +83,9 @@ class GetUserEmailFromFrontendTests(TestCase):
 
     @patch("login.use_cases.match_email_to_id")
     def test_non_existing_email(self, mock_match_email_to_id):
-        
-        #Test that the view handles non-existing emails and sets a random user ID in the session.
-      
+        """
+        Test that the view handles non-existing emails and sets a random user ID in the session.
+        """
         mock_match_email_to_id.return_value = "42"
         email = "nonexistentemail@gmail.com"
         response = self.client.post(self.url, data=email, format="json")
@@ -96,10 +96,9 @@ class GetUserEmailFromFrontendTests(TestCase):
         mock_match_email_to_id.assert_called_once_with(email)
 
     def test_invalid_request_method(self):
-   
-        #Test that the view rejects non-POST requests.
-  
+        """
+        Test that the view rejects non-POST requests.
+        """
         response = self.client.get(self.url)
         # Method Not Allowed
         self.assertEqual(response.status_code, 404)
-"""
