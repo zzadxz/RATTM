@@ -10,7 +10,7 @@ def match_email_to_id(email):
         "callum.sharrock@gmail.com": 0,
         "kiarashsotoudeh@gmail.com": 10
     }
-    if request.data in email_to_user_id.keys():
+    if email in email_to_user_id.keys():
         user_id = email_to_user_id[email]
     else:
         user_id = randint(0,99)
