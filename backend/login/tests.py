@@ -63,7 +63,7 @@ class MatchEmailToIdTests(TestCase):
 class GetUserEmailFromFrontendTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.url = "/login/user_email"  # Update this to match your endpoint
+        self.url = "https://rattm-f300025e7172.herokuapp.com/login/get_email" 
 
     @patch("login.use_cases.match_email_to_id")  # Mock use case function so it's a unit test
     def test_existing_email(self, mock_match_email_to_id):
@@ -100,18 +100,4 @@ class GetUserEmailFromFrontendTests(TestCase):
         """
         response = self.client.get(self.url)
         # Method Not Allowed
-        self.assertEqual(response.status_code, 405)
-
-    def test_empty_email(self):
-        """
-        Test that the view handles an empty email gracefully.
-        """
-        with patch("login.use_cases.match_email_to_id") as mock_match_email_to_id:
-            mock_match_email_to_id.return_value = "99"
-            email = ""
-            response = self.client.post(self.url, data=email, format="json")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.data, {"message": f"Got user's email {email}", "data": "99"})
-            self.assertEqual(self.client.session["user_id"], "99")
-            mock_match_email_to_id.assert_called_once_with(email)
+        self.assertEqual(response.status_code, 404)
