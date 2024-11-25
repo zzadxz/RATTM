@@ -1,105 +1,133 @@
 import Image from "next/image";
+import { useState } from "react";
 
-export type BRAND = {
+export type Company = {
   logo: string;
   name: string;
-  visitors: number;
-  revenues: string;
+  esgScore: number;
+  amountSpent: number;
 };
 
-const brandData: BRAND[] = [
-  {
-    logo: "/images/brand/brand-01.svg",
-    name: "Google",
-    visitors: 3.5,
-    revenues: "5,768",
-  },
-  {
-    logo: "/images/brand/brand-02.svg",
-    name: "Twitter",
-    visitors: 2.2,
-    revenues: "4,635",
-  },
-  {
-    logo: "/images/brand/brand-03.svg",
-    name: "Github",
-    visitors: 2.1,
-    revenues: "4,290",
-  },
-  {
-    logo: "/images/brand/brand-04.svg",
-    name: "Vimeo",
-    visitors: 1.5,
-    revenues: "3,580",
-  },
-  {
-    logo: "/images/brand/brand-05.svg",
-    name: "Facebook",
-    visitors: 3.5,
-    revenues: "6,768",
-  },
-];
+const getDomainVariations = (companyName: string) => {
+  const name = companyName.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return [
+    `${name}.com`,
+    `${name}.co`,
+    `${name}.org`,
+    `${name}.net`,
+    `${name}corp.com`,
+    `${name}inc.com`,
+  ];
+};
 
-const TableOne = () => {
+const TopCompaniesTable = ({ companies }: { companies: Company[] | undefined }) => {
+  const formatCompanyData = (rawCompanies: any[]): Company[] => {
+    return rawCompanies.map(company => ({
+      logo: `https://logo.clearbit.com/${company["Company Name"].toLowerCase()}.com`,
+      name: company["Company Name"],
+      esgScore: company["ESG Score"],
+      amountSpent: company["Amount Spent"]
+    }));
+  };
+
+  const LoadingRow = () => (
+    <div className="grid grid-cols-3 gap-4 border-b border-stroke dark:border-strokedark">
+      <div className="flex items-center justify-center gap-3 p-2.5 xl:p-5">
+        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gray-200 animate-pulse" />
+        <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
+      </div>
+      <div className="flex items-center justify-center p-2.5 xl:p-5">
+        <div className="w-12 h-4 bg-gray-200 rounded animate-pulse" />
+      </div>
+      <div className="flex items-center justify-center p-2.5 xl:p-5">
+        <div className="w-20 h-4 bg-gray-200 rounded animate-pulse" />
+      </div>
+    </div>
+  );
+
   return (
     <div className="mt-5 rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h1 className="text-3xl font-extrabold text-black dark:text-white">
         Your most purchased-from companies
       </h1>
       <p className="mb-5 pt-4 text-xl">
-        See which companies you purchased from the most, and their carbon
-        footprints
+        See which companies you purchased from the most, and their carbon footprints
       </p>
 
       <div className="flex flex-col">
         <div className="grid grid-cols-3 gap-4 rounded-sm bg-gray-2 dark:bg-meta-4">
           <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Company
-            </h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Company</h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              ESG Score
-            </h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">ESG Score</h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Amount Purchased
-            </h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Amount Purchased</h5>
           </div>
         </div>
 
-        {brandData.map((brand, key) => (
-          <div
-            className={`grid grid-cols-3 gap-4 ${
-              key === brandData.length - 1
-                ? ""
-                : "border-b border-stroke dark:border-strokedark"
-            }`}
-            key={key}
-          >
-            <div className="flex items-center justify-center gap-3 p-2.5 xl:p-5">
-              <div className="flex-shrink-0">
-                <Image src={brand.logo} alt="Brand" width={48} height={48} />
+        {!companies ? (
+          <>
+            <LoadingRow />
+            <LoadingRow />
+            <LoadingRow />
+            <LoadingRow />
+            <LoadingRow />
+          </>
+        ) : (
+          formatCompanyData(companies).map((company, key) => (
+            <div
+              className={`grid grid-cols-3 gap-4 ${
+                key === companies.length - 1
+                  ? ""
+                  : "border-b border-stroke dark:border-strokedark"
+              }`}
+              key={key}
+            >
+              <div className="flex items-center p-2.5 xl:p-5">
+                <div className="flex items-center gap-10">
+                  <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-full p-0.5 flex items-center justify-center">
+                    <Image
+                      src={`https://logo.clearbit.com/${getDomainVariations(company.name)[0]}`}
+                      alt={`${company.name} logo`}
+                      width={40}
+                      height={40}
+                      className="rounded-full object-contain"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        const currentDomain = target.src.split('/').pop();
+                        const domains = getDomainVariations(company.name);
+                        const currentIndex = domains.findIndex(d => d === currentDomain);
+                        if (currentIndex < domains.length - 1) {
+                          target.src = `https://logo.clearbit.com/${domains[currentIndex + 1]}`;
+                        } else {
+                          target.src = ''; // This will trigger the next onerror
+                        }
+                      }}
+                    />
+                  </div>
+                  <p className="text-black dark:text-white">
+                    {company.name}
+                  </p>
+                </div>
               </div>
-              <p className="hidden text-black dark:text-white sm:block">
-                {brand.name}
-              </p>
-            </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{brand.visitors}K</p>
-            </div>
+              <div className="flex items-center justify-center p-2.5 xl:p-5">
+                <p className="text-black dark:text-white">
+                  {company.esgScore === 0 ? "N/A" : company.esgScore}
+                </p>
+              </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-meta-3">${brand.revenues}</p>
+              <div className="flex items-center justify-center p-2.5 xl:p-5">
+                <p className="text-meta-3">${company.amountSpent.toFixed(2)}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
 };
 
-export default TableOne;
+export default TopCompaniesTable;
