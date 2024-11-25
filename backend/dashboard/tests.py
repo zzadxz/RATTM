@@ -59,7 +59,7 @@ class TestCalculations(TestCase):
         self.assertEqual(result, "A O Smith Corp")
         
         # Test when there's no match
-        result = _get_closest_match("Uber", self.esg)
+        result = _get_closest_match("RATTM Corp", self.esg)
         self.assertEqual(result, None)
         
     def test_get_company_env_score(self):
