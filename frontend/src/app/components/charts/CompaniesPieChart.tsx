@@ -70,53 +70,47 @@ const CompaniesPieChart: React.FC<CompaniesPieChartProps> = ({ companyTiers }) =
           </h5>
         </div>
         <div className="flex items-center">
-          <div className="relative z-20">
-            <select
-              name=""
-              id=""
-              className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
-            >
-            </select>
-            <span className="absolute right-3 top-1/2 z-30 -translate-y-1/2 cursor-pointer"
+          <span 
+            className="relative z-20 cursor-pointer"
             onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}>
-              <svg
-                className="transition-transform duration-300 hover:scale-110"
-                width="20"
-                height="20"
-                viewBox="0 0 10 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            onMouseLeave={handleMouseLeave}
+          >
+            <svg
+              className="transition-transform duration-300 hover:scale-110"
+              width="20"
+              height="20"
+              viewBox="0 0 10 10"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="5" cy="5" r="5" fill="#08d116" />
+              <text
+                x="5"
+                y="5"
+                textAnchor="middle"
+                dy=".3em"
+                fontSize="6"
+                fill="white"
               >
-                <circle cx="5" cy="5" r="5" fill="#08d116" />
-                <text
-                  x="5"
-                  y="5"
-                  textAnchor="middle"
-                  dy=".3em"
-                  fontSize="6"
-                  fill="white"
-                >
-                  ?
-                </text>
-              </svg>
-              {isPopoverVisible && (
-                <div
-                  className="absolute z-50 w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800"
-                  style={{ top: '50%', right: '30px', transform: 'translateY(-50%)' }}
-                >
-                  <div className="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
-                      Companies by Tier
-                    </h3>
-                  </div>
-                  <div className="px-3 py-2">
-                    <p>Here are the companies you purchased from last month organized by their tier. Tier 1 companies are the most sustainable, and Tier 4 companies are the least sustainable.</p>
-                  </div>
+                ?
+              </text>
+            </svg>
+            {isPopoverVisible && (
+              <div
+                className="absolute z-50 w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800"
+                style={{ top: '50%', right: '30px', transform: 'translateY(-50%)' }}
+              >
+                <div className="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                    Companies by Tier
+                  </h3>
                 </div>
-              )}
-            </span>
-          </div>
+                <div className="px-3 py-2">
+                  <p>Here are the companies you purchased from last month organized by their tier. Tier 1 companies are the most sustainable, and Tier 4 companies are the least sustainable.</p>
+                </div>
+              </div>
+            )}
+          </span>
         </div>
       </div>
 
