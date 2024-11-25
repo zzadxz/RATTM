@@ -3,22 +3,19 @@ import React, { ReactNode } from "react";
 interface CardDataStatsProps {
   title: string;
   total: string;
-  rate: string;
-  levelUp?: boolean;
-  levelDown?: boolean;
   children: ReactNode;
+  circleColor: string;
+  onHoverChange: (isHovered: boolean) => void;
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({
   title,
   total,
-  rate,
-  levelUp,
-  levelDown,
   children,
+  onHoverChange,
 }) => {
   return (
-    <div className="rounded-2xl border border-stroke bg-white px-7.5 py-6 dark:border-strokedark dark:bg-boxdark">
+    <div className="relative rounded-2xl border border-stroke bg-white px-7.5 py-6 dark:border-strokedark dark:bg-boxdark">
       {children}
 
       <div className="mt-4 flex items-end justify-between">
@@ -30,42 +27,30 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
         </div>
 
         <span
-          className={`flex items-center gap-1 text-sm font-medium ${
-            levelUp && "text-meta-3"
-          } ${levelDown && "text-meta-5"} `}
+          className="flex items-center gap-1 text-sm font-medium relative"
+          onMouseEnter={() => onHoverChange(true)}
+          onMouseLeave={() => onHoverChange(false)}
         >
-          {rate}
-
-          {levelUp && (
-            <svg
-              className="fill-meta-3"
-              width="10"
-              height="11"
-              viewBox="0 0 10 11"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+          <svg
+            className="transition-transform duration-300 hover:scale-110"
+            width="20"
+            height="20"
+            viewBox="0 0 10 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="5" cy="5" r="5" fill="#08d116" />
+            <text
+              x="5"
+              y="5"
+              textAnchor="middle"
+              dy=".3em"
+              fontSize="6"
+              fill="white"
             >
-              <path
-                d="M4.35716 2.47737L0.908974 5.82987L5.0443e-07 4.94612L5 0.0848689L10 4.94612L9.09103 5.82987L5.64284 2.47737L5.64284 10.0849L4.35716 10.0849L4.35716 2.47737Z"
-                fill=""
-              />
-            </svg>
-          )}
-          {levelDown && (
-            <svg
-              className="fill-meta-5"
-              width="10"
-              height="11"
-              viewBox="0 0 10 11"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5.64284 7.69237L9.09102 4.33987L10 5.22362L5 10.0849L-8.98488e-07 5.22362L0.908973 4.33987L4.35716 7.69237L4.35716 0.0848701L5.64284 0.0848704L5.64284 7.69237Z"
-                fill=""
-              />
-            </svg>
-          )}
+              ?
+            </text>
+          </svg>
         </span>
       </div>
     </div>

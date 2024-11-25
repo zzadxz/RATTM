@@ -1,66 +1,66 @@
 {
-  "name": "Rattm App",
-  "description": "This app integrates with Firebase and uses Django for handling transactions.",
-  "keywords": [
-    "django",
-    "firebase",
-    "python"
-  ],
-  "website": "https://rattm-f300025e7172.herokuapp.com/",
-  "repository": "https://github.com/zzadxz/RATTM",
-  "env": {
-    "SECRET_KEY": {
-      "description": "Django secret key for cryptographic signing.",
-      "generator": "secret"
-    },
-    "FIREBASE_CERT_URL": {
-      "description": "Firebase certificate URL",
-      "required": true
-    },
-    "FIREBASE_CLIENT_EMAIL": {
-      "description": "Firebase client email",
-      "required": true
-    },
-    "FIREBASE_CLIENT_ID": {
-      "description": "Firebase client ID",
-      "required": true
-    },
-    "FIREBASE_PRIVATE_KEY": {
-      "description": "Firebase private key",
-      "required": true
-    },
-    "FIREBASE_PRIVATE_KEY_ID": {
-      "description": "Firebase private key ID",
-      "required": true
-    },
-    "WEB_CONCURRENCY": {
-      "description": "The number of processes to run.",
-      "value": "3"
-    }
-  },
-  "formation": {
-    "web": {
-      "quantity": 1,
-      "size": "standard-2x"
-    }
-  },
-  "image": "heroku/python",
-  "buildpacks": [
-    {
-      "url": "heroku/python"
-    }
-  ],
-  "environments": {
-    "test": {
-      "formation": {
-        "test": {
-          "quantity": 1,
-          "size": "standard-2x"
-        }
+    "name": "Rattm App",
+    "description": "This app integrates with Firebase and uses Django for handling transactions.",
+    "keywords": [
+      "django",
+      "firebase",
+      "python"
+    ],
+    "website": "https://rattm-f300025e7172.herokuapp.com/",
+    "repository": "https://github.com/zzadxz/RATTM",
+    "env": {
+      "SECRET_KEY": {
+        "description": "Django secret key for cryptographic signing.",
+        "generator": "secret"
       },
-      "scripts": {
-        "test": "cd backend && python manage.py test"
+      "FIREBASE_CERT_URL": {
+        "description": "Firebase certificate URL",
+        "required": true
+      },
+      "FIREBASE_CLIENT_EMAIL": {
+        "description": "Firebase client email",
+        "required": true
+      },
+      "FIREBASE_CLIENT_ID": {
+        "description": "Firebase client ID",
+        "required": true
+      },
+      "FIREBASE_PRIVATE_KEY": {
+        "description": "Firebase private key",
+        "required": true
+      },
+      "FIREBASE_PRIVATE_KEY_ID": {
+        "description": "Firebase private key ID",
+        "required": true
+      },
+      "WEB_CONCURRENCY": {
+        "description": "The number of processes to run.",
+        "value": "3"
+      }
+    },
+    "formation": {
+      "web": {
+        "quantity": 1,
+        "size": "standard-2x"
+      }
+    },
+    "image": "heroku/python",
+    "buildpacks": [
+      {
+        "url": "heroku/python"
+      }
+    ],
+    "environments": {
+      "test": {
+        "formation": {
+          "test": {
+            "quantity": 1,
+            "size": "standard-2x"
+          }
+        },
+        "scripts": {
+          "test": "cd backend && python manage.py test"
+        }
       }
     }
-  }
-}  
+  }  
