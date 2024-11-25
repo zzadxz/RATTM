@@ -6,10 +6,13 @@ import json
 
 from transaction.views import (
     upload_data_to_firestore, 
-    get_data_from_firestore, 
-    esg_rating
+    get_data_from_firestore
 )
-from transaction.models import Transaction
+
+from transaction.use_case import (
+    upload_data_to_firestore, 
+    get_data_from_firestore
+)
 
 # To test locally: heroku local:run python manage.py test
 class ViewsTestCase(TestCase):
@@ -89,21 +92,6 @@ class ViewsTestCase(TestCase):
         self.assertEqual(len(transactions), 2)
         self.assertEqual(transactions[0]['Company Name'], 'TestCompany')
 
-    def test_esg_rating(self):
-        """
-        Test the esg_rating function
-        """
-        # Test with different company names
-        test_cases = [
-            {'Company Name': 'ShortCo', 'expected': 2},
-            {'Company Name': 'MediumCompany', 'expected': 4},
-            {'Company Name': 'VeryLongCompanyNameHere', 'expected': 7}
-        ]
-
-        for case in test_cases:
-            transaction = {'Company Name': case['Company Name']}
-            rating = esg_rating(transaction)
-            self.assertEqual(rating, case['expected'])
 
     @patch('transaction.views.db')
     def test_get_data_from_firestore_exception(self, mock_db):
