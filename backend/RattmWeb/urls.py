@@ -27,4 +27,5 @@ urlpatterns = [
     path('esg/', include('esg.urls')),
     path('login/', include('login.urls')),
     path('dashboard/', include('dashboard.urls')),
+    path('map/', include('map.urls')),
 ]

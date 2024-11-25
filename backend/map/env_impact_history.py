@@ -2,12 +2,14 @@ from datetime import datetime, timedelta
 from calendar import monthrange
 from rapidfuzz import process
 
-def _get_closest_match(query: str, choices: dict, score_cutoff: int = 75) -> str:
+def _get_closest_match(query: str, choices: list, score_cutoff: int = 60) -> str:
     """
     Returns the best match for query in the keys of choices dict if the score 
     is above the score_cutoff.
     """
-    match, score = process.extractOne(query, choices.keys())
+    match_score = process.extractOne(query, choices)
+    match = match_score[0]
+    score = match_score[1]
     if score >= score_cutoff:
         return match
     return None
