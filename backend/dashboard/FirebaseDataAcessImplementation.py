@@ -4,7 +4,7 @@ from .AbstractDataAccess import AbstractDataAccess
 class Firebase_data_access(AbstractDataAccess):
     def get_table_from_database(table_to_access: str) -> dict:
         """
-        Return a dict mapping the key of the firestore collection to the data within its rows.
+        Return a dict mapping the key of the firestore collection to the data within its rows
         """
         try:
             docs = db.collection(table_to_access).stream()
