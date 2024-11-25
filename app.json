@@ -1,3 +1,4 @@
+{
     "name": "Rattm App",
     "description": "This app integrates with Firebase and uses Django for handling transactions.",
     "keywords": [
