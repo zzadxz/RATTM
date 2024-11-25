@@ -1,13 +1,15 @@
 // src/components/TransactionsTable.tsx
 
-import React from 'react';
+import React from "react";
 import { Transaction } from "@/services/transactionService";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
 }
 
-const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions }) => {
+const TransactionsTable: React.FC<TransactionsTableProps> = ({
+  transactions,
+}) => {
   return (
     <div className="overflow-x-auto shadow-md rounded-lg">
       <table
@@ -15,29 +17,29 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions }) =
         role="table"
         aria-label="Recent Transactions"
       >
-        <thead className="bg-gray-50">
+        <thead className="bg-green-500">
           <tr>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
             >
               Action
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
             >
               Company Name
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
             >
               Amount ($)
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
             >
               Date
             </th>
@@ -47,16 +49,28 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({ transactions }) =
           {transactions.length > 0 ? (
             transactions.map((txn, index) => (
               <tr key={index} role="row" className="hover:bg-gray-100">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" role="cell">
+                <td
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                  role="cell"
+                >
                   {txn.action.charAt(0).toUpperCase() + txn.action.slice(1)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" role="cell">
+                <td
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                  role="cell"
+                >
                   {txn.merchant_name}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" role="cell">
+                <td
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                  role="cell"
+                >
                   {txn.amount.toFixed(2)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" role="cell">
+                <td
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                  role="cell"
+                >
                   {new Date(txn.time_completed).toLocaleDateString()}
                 </td>
               </tr>

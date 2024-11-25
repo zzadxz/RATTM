@@ -97,7 +97,7 @@ const TransactionsPage: React.FC = () => {
 
   return (
     <div className="mx-auto max-w-7xl p-6">
-      <h1 className="mb-8 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+      <h1 className="mb-8 text-center text-5xl font-extrabold text-gray-900 dark:text-white">
         All Recent Transactions
       </h1>
 
