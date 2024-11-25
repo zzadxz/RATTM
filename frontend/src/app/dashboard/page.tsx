@@ -25,6 +25,7 @@ const Dashboard: React.FC = () => {
   const [monthlyCO2ScoreChange, setMonthlyCO2ScoreChange] = useState<number>(0);
   const [monthlyGreenTransactions, setMonthlyGreenTransactions] = useState<number>(0);
   const [monthlyGreenTransactionsChange, setMonthlyGreenTransactionsChange] = useState<number>(0);
+  const [companyTiers, setCompanyTiers] = useState<number[]>([0, 0, 0, 0]);
   const [circleColor, setCircleColor] = useState<string>("#7d91f5");
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
@@ -37,22 +38,25 @@ const Dashboard: React.FC = () => {
           monthlyCO2Response,
           co2ChangeResponse,
           greenTransactionsResponse,
-          greenTransactionsChangeResponse
+          greenTransactionsChangeResponse,
+          companyTiersResponse
         ] = await Promise.all([
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_total_co2_score/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_co2_score/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_co2_score_change/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_green_transactions/"),
-          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_green_transaction_change/")
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_green_transaction_change/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_company_tiers/")
         ]);
 
-        const [totalCO2Data, monthlyCO2Data, co2ChangeData, greenTransactionsData, greenTransactionsChangeData] = 
+        const [totalCO2Data, monthlyCO2Data, co2ChangeData, greenTransactionsData, greenTransactionsChangeData, companyTiersData] = 
           await Promise.all([
             totalCO2Response.text(),
             monthlyCO2Response.text(),
             co2ChangeResponse.text(),
             greenTransactionsResponse.text(),
-            greenTransactionsChangeResponse.text()
+            greenTransactionsChangeResponse.text(),
+            companyTiersResponse.text()
           ]);
 
         setTotalCO2Score(totalCO2Data);
@@ -60,7 +64,7 @@ const Dashboard: React.FC = () => {
         setMonthlyCO2ScoreChange(Number(co2ChangeData));
         setMonthlyGreenTransactions(Number(greenTransactionsData));
         setMonthlyGreenTransactionsChange(Number(greenTransactionsChangeData));
-        
+        setCompanyTiers(JSON.parse(companyTiersData));
         const totalValue = parseFloat(totalCO2Data);
         setCircleColor(totalValue > 200 ? "#08d116" : "#FE4A49");
       } catch (error) {
@@ -123,7 +127,7 @@ const Dashboard: React.FC = () => {
         </CardDataStats>
         <AboutYourScore isHovered={isHovered} />
         <div className="mt-5">
-          <CompaniesPieChart />
+          <CompaniesPieChart companyTiers={companyTiers} />
         </div>
       </div>
     </div>
