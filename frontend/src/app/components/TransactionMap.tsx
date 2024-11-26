@@ -4,6 +4,16 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import React, { useEffect, useRef } from "react";
 
+const BRANDS_WITH_LOGOS = [
+  "amazon",
+  "lyft",
+  "mcdonalds",
+  "starbucks",
+  "target",
+  "uber",
+  "walmart",
+];
+
 const colorMap: { [key: number]: { textColor: string; description: string } } =
   {
     1: { textColor: "red", description: "Awful" },
@@ -47,7 +57,19 @@ const TransactionMap: React.FC = () => {
         ({ location, merchant_name, merchant_percentile }: MapPoint) => {
           const [latitude, longitude] = location;
           const { textColor, description } = colorMap[merchant_percentile];
-          new mapboxgl.Marker()
+
+          const el = document.createElement("div");
+          if (BRANDS_WITH_LOGOS.includes(merchant_name.toLowerCase())) {
+            el.style.backgroundImage = `url(/images/company-logos/${merchant_name.toLowerCase()}.png)`;
+          } else {
+            el.style.backgroundImage = `url(/images/company-logos/unknown.png)`;
+          }
+          el.style.backgroundSize = "cover";
+          el.style.width = "50px";
+          el.style.height = "50px";
+          el.style.borderRadius = "50%";
+
+          new mapboxgl.Marker(el)
             .setLngLat([longitude, latitude])
             .setPopup(
               new mapboxgl.Popup({ offset: 25 }).setHTML(`
