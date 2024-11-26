@@ -7,11 +7,11 @@ class AbstractMapUseCase(ABC):
     """
 
     @abstractmethod
-    def __init__(self, user_id):
+    def __init__(self):
         """
         Abstract method initiating a use case. 
         """
-        self.user_id = user_id
+        raise NotImplementedError
 
     @abstractmethod
     def get_user_all_locations_and_company(user_id):
