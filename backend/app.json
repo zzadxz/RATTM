@@ -61,6 +61,14 @@
       "scripts": {
         "test": "cd backend && python manage.py test"
       }
+    },
+    "production": {
+      "formation": {
+        "web": {
+          "quantity": 2,
+          "size": "standard-2x"
+        }
+      }
     }
   }
 }  
