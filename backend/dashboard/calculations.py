@@ -7,7 +7,7 @@ class Calculations:
     def _get_closest_match(query: str, choices: dict, score_cutoff: int = 75) -> str:
         """
         Returns the best match for query in the keys of choices dict if the score 
-        is above the score_cutoff.
+        is above the score_cutoff
         """
         match, score, _ = process.extractOne(query, choices.keys())
         if score >= score_cutoff:
