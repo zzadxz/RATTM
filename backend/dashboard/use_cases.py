@@ -4,6 +4,8 @@ from utils.abstract_data_access import AbstractDataAccess
 from datetime import date, datetime
 
 class DashboardUseCases:
+    """DashboardUseCases class is responsible for handling the business logic of the dashboard.
+    """
     def __init__(self, calculations: Calculations, data_access: AbstractDataAccess):
         self.calculations = calculations
         self.data_access = data_access

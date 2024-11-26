@@ -19,14 +19,14 @@ class Calculations:
         Returns environmental score for a transaction's company IF the company is in the ESG_scores dict.
         Otherwise, return 0.
         """
-        company_name = _get_closest_match(transaction['merchant_name'], ESG_scores)
+        company_name = self._get_closest_match(transaction['merchant_name'], ESG_scores)
         if company_name is not None:
             return ESG_scores[company_name]['environment_score']
         else:
             return 0
 
     def _is_green(transaction: dict, ESG_scores: dict[str,dict]):
-        company_env_score = _get_company_env_score(transaction, ESG_scores)
+        company_env_score = self._get_company_env_score(transaction, ESG_scores)
         return company_env_score > 500
 
     def _company_tier(company_env_score: int) -> int:
@@ -65,7 +65,7 @@ class Calculations:
         return sum(
             1 for transaction in transactions
             if start_date <= datetime.strptime(transaction['time_completed'], "%Y-%m-%dT%H:%M:%S.%fZ") <= end_date
-            and _is_green(transaction, ESG_scores)
+            and self._is_green(transaction, ESG_scores)
         )
 
 
@@ -76,7 +76,7 @@ class Calculations:
         unique_companies = set()
 
         for transaction in transactions:
-            company_name = _get_closest_match(transaction['merchant_name'], ESG_scores)
+            company_name = self._get_closest_match(transaction['merchant_name'], ESG_scores)
             if company_name:
                 unique_companies.add(company_name)
         return unique_companies
@@ -96,7 +96,7 @@ class Calculations:
         env_contribution = 0
         total_spending = 0
         for transaction in lst_of_transactions:
-            company_env_score = _get_company_env_score(transaction, ESG_scores)
+            company_env_score = self._get_company_env_score(transaction, ESG_scores)
             transaction_amount = transaction['amount']
             env_contribution += company_env_score * transaction_amount
             total_spending += transaction_amount
@@ -110,7 +110,7 @@ class Calculations:
         """
         company_ESG_scores = []
         for transaction in transactions:
-            company_env_score = _get_company_env_score(transaction, ESG_scores)
+            company_env_score = self._get_company_env_score(transaction, ESG_scores)
             company_ESG_scores.append({transaction['merchant_name']: company_env_score})
         
         return company_ESG_scores
@@ -125,7 +125,7 @@ class Calculations:
         """
         green_transactions = 0
         for transaction in transactions:
-            if _is_green(transaction, ESG_scores):
+            if self._is_green(transaction, ESG_scores):
                 green_transactions += 1
         
         return green_transactions
@@ -139,7 +139,7 @@ class Calculations:
         sorted_transactions = sorted(transactions, key=lambda dic: dic['amount'], reverse=True)
         top_5_companies = []
         for transaction in sorted_transactions[:5]:
-            company_env_score = _get_company_env_score(transaction, ESG_scores)
+            company_env_score = self._get_company_env_score(transaction, ESG_scores)
             top_5_companies.append({
                 'Company Name': transaction['merchant_name'],
                 'ESG Score': company_env_score,
@@ -160,10 +160,10 @@ class Calculations:
 
         for _ in range(12):
             # Get start and end dates
-            start_date, end_date = _get_start_end_dates(current_date)
+            start_date, end_date = self._get_start_end_dates(current_date)
             
             # Calculate the score for the current period
-            score = calculate_score(transactions, start_date, end_date, esg_scores)
+            score = self.calculate_score(transactions, start_date, end_date, esg_scores)
             
             scores.append(score)
             
@@ -182,10 +182,10 @@ class Calculations:
 
         for _ in range(12):
             # Get start and end dates for this period
-            start_date, end_date = _get_start_end_dates(current_date)
+            start_date, end_date = self._get_start_end_dates(current_date)
             
             # Get the number of green transactions for the current period
-            green_count = _count_green_transactions_in_period(transactions, start_date, end_date, ESG_scores)
+            green_count = self._count_green_transactions_in_period(transactions, start_date, end_date, ESG_scores)
             
             green_transaction_counts.append(green_count)
             
@@ -200,7 +200,7 @@ class Calculations:
         that the user shopped at for all time.
         """
         # Set of unique companies transacted with this month
-        unique_companies_this_month = _get_unique_companies(transactions, ESG_scores)
+        unique_companies_this_month = self._get_unique_companies(transactions, ESG_scores)
 
         # Indices correspond to tiers 1-4
         company_tier_counts = [0, 0, 0, 0]  
@@ -208,7 +208,7 @@ class Calculations:
         # Classify each unique company into a tier and count
         for company_name in unique_companies_this_month:
             company_env_score = ESG_scores[company_name]['environment_score']
-            tier_index = _company_tier(company_env_score) - 1 
+            tier_index = self._company_tier(company_env_score) - 1 
             company_tier_counts[tier_index] += 1
 
         return company_tier_counts

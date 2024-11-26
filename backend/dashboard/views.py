@@ -5,6 +5,9 @@ from .use_cases import DashboardUseCases
 from random import randint
 
 class DashboardView:
+    '''
+    This class is a view for the dashboard. It contains methods that return data for the dashboard .
+    '''
     
     def __init__(self, use_cases: DashboardUseCases):
         self.use_cases = use_cases
