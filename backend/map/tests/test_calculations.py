@@ -27,7 +27,7 @@ class CalculationsTest(TestCase):
         mock_extractOne.return_value = ("Walmart Inc", 90)
         result = _get_closest_match("Walmart", self.ESG_scores)
         self.assertEqual(result, "Walmart Inc")
-        mock_extractOne.assert_called_once_with("Walmart", self.ESG_scores.keys())
+        mock_extractOne.assert_called_once_with("Walmart", self.ESG_scores)
     
     @patch("map.calculations.process.extractOne")
     def test_get_closest_match_starbucks(self, mock_extractOne):
@@ -35,7 +35,7 @@ class CalculationsTest(TestCase):
         mock_extractOne.return_value = ("Starbucks Corp", 90)
         result = _get_closest_match("Starbucks", self.ESG_scores)
         self.assertEqual(result, "Starbucks Corp")
-        mock_extractOne.assert_called_once_with("Starbucks", self.ESG_scores.keys())
+        mock_extractOne.assert_called_once_with("Starbucks", self.ESG_scores)
     
     @patch("map.calculations.process.extractOne")
     def test_get_closest_match_no_match(self, mock_extractOne):
@@ -43,7 +43,7 @@ class CalculationsTest(TestCase):
         mock_extractOne.return_value = None
         result = _get_closest_match("Uber", self.ESG_scores)
         self.assertEqual(result, None)
-        mock_extractOne.assert_called_once_with("Starbucks", self.ESG_scores.keys())
+        mock_extractOne.assert_called_once_with("Uber", self.ESG_scores)
 
     def test_company_tier(self):
         # Test all companies return correct tier information given ESG scores. 
@@ -52,5 +52,5 @@ class CalculationsTest(TestCase):
         self.assertEqual(_company_tier(500), 4)
         self.assertEqual(_company_tier(501), 3)
         self.assertEqual(_company_tier(520), 3)
-        self.assertEqual(_company_tier(521), 1)
+        self.assertEqual(_company_tier(521), 2)
         self.assertEqual(_company_tier(600), 1)

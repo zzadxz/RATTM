@@ -8,6 +8,8 @@ def _get_closest_match(query: str, choices: list, score_cutoff: int = 60) -> str
     is above the score_cutoff.
     """
     match_score = process.extractOne(query, choices)
+    if match_score is None: 
+        return None
     match = match_score[0]
     score = match_score[1]
     if score >= score_cutoff:
