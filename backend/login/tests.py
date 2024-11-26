@@ -1,6 +1,7 @@
 from unittest.mock import patch, MagicMock
-from rest_framework.test import APIClient
-from django.test import SimpleTestCase, TestCase
+from rest_framework.response import Response
+from rest_framework.request import Request
+from django.test import SimpleTestCase, TestCase, RequestFactory
 from .use_case import LoginUseCase
 from .views import LoginView
 from .abstract_use_case import AbstractLoginUseCase
@@ -73,55 +74,64 @@ class MatchEmailToIdTests(SimpleTestCase):
 
 class GetUserEmailFromFrontendTests(TestCase):
     def setUp(self):
-        self.client = APIClient()
         self.mock_use_case = MagicMock(spec=AbstractLoginUseCase)
         self.view = LoginView(self.mock_use_case)
-        self.url = "/login/get_email/"
+        self.factory = RequestFactory()
 
-    def test_existing_email(self):
+    def test_existing_email_directly(self):
         """
-        Test that the view returns the correct user ID for an existing email.
+        Test the logic inside the view directly with an existing email.
         """
-        self.mock_use_case.match_email_to_id.return_value = "21"
         email = {"email": "liuyimeng01@gmail.com"}
+        django_request = self.factory.post("/login/get_email/", data=email, content_type="application/json")
+        
+        # Wrap Django's request with DRF's Request
+        request = Request(django_request)
 
-        response = self.client.post(
-            self.url,
-            data=email,
-            format="json"
-        )
+        self.mock_use_case.match_email_to_id.return_value = "21"
 
+        # Call the class method directly
+        response = self.view.get_user_email_from_frontend(request)
+
+        # Assertions
+        self.assertIsInstance(response, Response)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data,
-            {"message": f"Got user's email {email}", "data": "21"},
-        )
+        self.assertEqual(response.data, {"message": f"Got user's email {email}", "data": "21"})
         self.mock_use_case.match_email_to_id.assert_called_once_with(email)
 
-    def test_non_existing_email(self):
+    def test_non_existing_email_directly(self):
         """
-        Test that the view handles non-existing emails and returns a random user ID.
+        Test the logic inside the view directly with a non-existing email.
         """
-        self.mock_use_case.match_email_to_id.return_value = "42"
         email = {"email": "nonexistentemail@gmail.com"}
+        django_request = self.factory.post("/login/get_email/", data=email, content_type="application/json")
+        
+        # Wrap Django's request with DRF's Request
+        request = Request(django_request)
 
-        response = self.client.post(
-            self.url,
-            data=email,
-            format="json"
-        )
+        self.mock_use_case.match_email_to_id.return_value = "42"
 
+        # Call the class method directly
+        response = self.view.get_user_email_from_frontend(request)
+
+        # Assertions
+        self.assertIsInstance(response, Response)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data,
-            {"message": f"Got user's email {email}", "data": "42"},
-        )
+        self.assertEqual(response.data, {"message": f"Got user's email {email}", "data": "42"})
         self.mock_use_case.match_email_to_id.assert_called_once_with(email)
 
-    def test_invalid_request_method(self):
+    def test_invalid_request_method_directly(self):
         """
-        Test that the view rejects non-POST requests.
+        Test the logic inside the view directly with an invalid request method.
         """
-        response = self.client.get(self.url)
+        django_request = self.factory.get("/login/get_email/")
 
+        # Wrap Django's request with DRF's Request
+        request = Request(django_request)
+
+        # Call the class method directly
+        response = self.view.get_user_email_from_frontend(request)
+
+        # Assertions
+        self.assertIsInstance(response, Response)
         self.assertEqual(response.status_code, 405)
