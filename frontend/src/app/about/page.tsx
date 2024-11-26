@@ -1,13 +1,24 @@
-import { Metadata } from "next";
+"use client";
+
+import { auth } from "@/app/firebase/firebaseConfig";
+import { User } from "firebase/auth";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 
-export const metadata: Metadata = {
-  title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
-};
-
 export default function About() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+      setLoaded(true);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="ml-20 mr-20 mt-4 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-12 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
       <div id="left-col" className="rounded-2xl md:col-span-6">
@@ -29,9 +40,25 @@ export default function About() {
           making specific recommendations, empowering you to make decisions in
           line with your values.
         </p>
-        <button className="mt-5 w-1/3 rounded-2xl border border-stroke bg-green-400 px-5 pb-3 pt-3 font-bold text-white sm:px-7.5 xl:col-span-8">
-          SIGN IN
-        </button>
+        {loaded ? (
+          user ? (
+            <Link href="/dashboard">
+              <button className="mt-4 rounded-lg bg-green-500 px-8 py-3 font-bold text-white transition duration-200 hover:bg-green-600">
+                DASHBOARD
+              </button>
+            </Link>
+          ) : (
+            <Link href="/main-site/auth/SignInWithGoogle">
+              <button className="mt-4 rounded-lg bg-green-500 px-8 py-3 font-bold text-white transition duration-200 hover:bg-green-600">
+                SIGN IN
+              </button>
+            </Link>
+          )
+        ) : (
+          <button className="mt-4 rounded-lg bg-green-500 px-8 py-3 font-bold text-white transition duration-200 hover:bg-green-600">
+            Loading...
+          </button>
+        )}
       </div>
       <div
         id="right-col"
