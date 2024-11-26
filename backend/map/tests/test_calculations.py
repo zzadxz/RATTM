@@ -1,6 +1,6 @@
 from django.test import TestCase 
 from unittest.mock import patch
-from backend.map.calculations import (
+from map.calculations import (
     _get_closest_match, 
     _company_tier, 
 )
@@ -21,7 +21,7 @@ class CalculationsTest(TestCase):
         }
 
     # TEST FUZZY MATCHING
-    @patch("env_impact_history.process.extractOne")
+    @patch("map.calculations.process.extractOne")
     def test_get_closest_match_walmart(self, mock_extractOne):
         # Test matching "Walmart" to "Walmart Inc" in ESG_scores
         mock_extractOne.return_value = ("Walmart Inc", 90)
@@ -29,7 +29,7 @@ class CalculationsTest(TestCase):
         self.assertEqual(result, "Walmart Inc")
         mock_extractOne.assert_called_once_with("Walmart", self.ESG_scores.keys())
     
-    @patch("env_impact_history.process.extractOne")
+    @patch("map.calculations.process.extractOne")
     def test_get_closest_match_starbucks(self, mock_extractOne):
         # Test matching "Starbucks" to "Starbucks Corp"
         mock_extractOne.return_value = ("Starbucks Corp", 90)
@@ -37,7 +37,7 @@ class CalculationsTest(TestCase):
         self.assertEqual(result, "Starbucks Corp")
         mock_extractOne.assert_called_once_with("Starbucks", self.ESG_scores.keys())
     
-    @patch("env_impact_history.process.extractOne")
+    @patch("map.calculations.process.extractOne")
     def test_get_closest_match_no_match(self, mock_extractOne):
         # Test when there's no match
         mock_extractOne.return_value = None
@@ -48,8 +48,9 @@ class CalculationsTest(TestCase):
     def test_company_tier(self):
         # Test all companies return correct tier information given ESG scores. 
         self.assertEqual(_company_tier(244), 4)
-        self.assertEqual(_company_tier(245), 3)
-        self.assertEqual(_company_tier(500), 3)
-        self.assertEqual(_company_tier(501), 2)
-        self.assertEqual(_company_tier(520), 2)
+        self.assertEqual(_company_tier(245), 4)
+        self.assertEqual(_company_tier(500), 4)
+        self.assertEqual(_company_tier(501), 3)
+        self.assertEqual(_company_tier(520), 3)
         self.assertEqual(_company_tier(521), 1)
+        self.assertEqual(_company_tier(600), 1)

@@ -22,6 +22,6 @@ class MapView():
         User map location information is processed and returned.
         """
         # set user id according to the request 
-        self.user_id = request.request.session.get("user_id")  or '0'
+        self.user_id = request.session.get("user_id")  or '0'
         user_map = MapUseCase(self.user_id)
         return JsonResponse(user_map.get_user_all_locations_and_company(), safe=False)
