@@ -1,6 +1,6 @@
 from static_file.company_esg_score import company_name_matching, get_company_score
 from .calculations import Calculations
-from .AbstractDataAccess import AbstractDataAccess
+from utils.abstract_data_access import AbstractDataAccess
 from datetime import date, datetime
 
 class DashboardUseCases:

@@ -2,10 +2,11 @@ from django.urls import path
 from .views import DashboardView
 from .use_cases import DashboardUseCases
 from .calculations import Calculations
-from .FirebaseDataAcessImplementation import Firebase_data_access
+from utils.firebase_data_access_implementation import FirebaseDataAccess
+# This is a builder for dashboard
 views = DashboardView(
             DashboardUseCases(
-                Calculations(), Firebase_data_access()
+                Calculations(), FirebaseDataAccess()
             )
         )
 urlpatterns = [
