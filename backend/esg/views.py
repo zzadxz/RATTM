@@ -8,7 +8,7 @@ import os
 
 class ESGView:
 # endpoint: /esg/upload
-    def upload_data_to_firestore(request):
+    def upload_data_to_firestore(self, request):
         load_dotenv()
         esg_path = os.getenv('ESG_PATH')
         with open(esg_path, 'r') as file:
@@ -36,7 +36,7 @@ class ESGView:
 
     # as we move forward, this can be deleted 
     # endpoint: /esg/get
-    def get_data_from_firestore(request):
+    def get_data_from_firestore(self, request):
         try:
             docs = db.collection('esg').stream()
             all_esg = []
@@ -50,7 +50,7 @@ class ESGView:
 
     # get indivudual esg scores for company, need to be updated 
     # end point: /esg/get/<company_name>
-    def get_individual_company_score(company_name):
+    def get_individual_company_score(self, company_name):
         try:
             results = db.collection('esg').where('merchant_name', '==', company_name).limit(1).stream()
             return JsonResponse(results, safe=False, status=200)

@@ -13,7 +13,7 @@ class DashboardView:
         self.use_cases = use_cases
             
     # monthly carbon score, green transactions, and month names for each month - return the last 12 data points as a list
-    def get_line_graph_data(request):
+    def get_line_graph_data(self, request):
         user_id = request.session.get("user_id") or '0'
         data = {
             "months": self.use_cases.past_12_month_names(),
@@ -24,42 +24,42 @@ class DashboardView:
 
 
     # number of green transactions for each month - the last data point grouped by month
-    def get_this_month_green_transactions(request):
+    def get_this_month_green_transactions(self, request):
         user_id = request.session.get("user_id") or '0'
         return JsonResponse(self.use_cases.this_month_green_transactions(user_id), safe=False)
 
     # number of green transactions for all time
-    def get_total_green_transactions(request):
+    def get_total_green_transactions(self, request):
         user_id = request.session.get("user_id") or '0'
         return JsonResponse(self.use_cases.total_green_transactions(user_id), safe=False)
 
 
     # top 5 companies purchased from, their esg score, and amount purchased from them
-    def get_top_5_companies(request):
+    def get_top_5_companies(self, request):
         user_id = request.session.get("user_id") or '0'
         return JsonResponse(self.use_cases.top_5_companies(user_id), safe=False)
 
     # total CO2 score
-    def get_total_co2_score(request):
+    def get_total_co2_score(self, request):
         user_id = request.session.get("user_id") or '0'
         return JsonResponse(self.use_cases.total_co2_score(user_id), safe=False)
 
     # this month CO2 score
-    def get_this_month_co2_score(request):
+    def get_this_month_co2_score(self, request):
         user_id = request.session.get("user_id") or '0'
         return JsonResponse(self.use_cases.this_month_co2_score(user_id), safe=False)
 
     # number of companies from each tier
-    def get_company_tiers(request):
+    def get_company_tiers(self, request):
         user_id = request.session.get("user_id") or '0'
         return JsonResponse(self.use_cases.company_tiers(user_id), safe=False)
 
     # increase/decrease of CO2 score
-    def get_co2_score_change(request): 
+    def get_co2_score_change(self, request): 
         user_id = request.session.get("user_id") or '0'
         return JsonResponse(self.use_cases.co2_score_change(user_id), safe=False)
 
     # percent increase/decrease of green transactions
-    def get_green_transaction_change(request): 
+    def get_green_transaction_change(self, request): 
         user_id = request.session.get("user_id") or '0'
         return JsonResponse(self.use_cases.green_transaction_change(user_id), safe=False)
