@@ -1,11 +1,14 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export type Company = {
-  logo: string;
-  name: string;
-  esgScore: number;
-  amountSpent: number;
+interface Company {
+  logo?: string;
+  name?: string;
+  esgScore?: number;
+  amountSpent?: number;
+  "Company Name"?: string;
+  "ESG Score"?: number;
+  "Amount Spent"?: number;
 };
 
 const getDomainVariations = (companyName: string) => {
@@ -21,12 +24,12 @@ const getDomainVariations = (companyName: string) => {
 };
 
 const TopCompaniesTable = ({ companies }: { companies: Company[] | undefined }) => {
-  const formatCompanyData = (rawCompanies: any[]): Company[] => {
+  const formatCompanyData = (rawCompanies: Company[]): Company[] => {
     return rawCompanies.map(company => ({
-      logo: `https://logo.clearbit.com/${company["Company Name"].toLowerCase()}.com`,
-      name: company["Company Name"],
-      esgScore: company["ESG Score"],
-      amountSpent: company["Amount Spent"]
+      logo: `https://logo.clearbit.com/${(company["Company Name"] ?? "").toLowerCase()}.com`,
+      name: company["Company Name"] ?? "",
+      esgScore: company["ESG Score"] ?? 0,
+      amountSpent: company["Amount Spent"] ?? 0
     }));
   };
 
@@ -89,20 +92,20 @@ const TopCompaniesTable = ({ companies }: { companies: Company[] | undefined }) 
                 <div className="flex items-center gap-10">
                   <div className="flex-shrink-0 w-12 h-12 border border-gray-200 rounded-full p-0.5 flex items-center justify-center">
                     <Image
-                      src={`https://logo.clearbit.com/${getDomainVariations(company.name)[0]}`}
-                      alt={`${company.name} logo`}
+                      src={`https://logo.clearbit.com/${getDomainVariations(company.name ?? '')[0]}`}
+                      alt={`${company.name ?? 'Company'} logo`}
                       width={40}
                       height={40}
                       className="rounded-full object-contain"
-                      onError={(e) => {
+                      onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                         const target = e.target as HTMLImageElement;
                         const currentDomain = target.src.split('/').pop();
-                        const domains = getDomainVariations(company.name);
+                        const domains = getDomainVariations(company.name ?? '');
                         const currentIndex = domains.findIndex(d => d === currentDomain);
                         if (currentIndex < domains.length - 1) {
                           target.src = `https://logo.clearbit.com/${domains[currentIndex + 1]}`;
                         } else {
-                          target.src = ''; // This will trigger the next onerror
+                          target.src = '/fallback-logo.png';
                         }
                       }}
                     />
@@ -120,7 +123,7 @@ const TopCompaniesTable = ({ companies }: { companies: Company[] | undefined }) 
               </div>
 
               <div className="flex items-center justify-center p-2.5 xl:p-5">
-                <p className="text-meta-3">${company.amountSpent.toFixed(2)}</p>
+                <p className="text-meta-3">${(company.amountSpent ?? 0).toFixed(2)}</p>
               </div>
             </div>
           ))
