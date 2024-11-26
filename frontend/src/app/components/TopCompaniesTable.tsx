@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-interface Company {
+export interface Company {
   logo?: string;
   name?: string;
   esgScore?: number;
