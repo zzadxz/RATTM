@@ -59,7 +59,7 @@
           }
         },
         "scripts": {
-          "test": "cd backend && python manage.py test"
+          "test": "cd backend && coverage run manage.py test && coverage html && coverage report"
         }
       }
     }

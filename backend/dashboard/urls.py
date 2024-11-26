@@ -10,7 +10,7 @@ from .views import (
     get_co2_score_change,
     get_green_transaction_change,
 )
-    
+
 urlpatterns = [
     path('get_line_graph_data/', get_line_graph_data, name='get_line_graph_data'),
     path('get_this_month_green_transactions/', get_this_month_green_transactions, name='get_this_month_green_transactions'),
