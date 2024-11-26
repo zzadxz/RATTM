@@ -1,7 +1,14 @@
 const nextConfig = {
   swcMinify: true,
   images: {
-    domains: ['logo.clearbit.com'],  // Changed from remotePatterns
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'logo.clearbit.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
