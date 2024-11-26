@@ -12,7 +12,7 @@ class AbstractTransactionUseCase(ABC):
         Abstract method for uploading data to Firestore.
         Implementations should handle writing transaction data to Firestore.
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_data_from_firestore_use_case(self):
@@ -20,4 +20,4 @@ class AbstractTransactionUseCase(ABC):
         Abstract method for retrieving transaction data from Firestore.
         Implementations should handle fetching and returning transaction data.
         """
-        pass
+        raise NotImplementedError
