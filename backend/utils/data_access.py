@@ -13,4 +13,3 @@ def get_table_from_firebase(table_to_access: str):
         ret = None
         print(str(e))
     return ret
-
