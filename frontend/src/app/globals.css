@@ -7,6 +7,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .shadow-default {
+    @apply shadow-default;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

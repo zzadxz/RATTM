@@ -10,6 +10,7 @@ import MonthSummary from "@/app/components/charts/MonthSummary";
 import AboutYourScore from "@/app/components/AboutYourScore";
 import TableOne from "@/app/components/TopCompaniesTable";
 import CardDataStats from "@/app/components/CardDataStats";
+import { Company } from "@/app/components/TopCompaniesTable";
 
 const CompaniesPieChart = dynamic(
   () => import("@/app/components/charts/CompaniesPieChart"),
@@ -25,8 +26,10 @@ const Dashboard: React.FC = () => {
   const [monthlyCO2ScoreChange, setMonthlyCO2ScoreChange] = useState<number>(0);
   const [monthlyGreenTransactions, setMonthlyGreenTransactions] = useState<number>(0);
   const [monthlyGreenTransactionsChange, setMonthlyGreenTransactionsChange] = useState<number>(0);
+  const [companyTiers, setCompanyTiers] = useState<number[]>([0, 0, 0, 0]);
   const [circleColor, setCircleColor] = useState<string>("#7d91f5");
   const [isHovered, setIsHovered] = useState(false);
+  const [topCompanies, setTopCompanies] = useState<Company[] | undefined>(undefined);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,22 +40,28 @@ const Dashboard: React.FC = () => {
           monthlyCO2Response,
           co2ChangeResponse,
           greenTransactionsResponse,
-          greenTransactionsChangeResponse
+          greenTransactionsChangeResponse,
+          companyTiersResponse,
+          topCompaniesResponse
         ] = await Promise.all([
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_total_co2_score/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_co2_score/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_co2_score_change/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_green_transactions/"),
-          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_green_transaction_change/")
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_green_transaction_change/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_company_tiers/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_top_5_companies/")
         ]);
 
-        const [totalCO2Data, monthlyCO2Data, co2ChangeData, greenTransactionsData, greenTransactionsChangeData] = 
+        const [totalCO2Data, monthlyCO2Data, co2ChangeData, greenTransactionsData, greenTransactionsChangeData, companyTiersData, topCompaniesData] = 
           await Promise.all([
             totalCO2Response.text(),
             monthlyCO2Response.text(),
             co2ChangeResponse.text(),
             greenTransactionsResponse.text(),
-            greenTransactionsChangeResponse.text()
+            greenTransactionsChangeResponse.text(),
+            companyTiersResponse.text(),
+            topCompaniesResponse.json()
           ]);
 
         setTotalCO2Score(totalCO2Data);
@@ -60,9 +69,10 @@ const Dashboard: React.FC = () => {
         setMonthlyCO2ScoreChange(Number(co2ChangeData));
         setMonthlyGreenTransactions(Number(greenTransactionsData));
         setMonthlyGreenTransactionsChange(Number(greenTransactionsChangeData));
-        
+        setCompanyTiers(JSON.parse(companyTiersData));
         const totalValue = parseFloat(totalCO2Data);
         setCircleColor(totalValue > 200 ? "#08d116" : "#FE4A49");
+        setTopCompanies(topCompaniesData);
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
       }
@@ -107,7 +117,7 @@ const Dashboard: React.FC = () => {
           monthlyGreenTransactions={monthlyGreenTransactions}
           monthlyGreenTransactionsChange={monthlyGreenTransactionsChange}
         />
-        <TableOne />
+        <TableOne companies={topCompanies} />
       </div>
 
       <div className="col-span-12 rounded-2xl bg-white pt-5 md:col-span-4 lg:pl-10 lg:pr-10">
@@ -123,7 +133,7 @@ const Dashboard: React.FC = () => {
         </CardDataStats>
         <AboutYourScore isHovered={isHovered} />
         <div className="mt-5">
-          <CompaniesPieChart />
+          <CompaniesPieChart companyTiers={companyTiers} />
         </div>
       </div>
     </div>
