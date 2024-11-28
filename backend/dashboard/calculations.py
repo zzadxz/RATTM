@@ -4,7 +4,7 @@ from rapidfuzz import process
 from dateutil.relativedelta import relativedelta
 
 class Calculations:
-    def _get_closest_match(query: str, choices: dict, score_cutoff: int = 75) -> str:
+    def _get_closest_match(self, query: str, choices: dict, score_cutoff: int = 75) -> str:
         """
         Returns the best match for query in the keys of choices dict if the score 
         is above the score_cutoff
@@ -14,7 +14,7 @@ class Calculations:
             return match
         return None
 
-    def _get_company_env_score(transaction: dict, ESG_scores: dict[str, dict]):
+    def _get_company_env_score(self, transaction: dict, ESG_scores: dict[str, dict]):
         """
         Returns environmental score for a transaction's company IF the company is in the ESG_scores dict.
         Otherwise, return 0.
@@ -25,11 +25,11 @@ class Calculations:
         else:
             return 0
 
-    def _is_green(transaction: dict, ESG_scores: dict[str,dict]):
+    def _is_green(self, transaction: dict, ESG_scores: dict[str,dict]):
         company_env_score = self._get_company_env_score(transaction, ESG_scores)
         return company_env_score > 500
 
-    def _company_tier(company_env_score: int) -> int:
+    def _company_tier(self, company_env_score: int) -> int:
         """
         Returns the tier of the company based on its environmental score, 
         worst tier is 4 and best tier is 1.
@@ -44,7 +44,7 @@ class Calculations:
             return 4
         
 
-    def _get_start_end_dates(current_date: datetime) -> tuple[datetime]:
+    def _get_start_end_dates(self, current_date: datetime) -> tuple[datetime]:
         """
         Helper function, get start and end dates of the month of the current_date.
         """
@@ -58,7 +58,7 @@ class Calculations:
 
 
 
-    def _count_green_transactions_in_period(transactions: list[dict], start_date: datetime, end_date: datetime, ESG_scores: dict[str,dict]) -> int:
+    def _count_green_transactions_in_period(self, transactions: list[dict], start_date: datetime, end_date: datetime, ESG_scores: dict[str,dict]) -> int:
         """
         Helper function that counts green transactions within a specified date range.
         """
@@ -69,7 +69,7 @@ class Calculations:
         )
 
 
-    def _get_unique_companies(transactions: list[dict], ESG_scores: dict[str, dict]):
+    def _get_unique_companies(self, transactions: list[dict], ESG_scores: dict[str, dict]):
         """
         Return set of top companies shopped at for all time
         """
@@ -82,7 +82,7 @@ class Calculations:
         return unique_companies
 
 
-    def calculate_score(transactions: list[dict], start: datetime, end: datetime, ESG_scores: dict[str, dict]) -> float:
+    def calculate_score(self, transactions: list[dict], start: datetime, end: datetime, ESG_scores: dict[str, dict]) -> float:
         """
         Calculate the environmental impact score of a user
         """
@@ -104,7 +104,7 @@ class Calculations:
         return int(env_contribution / total_spending) if total_spending != 0 else None
 
 
-    def calculate_company_esg_scores(transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[dict[str, float]]:
+    def calculate_company_esg_scores(self, transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[dict[str, float]]:
         """
         Calculate the ESG score of the companies that the user has made transactions with
         """
@@ -116,7 +116,7 @@ class Calculations:
         return company_ESG_scores
 
 
-    def calculate_total_green_transactions(transactions: list[dict], ESG_scores: dict[str,dict]) -> int:
+    def calculate_total_green_transactions(self, transactions: list[dict], ESG_scores: dict[str,dict]) -> int:
         """
         25th percentile: 245.0
         50th percentile: 500.0
@@ -131,7 +131,7 @@ class Calculations:
         return green_transactions
 
 
-    def find_most_purchased_companies(transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[dict[str, float]]:
+    def find_most_purchased_companies(self, transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[dict[str, float]]:
         """
         Gets most purchased companies of all time, returns a list of dictionary, where dictionaries 
         contain the company name, the ESG score of the company and the amount spent on that company
@@ -149,7 +149,7 @@ class Calculations:
         return top_5_companies
 
 
-    def calculate_historical_scores(transactions: dict[int, dict], esg_scores: dict[str, dict]) -> list[int]:
+    def calculate_historical_scores(self, transactions: dict[int, dict], esg_scores: dict[str, dict]) -> list[int]:
         """
         Return list of environmental scores for the past 12 months.
         The scores go from most to least recent! So scores[0] is this month, scores[-1] is 10 months ago
@@ -172,7 +172,7 @@ class Calculations:
         return scores
 
 
-    def calculate_historical_green_transactions(transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[int]:
+    def calculate_historical_green_transactions(self, transactions: dict[int, dict], ESG_scores: dict[str,dict]) -> list[int]:
         """
         Return a list of green transaction counts for the past months.
         List goes from most recent as first element to least recent as last element.
@@ -194,7 +194,7 @@ class Calculations:
         return green_transaction_counts
 
 
-    def find_companies_in_each_tier(transactions: list[dict], ESG_scores: dict[str, dict]) -> list[int]:
+    def find_companies_in_each_tier(self, transactions: list[dict], ESG_scores: dict[str, dict]) -> list[int]:
         """
         Returns list of length 4, where the first element is the number of companies in the highest tier
         that the user shopped at for all time.
