@@ -21,6 +21,12 @@ export class TransactionService {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/transaction/get/`);
       if (!response.ok) {
+        const errorDetails = await response.text();
+        console.error('Fetch failed with details:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorDetails,
+        });
         throw new Error('Network response was not ok');
       }
       const data: Transaction[] = await response.json();
