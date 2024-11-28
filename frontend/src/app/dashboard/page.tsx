@@ -10,6 +10,7 @@ import MonthSummary from "@/app/components/charts/MonthSummary";
 import AboutYourScore from "@/app/components/AboutYourScore";
 import TableOne from "@/app/components/TopCompaniesTable";
 import CardDataStats from "@/app/components/CardDataStats";
+import { Company } from "@/app/components/TopCompaniesTable";
 
 const CompaniesPieChart = dynamic(
   () => import("@/app/components/charts/CompaniesPieChart"),
@@ -20,11 +21,66 @@ const CompaniesPieChart = dynamic(
 
 const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
+  const [totalCO2Score, setTotalCO2Score] = useState<string>("Loading...");
+  const [monthlyCO2Score, setMonthlyCO2Score] = useState<number>(0);
+  const [monthlyCO2ScoreChange, setMonthlyCO2ScoreChange] = useState<number>(0);
+  const [monthlyGreenTransactions, setMonthlyGreenTransactions] = useState<number>(0);
+  const [monthlyGreenTransactionsChange, setMonthlyGreenTransactionsChange] = useState<number>(0);
+  const [companyTiers, setCompanyTiers] = useState<number[]>([0, 0, 0, 0]);
+  const [circleColor, setCircleColor] = useState<string>("#7d91f5");
+  const [isHovered, setIsHovered] = useState(false);
+  const [topCompanies, setTopCompanies] = useState<Company[] | undefined>(undefined);
   const router = useRouter();
 
   useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const [
+          totalCO2Response,
+          monthlyCO2Response,
+          co2ChangeResponse,
+          greenTransactionsResponse,
+          greenTransactionsChangeResponse,
+          companyTiersResponse,
+          topCompaniesResponse
+        ] = await Promise.all([
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_total_co2_score/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_co2_score/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_co2_score_change/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_green_transactions/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_green_transaction_change/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_company_tiers/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_top_5_companies/")
+        ]);
+
+        const [totalCO2Data, monthlyCO2Data, co2ChangeData, greenTransactionsData, greenTransactionsChangeData, companyTiersData, topCompaniesData] = 
+          await Promise.all([
+            totalCO2Response.text(),
+            monthlyCO2Response.text(),
+            co2ChangeResponse.text(),
+            greenTransactionsResponse.text(),
+            greenTransactionsChangeResponse.text(),
+            companyTiersResponse.text(),
+            topCompaniesResponse.json()
+          ]);
+
+        setTotalCO2Score(totalCO2Data);
+        setMonthlyCO2Score(Number(monthlyCO2Data));
+        setMonthlyCO2ScoreChange(Number(co2ChangeData));
+        setMonthlyGreenTransactions(Number(greenTransactionsData));
+        setMonthlyGreenTransactionsChange(Number(greenTransactionsChangeData));
+        setCompanyTiers(JSON.parse(companyTiersData));
+        const totalValue = parseFloat(totalCO2Data);
+        setCircleColor(totalValue > 200 ? "#08d116" : "#FE4A49");
+        setTopCompanies(topCompaniesData);
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+      }
+    };
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+        fetchDashboardData();
         setLoading(false);
       } else {
         router.replace("/main-site/auth/SignInWithGoogle");
@@ -55,19 +111,29 @@ const Dashboard: React.FC = () => {
         </p>
         <br />
         <FootprintLineGraph />
-        <MonthSummary />
-        <TableOne />
+        <MonthSummary 
+          monthlyCO2Score={monthlyCO2Score}
+          monthlyCO2ScoreChange={monthlyCO2ScoreChange}
+          monthlyGreenTransactions={monthlyGreenTransactions}
+          monthlyGreenTransactionsChange={monthlyGreenTransactionsChange}
+        />
+        <TableOne companies={topCompanies} />
       </div>
 
       <div className="col-span-12 rounded-2xl bg-white pt-5 md:col-span-4 lg:pl-10 lg:pr-10">
-        <CardDataStats title="(out of 850)" total="840" rate="23" levelUp>
+        <CardDataStats
+          title="(out of 500)"
+          total={totalCO2Score}
+          circleColor={circleColor}
+          onHoverChange={setIsHovered}
+        >
           <p className="text-center text-xl font-black text-black">
             Carbon Score
           </p>
         </CardDataStats>
-        <AboutYourScore />
+        <AboutYourScore isHovered={isHovered} />
         <div className="mt-5">
-          <CompaniesPieChart />
+          <CompaniesPieChart companyTiers={companyTiers} />
         </div>
       </div>
     </div>

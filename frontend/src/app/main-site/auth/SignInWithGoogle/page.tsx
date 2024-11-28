@@ -23,13 +23,13 @@ function SendEmail(userEmail: string) {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message);
+        console.log(data.message);
       } else {
-        alert(`Error: ${data.error}`);
+        console.log(`Error: ${data.error}`);
       }
     } catch (error) {
       console.error("Error sending number:", error);
-      alert("An error occurred while sending the number.");
+      console.log("An error occurred while sending the number.");
     }
   };
   return sendEmailToBackend(userEmail);

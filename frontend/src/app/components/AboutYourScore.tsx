@@ -2,10 +2,18 @@
 
 import React from "react";
 
-const AboutYourScore: React.FC = () => {
+interface AboutYourScoreProps {
+  isHovered: boolean;
+}
+
+const AboutYourScore: React.FC<AboutYourScoreProps> = ({ isHovered }) => {
   return (
     <>
-      <div className="col-span-12 mt-5 rounded-2xl border border-stroke px-5 pb-5 pt-7.5 dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+      <div
+        className={`about-your-score col-span-12 mt-5 rounded-2xl border border-stroke px-5 pb-5 pt-7.5 dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8 transition-transform duration-300 ${
+          isHovered ? "scale-105 shadow-lg" : ""
+        }`}
+      >
         <h1 className="text-xl font-extrabold text-black dark:text-white">
           About your score
         </h1>
