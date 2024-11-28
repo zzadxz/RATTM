@@ -111,9 +111,8 @@ class ViewsTestCase(TestCase):
 
         # Parse the response content
         transactions = json.loads(response.content)
-        self.assertIn("transactions", transactions)
-        self.assertEqual(len(transactions["transactions"]), 2)
-        self.assertEqual(transactions["transactions"][0]["Company Name"], "TestCompany")
+        self.assertEqual(len(transactions), 2)
+        self.assertEqual(transactions[0]["Company Name"], "TestCompany")
 
         self.mock_use_case.get_data_from_firestore_use_case.assert_called_once()
 
