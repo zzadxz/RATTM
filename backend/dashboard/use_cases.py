@@ -40,7 +40,7 @@ class DashboardUseCases:
         """
         user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
-        return self.calculations.calculate_historical_scores(user_transactions, esg_data)[::-1]
+        return self.calculations.calculate_historical_green_transactions(user_transactions, esg_data)[::-1]
         
 
     def total_green_transactions(self, user_id) -> int:
