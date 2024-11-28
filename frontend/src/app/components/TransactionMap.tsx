@@ -78,7 +78,7 @@ const TransactionMap: React.FC = () => {
                 </h3>
                 <p className="text-lg">
                   Rating:
-                  <span style='color: ${textColor}'>${description}</span>
+                  <span style='color: ${textColor}; font-weight: 800;'>${description}</span>
                 </p>
               `)
             )
@@ -99,7 +99,7 @@ const TransactionMap: React.FC = () => {
         className="map-container"
         style={{
           margin: "auto",
-          width: "80vw",
+          width: "100%",
           height: "69vh",
           minHeight: "400px",
           maxHeight: "100%",
