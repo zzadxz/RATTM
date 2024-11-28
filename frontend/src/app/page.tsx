@@ -25,7 +25,7 @@ export default function Home() {
       <div id="left-col" className="rounded-2xl md:col-span-6">
         <Image
           src="/images/logo/rootpage-logo.png"
-          alt="RATTM CO2 Calculator"
+          alt="Eco-Score by RATTM"
           width={872}
           height={774}
           className="w-full"
@@ -35,11 +35,13 @@ export default function Home() {
         id="right-col"
         className="flex h-full flex-col items-center justify-center rounded-2xl md:col-span-6"
       >
-        <div className="max-w-sm rounded-lg bg-green-100 p-6 text-center shadow-md">
+        <div className="max-w-sm rounded-lg bg-green-100 p-6 text-center shadow-md w-full">
           <h1 className="text-xl font-bold text-gray-900">
-            Welcome to RATTM&apos;s CO2 Calculator!
+            Welcome to RATTM&apos;s
+            <br />
+            Eco-Score calculator
           </h1>
-          <p className="mt-2 text-gray-700">Improve your carbon score today!</p>
+          <p className="mt-2 text-gray-700">Improve your Eco-Score today!</p>
         </div>
         {user ? (
           <Link href="/dashboard">

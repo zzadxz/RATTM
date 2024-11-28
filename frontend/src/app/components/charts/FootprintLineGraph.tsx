@@ -16,7 +16,7 @@ const FootprintLineGraph: React.FC = () => {
       color: "#08d116",
     },
     {
-      name: "Carbon Score",
+      name: "Eco-Score",
       data: [],
       color: "#7d91f5",
     },
@@ -27,9 +27,11 @@ const FootprintLineGraph: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_line_graph_data/");
+        const response = await fetch(
+          "https://rattm-f300025e7172.herokuapp.com/dashboard/get_line_graph_data/"
+        );
         const data = await response.json();
-        
+
         setCategories(data.months);
         setSeries([
           {
@@ -38,7 +40,7 @@ const FootprintLineGraph: React.FC = () => {
             color: "#08d116",
           },
           {
-            name: "Carbon Score",
+            name: "Eco-Score",
             data: data.carbon_scores,
             color: "#7d91f5",
           },
@@ -152,7 +154,7 @@ const FootprintLineGraph: React.FC = () => {
       {
         opposite: true,
         title: {
-          text: "Carbon Score",
+          text: "Eco-Score",
         },
         min: 0,
         max: 600,
@@ -167,7 +169,7 @@ const FootprintLineGraph: React.FC = () => {
         Your footprint over time
       </h1>
       <p className="pt-4 text-xl">
-        See how your carbon footprint varied in the last 12 months
+        See how your Eco-Score varied in the last 12 months
       </p>
       <br />
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
@@ -187,7 +189,7 @@ const FootprintLineGraph: React.FC = () => {
                 <p className="font-semibold" style={{ color: color }}>
                   {name}
                 </p>
-                <p className="text-sm font-medium">10.01.2023 - 10.01.2024</p>
+                <p className="text-sm font-medium">10/01/2023 - 10/01/2024</p>
               </div>
             </div>
           ))}

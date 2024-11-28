@@ -9,7 +9,7 @@ interface MonthSummaryProps {
   monthlyGreenTransactionsChange: number;
 }
 
-const MonthSummary: React.FC<MonthSummaryProps>  = ({
+const MonthSummary: React.FC<MonthSummaryProps> = ({
   monthlyCO2Score,
   monthlyCO2ScoreChange,
   monthlyGreenTransactions,
@@ -17,17 +17,27 @@ const MonthSummary: React.FC<MonthSummaryProps>  = ({
 }) => {
   const getCurrentMonth = () => {
     const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     const currentMonth = new Date().getMonth();
     return months[currentMonth];
   };
-  
+
   const getChangeDisplay = (value: number) => ({
     absoluteValue: Math.abs(value),
     color: value >= 0 ? "text-green-600" : "text-red-600",
-    isPositive: value >= 0
+    isPositive: value >= 0,
   });
 
   const co2Change = getChangeDisplay(monthlyCO2ScoreChange);
@@ -44,10 +54,12 @@ const MonthSummary: React.FC<MonthSummaryProps>  = ({
       <br />
       <div className="flex space-x-4">
         <div className="flex-1 rounded-lg border border-gray-200 p-4">
-          <h3 className="font-medium text-gray-600">CO2 Score</h3>
+          <h3 className="font-medium text-gray-600">Eco-Score</h3>
           <p className="text-sm text-gray-500">This Month</p>
           <div className="mt-2 flex items-center justify-between">
-            <span className="text-4xl font-bold text-gray-900">{monthlyCO2Score}</span>
+            <span className="text-4xl font-bold text-gray-900">
+              {monthlyCO2Score}
+            </span>
             <div className={`flex items-center text-sm ${co2Change.color}`}>
               <span>{co2Change.absoluteValue}</span>
               <svg
@@ -61,9 +73,10 @@ const MonthSummary: React.FC<MonthSummaryProps>  = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d={co2Change.isPositive 
-                    ? "M5 10l7-7m0 0l7 7m-7-7v18"  // upward arrow
-                    : "M19 14l-7 7m0 0l-7-7m7 7V3"  // downward arrow
+                  d={
+                    co2Change.isPositive
+                      ? "M5 10l7-7m0 0l7 7m-7-7v18" // upward arrow
+                      : "M19 14l-7 7m0 0l-7-7m7 7V3" // downward arrow
                   }
                 />
               </svg>
@@ -75,8 +88,12 @@ const MonthSummary: React.FC<MonthSummaryProps>  = ({
           <h3 className="font-medium text-gray-600">Green Transactions</h3>
           <p className="text-sm text-gray-500">This Month</p>
           <div className="mt-2 flex items-center justify-between">
-            <span className="text-4xl font-bold text-gray-900">{monthlyGreenTransactions}</span>
-            <div className={`flex items-center text-sm ${transactionsChange.color}`}>
+            <span className="text-4xl font-bold text-gray-900">
+              {monthlyGreenTransactions}
+            </span>
+            <div
+              className={`flex items-center text-sm ${transactionsChange.color}`}
+            >
               <span>{transactionsChange.absoluteValue}</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -89,9 +106,10 @@ const MonthSummary: React.FC<MonthSummaryProps>  = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d={transactionsChange.isPositive 
-                    ? "M5 10l7-7m0 0l7 7m-7-7v18"  // upward arrow
-                    : "M19 14l-7 7m0 0l-7-7m7 7V3"  // downward arrow
+                  d={
+                    transactionsChange.isPositive
+                      ? "M5 10l7-7m0 0l7 7m-7-7v18" // upward arrow
+                      : "M19 14l-7 7m0 0l-7-7m7 7V3" // downward arrow
                   }
                 />
               </svg>

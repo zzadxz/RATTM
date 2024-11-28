@@ -15,7 +15,7 @@ const AboutYourScore: React.FC<AboutYourScoreProps> = ({ isHovered }) => {
         }`}
       >
         <h1 className="text-xl font-extrabold text-black dark:text-white">
-          About your score
+          About your Eco-Score
         </h1>
         <p className="text-md pt-4">
           We calculate based on normalized company ESG data to provide a quick
