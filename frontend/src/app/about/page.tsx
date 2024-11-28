@@ -23,12 +23,12 @@ export default function About() {
     <div className="ml-20 mr-20 mt-4 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-12 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
       <div id="left-col" className="rounded-2xl md:col-span-6">
         <h1 className="mb-7 mt-10 text-5xl font-extrabold text-black dark:text-white">
-          About Your Score
+          About Your Eco-Score
         </h1>
         <p className="mb-7 mt-2 text-lg font-medium text-black">
-          Our goal with the Environmental Friendliness Score is to give you
-          insight into the environmental impact of your purchases, helping you
-          understand how your spending aligns with sustainability goals.
+          Our goal with the Eco-Score is to give you insight into the
+          environmental impact of your purchases, helping you understand how
+          your spending aligns with sustainability goals.
         </p>
         <p className="mt-2 text-lg font-medium text-black">
           Our algorithm prioritizes simplicity and transparency and provides you
@@ -66,7 +66,7 @@ export default function About() {
       >
         <Image
           src="/images/logo/woman-holding-grlobe.svg"
-          alt="RATTM CO2 Calculator"
+          alt="RATTM Eco-Score Calculator"
           width={634}
           height={538}
           className="w-full"

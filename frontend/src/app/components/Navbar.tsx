@@ -9,7 +9,7 @@ import { User } from "firebase/auth";
 const navBarLinks = [
   { name: "Home", link: "/", access_restricted: false },
   { name: "About", link: "/about", access_restricted: false },
-  { name: "Carbon Dashboard", link: "/dashboard", access_restricted: true },
+  { name: "Eco-Score Dashboard", link: "/dashboard", access_restricted: true },
   { name: "Transactions", link: "/transactions", access_restricted: true },
   { name: "Map", link: "/map", access_restricted: true },
 ];
