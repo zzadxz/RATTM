@@ -104,10 +104,10 @@ const Dashboard: React.FC = () => {
     <div className="mt-4 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-12 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
       <div className="dashboard-box rounded-2xl md:col-span-8">
         <h1 className="text-3xl font-extrabold text-black dark:text-white">
-          Overview of your carbon footprint
+          Eco-Score Overview
         </h1>
         <p className="pt-4 text-xl">
-          See how your carbon footprint varied in the last 12 months
+          A Snapshot of Your Recent Environmental Impact
         </p>
         <br />
         <FootprintLineGraph />
@@ -128,7 +128,7 @@ const Dashboard: React.FC = () => {
           onHoverChange={setIsHovered}
         >
           <p className="text-center text-xl font-black text-black">
-            Carbon Score
+            Eco-Score
           </p>
         </CardDataStats>
         <AboutYourScore isHovered={isHovered} />
