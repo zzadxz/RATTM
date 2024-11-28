@@ -67,7 +67,7 @@ class DashboardUseCases:
         """
         user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
-        return self.calculate.find_most_purchased_companies(user_transactions, esg_data)
+        return self.calculations.find_most_purchased_companies(user_transactions, esg_data)
 
 
     def total_co2_score(self, user_id) -> int:
