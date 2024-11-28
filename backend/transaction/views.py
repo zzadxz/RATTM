@@ -23,4 +23,4 @@ class TransactionView:
         if isinstance(transactions, str):  # Check if an error message was returned
             return JsonResponse({"error": transactions}, status=500)
 
-        return JsonResponse({"transactions": transactions}, safe=False, status=200)
+        return JsonResponse(transactions, safe=False, status=200)
