@@ -8,6 +8,7 @@ export interface Transaction {
   latitude: number;
   customerID: number;
   amount: number;
+  esg_score: string;
   ip_address: string;
 }
 
@@ -53,6 +54,7 @@ export class TransactionService {
         latitude: -42.372604,
         customerID: 52,
         amount: 860.27,
+        esg_score: "N/A",
         ip_address: "179.152.194.186",
       },
       {
@@ -63,6 +65,7 @@ export class TransactionService {
         latitude: 11.962175,
         customerID: 74,
         amount: 144.53,
+        esg_score: "300",
         ip_address: "173.64.65.25",
       },
       // Add more mock transactions as needed

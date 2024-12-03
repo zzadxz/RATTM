@@ -1,10 +1,33 @@
-// src/components/TransactionsTable.tsx
-
 import React from "react";
 import { Transaction } from "@/services/transactionService";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
+}
+
+// Function to determine text color based on ESG score percentiles
+function getScoreColor(esgScore: string) {
+  if (esgScore === "N/A") {
+    return "text-gray-500"; 
+  }
+
+  const score = parseFloat(esgScore); // Convert string to a number
+  if (isNaN(score)) {
+    return "text-gray-500"; 
+  }
+
+  if (score <= 245.0) {
+    return "text-[#FE5620]"; // Red (25th percentile)
+  } else if (score <= 500.0) {
+    return "text-[#FEC005]"; // Yellow (50th percentile)
+  } else if (score <= 520.0) {
+    return "text-[#CCDA38]"; // Yellow-green (75th percentile)
+  } else if (score <= 560.0) {
+    return "text-[#4BAE50]"; // Green (90th percentile)
+  }
+
+  // Default color for scores above the 90th percentile
+  return "text-[#4BAE50]";
 }
 
 const TransactionsTable: React.FC<TransactionsTableProps> = ({
@@ -35,6 +58,12 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
             >
+              Company ESG Score
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+            >
               Amount ($)
             </th>
             <th
@@ -60,6 +89,14 @@ const TransactionsTable: React.FC<TransactionsTableProps> = ({
                   role="cell"
                 >
                   {txn.merchant_name}
+                </td>
+                <td
+                  className={`px-6 py-4 whitespace-nowrap text-sm ${getScoreColor(
+                    txn.esg_score
+                  )}`}
+                  role="cell"
+                >
+                  {txn.esg_score}
                 </td>
                 <td
                   className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"

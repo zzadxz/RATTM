@@ -1,10 +1,12 @@
-''' This file is used to test the core, important functions in calculations.py.'''
+''' This file is used to test the core, important functions in calculations.py and use_cases.py'''
 
 from django.test import TestCase
 from utils.firebase import db
 from .calculations import Calculations
-from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedelta
+from datetime import datetime
+from unittest.mock import MagicMock
+from dashboard.use_cases import DashboardUseCases
+from utils.abstract_data_access import AbstractDataAccess
 
 
 class TestCalculations(TestCase):
@@ -149,19 +151,126 @@ class AdditionalCalculationsTest(TestCase):
         # Verify that the counts are calculated
         self.assertIsNotNone(historical_green_transactions[0], "First month's green transaction count should be calculable")
 
-        
-# if __name__ == '__main__':
-#     def get_table_from_firebase(table_to_access: str):
-#         try:
-#             docs = db.collection(table_to_access).limit(2).stream()
-#             ret = {}
-#             for doc in docs:
-#                 ret[doc.id] = doc.to_dict()
-#         except Exception as e:
-#             ret = None
-#             print(str(e))
-#         return ret
-#         print(get_table_from_firebase("esg"))
-#     print(get_table_from_firebase('esg'))
-#     print("================transactions====================\n")
-#     print(get_table_from_firebase('transactions'))
+
+class TestUseCases(TestCase):
+    def setUp(self):
+        # Mock dependencies
+        self.mock_calculations = MagicMock(spec=Calculations)
+        self.mock_data_access = MagicMock(spec=AbstractDataAccess)
+        self.use_cases = DashboardUseCases(self.mock_calculations, self.mock_data_access)
+
+        # Mock user data
+        self.user_id = "test_user"
+        self.mock_transactions = [
+            {"merchant_name": "CompanyA", "amount": 100, "time_completed": "2023-01-01T12:00:00Z"},
+            {"merchant_name": "CompanyB", "amount": 200, "time_completed": "2023-02-01T12:00:00Z"},
+        ]
+        self.mock_esg_data = {
+            "CompanyA": {"environment_score": 500},
+            "CompanyB": {"environment_score": 450},
+        }
+
+        # Mock return values for data access
+        self.mock_data_access.get_table_from_database.side_effect = lambda table: {
+            "Users": {self.user_id: {"transactions": self.mock_transactions}},
+            "esg": self.mock_esg_data,
+        }.get(table)
+
+    def test_past_12_month_names(self):
+        """Test the past_12_month_names method."""
+        expected_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        result = self.use_cases.past_12_month_names()
+        self.assertEqual(len(result), 12, "Should return 12 months")
+        self.assertTrue(all(month in expected_months for month in result), "All months should be valid")
+
+    def test_monthly_carbon_scores(self):
+        """Test the monthly_carbon_scores method."""
+        self.mock_calculations.calculate_historical_scores.return_value = [100, 200, 300]
+        result = self.use_cases.monthly_carbon_scores(self.user_id)
+        self.assertEqual(result, [300, 200, 100], "Should return reversed carbon scores")
+        self.mock_calculations.calculate_historical_scores.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )
+
+    def test_monthly_green_transactions(self):
+        """Test the monthly_green_transactions method."""
+        self.mock_calculations.calculate_historical_green_transactions.return_value = [1, 2, 3]
+        result = self.use_cases.monthly_green_transactions(self.user_id)
+        self.assertEqual(result, [3, 2, 1], "Should return reversed green transaction counts")
+        self.mock_calculations.calculate_historical_green_transactions.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )
+
+    def test_total_green_transactions(self):
+        """Test the total_green_transactions method."""
+        self.mock_calculations.calculate_total_green_transactions.return_value = 10
+        result = self.use_cases.total_green_transactions(self.user_id)
+        self.assertEqual(result, 10, "Should return total green transactions")
+        self.mock_calculations.calculate_total_green_transactions.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )
+
+    def test_this_month_green_transactions(self):
+        """Test the this_month_green_transactions method."""
+        self.mock_calculations.calculate_historical_green_transactions.return_value = [5, 3, 2]
+        result = self.use_cases.this_month_green_transactions(self.user_id)
+        self.assertEqual(result, 5, "Should return green transactions for this month")
+        self.mock_calculations.calculate_historical_green_transactions.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )
+
+    def test_top_5_companies(self):
+        """Test the top_5_companies method."""
+        expected_result = {"CompanyA": {"ESG Score": 500, "Amount Spent": 100}}
+        self.mock_calculations.find_most_purchased_companies.return_value = expected_result
+        result = self.use_cases.top_5_companies(self.user_id)
+        self.assertEqual(result, expected_result, "Should return top 5 companies")
+        self.mock_calculations.find_most_purchased_companies.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )
+
+    def test_total_co2_score(self):
+        """Test the total_co2_score method."""
+        self.mock_calculations.calculate_historical_scores.return_value = [500, 400, 300]
+        result = self.use_cases.total_co2_score(self.user_id)
+        self.assertEqual(result, 400, "Should return average CO2 score")
+        self.mock_calculations.calculate_historical_scores.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )
+
+    def test_this_month_co2_score(self):
+        """Test the this_month_co2_score method."""
+        self.mock_calculations.calculate_historical_scores.return_value = [400, 300, 200]
+        result = self.use_cases.this_month_co2_score(self.user_id)
+        self.assertEqual(result, 400, "Should return CO2 score for this month")
+        self.mock_calculations.calculate_historical_scores.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )
+
+    def test_company_tiers(self):
+        """Test the company_tiers method."""
+        expected_tiers = [5, 3, 2, 1]
+        self.mock_calculations.find_companies_in_each_tier.return_value = expected_tiers
+        result = self.use_cases.company_tiers(self.user_id)
+        self.assertEqual(result, expected_tiers, "Should return the number of companies in each tier")
+        self.mock_calculations.find_companies_in_each_tier.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )
+
+    def test_co2_score_change(self):
+        """Test the co2_score_change method."""
+        self.mock_calculations.calculate_historical_scores.return_value = [500, 450]
+        result = self.use_cases.co2_score_change(self.user_id)
+        self.assertEqual(result, 50, "Should return the change in CO2 score")
+        self.mock_calculations.calculate_historical_scores.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )
+
+    def test_green_transaction_change(self):
+        """Test the green_transaction_change method."""
+        self.mock_calculations.calculate_historical_green_transactions.return_value = [10, 7]
+        result = self.use_cases.green_transaction_change(self.user_id)
+        self.assertEqual(result, 3, "Should return the change in green transactions")
+        self.mock_calculations.calculate_historical_green_transactions.assert_called_once_with(
+            self.mock_transactions, self.mock_esg_data
+        )

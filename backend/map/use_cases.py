@@ -3,26 +3,27 @@ from utils.firebase import db
 from django.http import JsonResponse
 from .calculations import _get_closest_match, _company_tier
 from utils.firebase import db
-from utils.data_access import get_table_from_firebase
+from utils.abstract_data_access import AbstractDataAccess
 from .abstract_use_case import AbstractMapUseCase
 
 class MapUseCase(AbstractMapUseCase):
     """
     Implemnted child class of abstract map use case. 
     """
-    def __init__(self, user_id):
+    def __init__(self, data_access: AbstractDataAccess):
         """
-        Initialize Map Use Case for the user"""
-        self.user_id = user_id
+        Initialize Map Use Case for the user
+        """
+        self.data_access = data_access
 
 
-    def get_user_all_locations_and_company(self):
+    def get_user_all_locations_and_company(self, user_id: str):
         """
         Returns a list of transaction details necessary for the map. This use case implement such that 
         company name, location of purchase, and merchant percentile is returned. 
         """
-        user_transactions = get_table_from_firebase('Users')[self.user_id]['transactions']
-        esg_data = get_table_from_firebase('esg')
+        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        esg_data = self.data_access.get_table_from_database('esg')
 
         map_data = []
         
