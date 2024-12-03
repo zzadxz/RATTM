@@ -149,19 +149,3 @@ class AdditionalCalculationsTest(TestCase):
         # Verify that the counts are calculated
         self.assertIsNotNone(historical_green_transactions[0], "First month's green transaction count should be calculable")
 
-        
-# if __name__ == '__main__':
-#     def get_table_from_firebase(table_to_access: str):
-#         try:
-#             docs = db.collection(table_to_access).limit(2).stream()
-#             ret = {}
-#             for doc in docs:
-#                 ret[doc.id] = doc.to_dict()
-#         except Exception as e:
-#             ret = None
-#             print(str(e))
-#         return ret
-#         print(get_table_from_firebase("esg"))
-#     print(get_table_from_firebase('esg'))
-#     print("================transactions====================\n")
-#     print(get_table_from_firebase('transactions'))
