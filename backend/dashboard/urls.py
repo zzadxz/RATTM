@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import DashboardView
-from .use_cases import DashboardUseCases
+from .use_case import DashboardUseCases
 from .calculations import Calculations
 from utils.firebase_data_access_implementation import FirebaseDataAccess
 # This is a builder for dashboard
