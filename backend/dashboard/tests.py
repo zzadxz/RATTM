@@ -5,7 +5,7 @@ from utils.firebase import db
 from .calculations import Calculations
 from datetime import datetime
 from unittest.mock import MagicMock
-from dashboard.use_cases import DashboardUseCases
+from backend.dashboard.use_case import DashboardUseCases
 from utils.abstract_data_access import AbstractDataAccess
 
 
