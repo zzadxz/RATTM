@@ -19,7 +19,8 @@ class TransactionView:
     # Get data from Firestore
     # Endpoint: /transaction/get
     def get_data_from_firestore(self, request):
-        transactions = self.use_case.get_data_from_firestore_use_case()
+        user_id = request.session.get("user_id") or "0"
+        transactions = self.use_case.get_data_from_firestore_use_case(user_id)
         if isinstance(transactions, str):  # Check if an error message was returned
             return JsonResponse({"error": transactions}, status=500)
 

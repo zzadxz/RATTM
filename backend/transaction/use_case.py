@@ -4,9 +4,14 @@ from dotenv import load_dotenv
 import json
 import os
 from .abstract_use_case import AbstractTransactionUseCase
-
+from utils.abstract_data_access import AbstractDataAccess
+from .calculations import Calculations
 
 class TransactionUseCase(AbstractTransactionUseCase):
+    def __init__(self, calculations: Calculations, data_access: AbstractDataAccess):
+        self.calculations = calculations
+        self.data_access = data_access
+    
     # Put data in Firestore
     # endpoint: /transaction/upload
     def upload_data_to_firestore_use_case(self):
@@ -161,16 +166,12 @@ class TransactionUseCase(AbstractTransactionUseCase):
 
     # Get data from Firestore
     # endpoint: /transaction/get
-    def get_data_from_firestore_use_case(self):
-        try:
-            transactions_ref = db.collection("transactions")
-            docs = transactions_ref.stream()
+    def get_data_from_firestore_use_case(self, user_id: str):
+        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        esg_data = self.data_access.get_table_from_database('esg')
+        for t in user_transactions:
+            score = self.calculations.get_company_env_score(t, esg_data)
+            t['esg_score'] = round(score, 2) if score != 0 else "N/A"
+        return user_transactions
 
-            transactions = []
-            # a document is a row in the table (transaction obj)
-            for doc in docs:
-                transaction = doc.to_dict()
-                transactions.append(transaction)
-            return transactions
-        except Exception as e:
-            return str(e)
+    

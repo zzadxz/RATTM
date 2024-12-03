@@ -1,10 +1,5 @@
-from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
-
-from .use_cases import (
-    MapUseCase
-)
+from .abstract_use_case import AbstractMapUseCase
 
 class MapView(): 
     """
@@ -12,9 +7,9 @@ class MapView():
     Methods are used when getting useful purchase information for the map display, given a user. 
     """
 
-    def __init__(self):
+    def __init__(self, user_map: AbstractMapUseCase):
         # initialize the view without setting user information
-        self.user_id = None 
+        self.user_map = user_map
     
     def get_map_data(self, request):
         """
@@ -22,6 +17,5 @@ class MapView():
         User map location information is processed and returned.
         """
         # set user id according to the request 
-        self.user_id = request.session.get("user_id")  or '0'
-        user_map = MapUseCase(self.user_id)
-        return JsonResponse(user_map.get_user_all_locations_and_company(), safe=False)
+        user_id = request.session.get("user_id")  or '0'
+        return JsonResponse(self.user_map.get_user_all_locations_and_company(user_id), safe=False)

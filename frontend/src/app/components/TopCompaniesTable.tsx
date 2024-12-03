@@ -128,6 +128,12 @@ const TopCompaniesTable = ({ companies }: { companies: Company[] | undefined }) 
           ))
         )}
       </div>
+
+      <a href="/transactions">
+        <button className="mt-5 w-full rounded-2xl border border-stroke bg-green-400 px-5 pb-3 pt-3 font-bold text-white sm:px-7.5 xl:col-span-8 my-4">
+            See All Transactions
+        </button>
+      </a>
     </div>
   );
 };
