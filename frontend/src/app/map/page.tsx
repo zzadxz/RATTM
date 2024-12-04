@@ -3,7 +3,7 @@
 import TransactionMap from "@/app/components/TransactionMap";
 import React from "react";
 
-const Map = () => {
+const MapPage = () => {
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-5 mt-5 flex justify-center items-center">
@@ -12,8 +12,8 @@ const Map = () => {
         </h1>
       </div>
       <div className="mt-4 grid grid-cols-1 md:mt-6 md:grid-cols-12 2xl:mt-7.5">
-        <div className="rounded-2xl md:col-span-8 p-0">
-          <TransactionMap />
+        <div className="rounded-2xl md:col-span-8 p-0" data-testid="map-container">
+          <TransactionMap data-testid="transaction-map" />
         </div>
 
         <div
@@ -65,4 +65,4 @@ const Map = () => {
   );
 };
 
-export default Map;
+export default MapPage;
