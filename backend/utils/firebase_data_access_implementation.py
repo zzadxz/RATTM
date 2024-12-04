@@ -1,5 +1,7 @@
 from utils.firebase import db
 from .abstract_data_access import AbstractDataAccess
+
+
 class FirebaseDataAccess(AbstractDataAccess):
     """ This class is responsible for handling the data access to the firebase database.
     """
@@ -16,3 +18,10 @@ class FirebaseDataAccess(AbstractDataAccess):
             ret = None
             print(str(e))
         return ret
+    
+    def upload_table_to_database(self, data: dict, name: str):
+        """
+        upload data to the database. specialized for Firestore. 
+        """
+        for id in data: 
+            db.collection(name).document(str(id)).set(data[id])
