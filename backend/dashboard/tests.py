@@ -140,12 +140,10 @@ class TestCalculations(TestCase):
 
 class TestUseCases(TestCase):
     def setUp(self):
-        # Mock dependencies
         self.mock_calculations = MagicMock(spec=Calculations)
         self.mock_data_access = MagicMock(spec=AbstractDataAccess)
         self.use_cases = DashboardUseCases(self.mock_calculations, self.mock_data_access)
 
-        # Mock user data
         self.user_id = "test_user"
         self.mock_transactions = [
             {"merchant_name": "CompanyA", "amount": 100, "time_completed": "2023-01-01T12:00:00Z"},
