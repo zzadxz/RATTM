@@ -4,6 +4,7 @@ from django.http import JsonResponse
 import json
 from esg.views import ESGView
 
+
 class ESGViewTests(TestCase):
     """
     Test cases for ESGView class.
@@ -13,10 +14,9 @@ class ESGViewTests(TestCase):
         self.view = ESGView()
         self.factory = RequestFactory()
         self.mock_esg_data = [
-            {"name": "CompanyA", "environment_score": 300, "social_score": 305, "governance_score": 310},
-            {"name": "CompanyB", "environment_score": 450, "social_score": 200, "governance_score": 500},
+            {"name": "Subway", "environment_score": 200, "social_score": 180, "governance_score": 190},
+            {"name": "Walmart", "environment_score": 300, "social_score": 250, "governance_score": 270},
         ]
-
 
     @patch("esg.views.db")
     def test_get_data_from_firestore_success(self, mock_db):
@@ -45,3 +45,24 @@ class ESGViewTests(TestCase):
             {"name": "Walmart", "environment_score": 300},
         ]
         self.assertJSONEqual(response.content.decode("utf-8"), expected_data)
+
+    @patch("esg.views.db")
+    def test_get_data_from_firestore_failure(self, mock_db):
+        """
+        Test error handling in get_data_from_firestore.
+        """
+        # Mock Firestore to raise an exception
+        mock_db.collection.return_value.stream.side_effect = Exception("Firestore error")
+
+        # Create a mock GET request
+        request = self.factory.get("/esg/get")
+
+        # Call the view
+        response = self.view.get_data_from_firestore(request)
+
+        # Assertions
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, 500)
+        error_data = json.loads(response.content.decode("utf-8"))
+        self.assertIn("error", error_data)
+        self.assertEqual(error_data["error"], "Firestore error")
