@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from .use_case import DashboardUseCases
+from .abstract_use_case import AbstractDashboardUseCases    
 from random import randint
 
 class DashboardView:
@@ -9,7 +9,7 @@ class DashboardView:
     This class is a view for the dashboard. It contains methods that return data for the dashboard .
     '''
     
-    def __init__(self, use_cases: DashboardUseCases):
+    def __init__(self, use_cases: AbstractDashboardUseCases):
         self.use_cases = use_cases
             
     # monthly carbon score, green transactions, and month names for each month - return the last 12 data points as a list

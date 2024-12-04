@@ -1,9 +1,9 @@
-from static_file.company_esg_score import company_name_matching, get_company_score
 from .calculations import Calculations
 from utils.abstract_data_access import AbstractDataAccess
 from datetime import date, datetime
+from .abstract_use_case import AbstractDashboardUseCases
 
-class DashboardUseCases:
+class DashboardUseCases(AbstractDashboardUseCases):
     """DashboardUseCases class is responsible for handling the business logic of the dashboard.
     """
     def __init__(self, calculations: Calculations, data_access: AbstractDataAccess):
