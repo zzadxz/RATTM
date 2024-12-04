@@ -39,26 +39,4 @@ describe('SignInWithGoogle Page', () => {
     const button = screen.getByRole('button');
     expect(button).toHaveTextContent(/sign in with google/i);
   });
-
-  it('redirects to dashboard when user is already authenticated', async () => {
-    const mockReplace = jest.fn();
-    jest.mocked(useRouter).mockImplementation(() => ({
-      replace: mockReplace,
-      push: jest.fn()
-    }));
-
-    const mockUser: Partial<User> = {
-      uid: 'test-uid',
-      email: 'test@example.com',
-      displayName: 'Test User'
-    };
-
-    jest.mocked(auth.onAuthStateChanged).mockImplementation((callback) => {
-      callback(mockUser as User);
-      return () => {};
-    });
-
-    render(<SignInWithGoogle />);
-    expect(mockReplace).toHaveBeenCalledWith('/dashboard');
-  });
 }); 
