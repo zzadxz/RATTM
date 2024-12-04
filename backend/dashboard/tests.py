@@ -14,7 +14,6 @@ from .views import DashboardView
 
 class TestCalculations(TestCase):
     def setUp(self):
-        # Mock ESG data and transactions
         self.esg = {
             '3M Co': {'environment_score': 526},
             'A O Smith Corp': {'environment_score': 510},
