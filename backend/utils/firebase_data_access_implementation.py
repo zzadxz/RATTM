@@ -5,7 +5,8 @@ from .abstract_data_access import AbstractDataAccess
 class FirebaseDataAccess(AbstractDataAccess):
     """ This class is responsible for handling the data access to the firebase database.
     """
-    def get_table_from_database(self, table_to_access: str) -> dict:
+
+    def get_table_from_database(table_to_access: str) -> dict:
         """
         return a dict mapping the key of the firestore collection to the data within its rows
         """

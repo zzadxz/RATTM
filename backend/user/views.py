@@ -1,4 +1,4 @@
-from abstract_use_case import AbstractUserUseCase
+from .abstract_use_case import AbstractUserUseCase
 from django.http import JsonResponse
 
 class UserView: 

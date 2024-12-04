@@ -1,6 +1,6 @@
-from abstract_use_case import AbstractUserUseCase, AbstractIndividualUseCase
+from .abstract_use_case import AbstractUserUseCase, AbstractIndividualUseCase
 from utils.abstract_data_access import AbstractDataAccess
-from calculations import Calculations
+from .calculations import Calculations
 
 """
 Implementation note: 
@@ -21,13 +21,6 @@ class UserUseCase(AbstractUserUseCase):
         self.user_data = {}
         self.calculation = Calculations()
 
-    def get_all_esg(self): 
-        """
-        Function to get all esg data from data_access.
-        """
-        esg_collection = self.data_access.get_table_from_database('esg')
-
-        return esg_collection
 
     def get_all_transaction(self): 
         """
@@ -43,12 +36,11 @@ class UserUseCase(AbstractUserUseCase):
         """
 
         try: 
-            esg_data = self.get_all_esg()
-            transaction_data = self.get_all_transaction()
+            transaction_data = self.data_access.get_table_from_database('transactions')
 
             # initislize the 100 users in the database 
             for user_id in range(100):
-                new_user = IndividualUserUseCase(self.data_access, user_id)
+                new_user = IndividualUserUseCase(user_id)
                 self.user_data[user_id] = new_user
             
             for transaction in transaction_data: 
@@ -60,9 +52,12 @@ class UserUseCase(AbstractUserUseCase):
                 temp_value = self.user_data[key].get_data()
                 self.user_data[key] = temp_value
 
-            self.data_access.upload_table_to_database(self.user_data, 'Users')
+            print('nnno')
+
+            self.data_access.upload_table_to_database(self.user_data, 'uers')
 
             return 1
+    
         except: 
             return 0 
 

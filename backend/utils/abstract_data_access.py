@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-#
 class AbstractDataAccess(ABC):
     """
     Abstract class for the data access layer. 
