@@ -30,10 +30,10 @@ class TestCalculations(TestCase):
                                         'currency': 'USD', 'governance_grade': 'BB', 'environment_score': 510, 
                                         'last_processing_date': '16-04-2022', 'environment_grade': 'A', 'ticker': 'aos'}}
         
-        self.transactions = [{'action': 'declined', 'time_completed': '2024-08-31T06:02:27.687Z', 
+        self.transactions = [{'action': 'declined', 'time_completed': '2024-028T22:41:58.000000Z', 
                                    'longitude': -113.807658, 'merchant_name': '3M Co', 'latitude': -42.372604, 
                                    'customerID': 52, 'amount': 860.27, 'ip_address': '179.152.194.186'}, 
-                             {'action': 'declined', 'time_completed': '2023-12-07T08:07:20.451Z', 
+                             {'action': 'declined', 'time_completed': '2024-076T21:17:59.000000Z', 
                                    'longitude': -1.121183, 'merchant_name': 'Smith Corp', 'latitude': 11.962175, 
                                    'customerID': 52, 'amount': 144.53, 'ip_address': '173.64.65.25'}]
     def test_get_closest_match(self):
@@ -112,22 +112,22 @@ class AdditionalCalculationsTest(TestCase):
         self.transactions = [
             {
                 'merchant_name': '3M Co', 
-                'time_completed': '2024-01-15T12:00:00.000Z', 
+                'time_completed': '2024-015T12:00:00.000000Z', 
                 'amount': 860.27
             }, 
             {
                 'merchant_name': 'A O Smith Corp', 
-                'time_completed': '2024-01-10T12:00:00.000Z', 
+                'time_completed': '2024-128T13:02:37.000000Z', 
                 'amount': 144.53
             },
             {
                 'merchant_name': 'Green Company', 
-                'time_completed': '2024-01-05T12:00:00.000Z', 
+                'time_completed': '2024-010T12:00:00.000000Z', 
                 'amount': 500.00
             },
             {
                 'merchant_name': 'Borderline Company', 
-                'time_completed': '2024-01-01T12:00:00.000Z', 
+                'time_completed': '2024-001T12:00:00.000000Z', 
                 'amount': 250.00
             }
         ]
@@ -162,8 +162,8 @@ class TestUseCases(TestCase):
         # Mock user data
         self.user_id = "test_user"
         self.mock_transactions = [
-            {"merchant_name": "CompanyA", "amount": 100, "time_completed": "2023-01-01T12:00:00Z"},
-            {"merchant_name": "CompanyB", "amount": 200, "time_completed": "2023-02-01T12:00:00Z"},
+            {"merchant_name": "CompanyA", "amount": 100, "time_completed": "2024-259T07:39:51.000000Z"},
+            {"merchant_name": "CompanyB", "amount": 200, "time_completed": "2024-239T00:30:40.000000Z"},
         ]
         self.mock_esg_data = {
             "CompanyA": {"environment_score": 500},
