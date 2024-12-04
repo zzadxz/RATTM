@@ -19,9 +19,9 @@ class AbstractIndividualUseCase(ABC):
     """
 
     @abstractmethod
-    def populate_user_transactions(self):
+    def add_new_transaction(self):
         """
         Abstract method for populating user data with transaction data from Firestore.
-        Implementations should handle writing user data to Firestore.
+        Implementations should handle writing transaction to user.
         """
         raise NotImplementedError
