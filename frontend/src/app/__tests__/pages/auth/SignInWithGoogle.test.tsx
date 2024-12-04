@@ -1,5 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import SignInWithGoogle from '@/app/main-site/auth/SignInWithGoogle/page';
+import { auth } from '@/app/firebase/firebaseConfig';
+import { useRouter } from 'next/navigation';
+import { User } from 'firebase/auth';
 
 // Mock Firebase auth before importing any modules that use it
 jest.mock('@/app/firebase/firebaseConfig', () => {
@@ -8,7 +11,7 @@ jest.mock('@/app/firebase/firebaseConfig', () => {
   
   return {
     auth: {
-      onAuthStateChanged: jest.fn((callback) => {
+      onAuthStateChanged: jest.fn((callback: (user: User | null) => void) => {
         callback(null);
         return () => {};
       }),
@@ -38,14 +41,20 @@ describe('SignInWithGoogle Page', () => {
   });
 
   it('redirects to dashboard when user is already authenticated', async () => {
-    const { auth } = require('@/app/firebase/firebaseConfig');
     const mockReplace = jest.fn();
-    jest.spyOn(require('next/navigation'), 'useRouter').mockImplementation(() => ({
-      replace: mockReplace
+    jest.mocked(useRouter).mockImplementation(() => ({
+      replace: mockReplace,
+      push: jest.fn()
     }));
 
-    auth.onAuthStateChanged.mockImplementation((callback) => {
-      callback({ uid: 'test-uid' });
+    const mockUser: Partial<User> = {
+      uid: 'test-uid',
+      email: 'test@example.com',
+      displayName: 'Test User'
+    };
+
+    jest.mocked(auth.onAuthStateChanged).mockImplementation((callback) => {
+      callback(mockUser as User);
       return () => {};
     });
 

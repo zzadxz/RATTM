@@ -1,11 +1,12 @@
 import { render, screen, waitFor, act } from '@testing-library/react';
 import TransactionsPage from '@/app/transactions/page';
 import { auth } from '@/app/firebase/firebaseConfig';
+import { User } from 'firebase/auth';
 
 jest.mock('@/app/firebase/firebaseConfig', () => ({
   auth: {
-    onAuthStateChanged: (callback: (user: any) => void) => {
-      callback({ uid: 'test-uid' });
+    onAuthStateChanged: (callback: (user: User | null) => void) => {
+      callback({ uid: 'test-uid' } as User);
       return () => {};
     }
   }

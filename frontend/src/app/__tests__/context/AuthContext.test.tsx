@@ -2,15 +2,16 @@ import { render, screen, act } from '@testing-library/react';
 import { AuthContext, AuthProvider } from '@/app/context/AuthContext';
 import { useContext } from 'react';
 import { User, NextOrObserver } from 'firebase/auth';
+import { auth } from '@/app/firebase/firebaseConfig';
 
 jest.mock('@/app/firebase/firebaseConfig', () => ({
   auth: {
-    onAuthStateChanged: (callback: NextOrObserver<User>) => {
+    onAuthStateChanged: jest.fn((callback: NextOrObserver<User>) => {
       if (typeof callback === 'function') {
         callback(null);
       }
       return () => {};
-    }
+    })
   }
 }));
 
@@ -42,14 +43,12 @@ describe('AuthContext', () => {
 
   it('updates auth state when user logs in', async () => {
     const mockUser = { uid: 'test-uid', email: 'test@example.com' } as User;
-    jest.spyOn(require('@/app/firebase/firebaseConfig').auth, 'onAuthStateChanged')
-      .mockImplementation((...args: unknown[]) => {
-        const callback = args[0] as NextOrObserver<User>;
-        if (typeof callback === 'function') {
-          callback(mockUser);
-        }
-        return () => {};
-      });
+    jest.mocked(auth.onAuthStateChanged).mockImplementation((callback) => {
+      if (typeof callback === 'function') {
+        callback(mockUser);
+      }
+      return () => {};
+    });
 
     render(
       <AuthProvider>
