@@ -7,29 +7,8 @@ import csv
 import json
 import os
 
-"""
-The end result is a dictionary of users:
-{user1:..., user2:..., user3:...}, where each userid is the key and the fields of the users are the value.
-take user1 for example, it will map to a dictionary of fields:
-users["1"] = {
-        "transactions": [] # list of transactions, each transaction is a dictionary
-        "map_data": {}, # { merchant_name : { "latitude" : latitude, "longitude" : longitude, "esg_score" : company_esg_score, "amount_spent" : amount_spent } }
-        "environmental_impact_info": {
-            "past_green_transactions" : {
-                "weekly":[], 
-                "monthly":[] # list of length 12
-            }, 
-            "past_carbon_scores" : {
-                "weekly":[], 
-                "monthly":[] # list of length 12
-            }, 
-            "top_10_companies" : {}, # { merchant_name : (esg_score, total_amount_purchased) }
-            "number_companies_in_each_tier" : [], # list of length 4
-            "current_user_score" : 0,
-        }
-    }
-"""
 
+# done cal 
 def collection_to_list(collection_reference) -> list[dict]:
     """Fetches all documents from a specific Firestore collection and returns
     them as a list of dictionaries.
@@ -47,6 +26,7 @@ def collection_to_list(collection_reference) -> list[dict]:
     
     return data_list
 
+# done cal 
 # This function is for testing purposes
 def collection_to_list_limited(collection_reference, limit=2):
     # Use .limit() to fetch only a specified number of documents
@@ -86,6 +66,7 @@ def esg_data_normalization(collection_data: list[dict]):
         normalized_data.append(data)
     return normalized_data
 
+# done abs
 def populate_user_transactions(tranaction_data: list[dict], User_data: dict) -> None:
     for transaction in tranaction_data:
         if transaction['customerID'] not in User_data:
@@ -94,12 +75,7 @@ def populate_user_transactions(tranaction_data: list[dict], User_data: dict) -> 
         else:
             User_data[transaction['customerID']]['transactions'].append(transaction)
 
-def populate_map_data(User_data: dict, esg_data: list[dict]) -> None:
-    return None
-
-def populate_environmental_impact_info(User_data: dict, esg_data: list[dict]) -> None:
-    return None
-
+# done abs 
 def upload_user_data(User_data: dict) -> None:
     if User_data:
         # Testing for connection to firebase
