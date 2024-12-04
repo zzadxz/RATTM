@@ -5,13 +5,13 @@
 
 [**Gabriel**](https://github.com/zzadxz/RATTM/pull/110/) Shows integration between front and backend 
 
-[**Ben**](https://github.com/zzadxz/RATTM/pull/84) ****Shows clear separation of frontend and backend
+[**Ben**](https://github.com/zzadxz/RATTM/pull/84) Shows clear separation of frontend and backend
 
-[**Kiarash**](https://github.com/zzadxz/RATTM/pull/96) ****Shows accessibility implementations and reusable components
+[**Kiarash**](https://github.com/zzadxz/RATTM/pull/96) Shows accessibility implementations and reusable components
 
 [**Jennifer**](https://github.com/zzadxz/RATTM/pull/99) Shows Liskov Substitution and Dependency Inversion
 
-[**Yoyo**](https://github.com/zzadxz/RATTM/pull/76) ****Shows Single Responsibility and Interface Segregation
+[**Yoyo**](https://github.com/zzadxz/RATTM/pull/76) Shows Single Responsibility and Interface Segregation
 
 [**Chong**](https://github.com/zzadxz/RATTM/pull/106) Shows Open-Closed Principle and Dependency Inversion
 
