@@ -167,7 +167,7 @@ class TransactionUseCase(AbstractTransactionUseCase):
     # Get data from Firestore
     # endpoint: /transaction/get
     def get_data_from_firestore_use_case(self, user_id: str):
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         for t in user_transactions:
             score = self.calculations.get_company_env_score(t, esg_data)

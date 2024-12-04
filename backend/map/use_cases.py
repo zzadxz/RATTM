@@ -22,7 +22,7 @@ class MapUseCase(AbstractMapUseCase):
         Returns a list of transaction details necessary for the map. This use case implement such that 
         company name, location of purchase, and merchant percentile is returned. 
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
 
         map_data = []
