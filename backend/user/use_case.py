@@ -41,25 +41,30 @@ class UserUseCase(AbstractUserUseCase):
         """
         Function to upload individual user data to data_access. 
         """
-        esg_data = self.get_all_esg()
-        transaction_data = self.get_all_transaction()
 
-        # initislize the 100 users in the database 
-        for user_id in range(100):
-            new_user = IndividualUserUseCase(self.data_access, user_id)
-            self.user_data[user_id] = new_user
-        
-        for transaction in transaction_data: 
-            user_id = transaction['customerID']
-            self.user_data[user_id].add_new_transaction(transaction)
-        
-        # modify the data such that it's {user_id: new_user.data}
-        for key in self.user_data.keys():
-            temp_value = self.user_data[key].get_data()
-            self.user_data[key] = temp_value
+        try: 
+            esg_data = self.get_all_esg()
+            transaction_data = self.get_all_transaction()
 
-        self.data_access.upload_table_to_database(self.user_data, 'Users')
+            # initislize the 100 users in the database 
+            for user_id in range(100):
+                new_user = IndividualUserUseCase(self.data_access, user_id)
+                self.user_data[user_id] = new_user
+            
+            for transaction in transaction_data: 
+                user_id = transaction['customerID']
+                self.user_data[user_id].add_new_transaction(transaction)
+            
+            # modify the data such that it's {user_id: new_user.data}
+            for key in self.user_data.keys():
+                temp_value = self.user_data[key].get_data()
+                self.user_data[key] = temp_value
 
+            self.data_access.upload_table_to_database(self.user_data, 'Users')
+
+            return 1
+        except: 
+            return 0 
 
 class IndividualUserUseCase(AbstractIndividualUseCase): 
     """
