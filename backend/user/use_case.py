@@ -2,7 +2,6 @@ from abstract_use_case import AbstractUserUseCase, AbstractIndividualUseCase
 from utils.abstract_data_access import AbstractDataAccess
 from calculations import Calculations
 
-
 """
 Implementation note: 
 check make sure all necessary functions exist in abstract 
