@@ -20,9 +20,9 @@ class FirebaseDataAccess(AbstractDataAccess):
             print(str(e))
         return ret
     
-    def upload_table_to_database(self, data: dict, name: str):
+    def upload_table_to_database(data: dict, name: str):
         """
         upload data to the database. specialized for Firestore. 
         """
         for id in data: 
-            db.collection(name).document(str(id)).set(data[id])
+            db.collection(name).document(id).set(data[id])

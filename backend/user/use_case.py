@@ -35,49 +35,47 @@ class UserUseCase(AbstractUserUseCase):
         Function to upload individual user data to data_access. 
         """
 
-        try: 
-            transaction_data = self.data_access.get_table_from_database('transactions')
+    # try: 
+        transaction_data = self.data_access.get_table_from_database('transactions')
+        transaction_data = {str(key): value for key, value in transaction_data.items()}
+        # initislize the 100 users in the database 
+        for user_id in range(100):
+            user_id = str(user_id)
+            new_user = IndividualUserUseCase(user_id)
+            self.user_data[user_id] = new_user
+                
+        for transaction in transaction_data: 
+            user_id = transaction_data[transaction]['customerID']
+            self.user_data[str(user_id)].add_new_transaction(transaction_data[transaction])
+        
+        # modify the data such that it's {user_id: new_user.data}
+        for key in self.user_data.keys():
+            temp_value = self.user_data[key].get_data()
+            self.user_data[key] = temp_value
 
-            # initislize the 100 users in the database 
-            for user_id in range(100):
-                new_user = IndividualUserUseCase(user_id)
-                self.user_data[user_id] = new_user
-            
-            for transaction in transaction_data: 
-                user_id = transaction['customerID']
-                self.user_data[user_id].add_new_transaction(transaction)
-            
-            # modify the data such that it's {user_id: new_user.data}
-            for key in self.user_data.keys():
-                temp_value = self.user_data[key].get_data()
-                self.user_data[key] = temp_value
-
-            print('nnno')
-
-            self.data_access.upload_table_to_database(self.user_data, 'uers')
-
-            return 1
+        self.data_access.upload_table_to_database(self.user_data, "user")
+        #     return 1
     
-        except: 
-            return 0 
+        # except: 
+        #     return 0 
 
 class IndividualUserUseCase(AbstractIndividualUseCase): 
     """
     An implementation of the AbstractUserUseCase. Each instance is a different user.
     """
 
-    def __init__(self, user_id: int):
+    def __init__(self, user_id: str):
         """
         Initialize individual user.
         """ 
-        self.data = {}
+        self.data = {"transactions": {}}
         self.max_data = 0
 
     def add_new_transaction(self, transaction):
         """
         Add new transaction to a specific user.
         """
-        self.data[self.max_data] = transaction
+        self.data["transactions"][str(self.max_data)] = transaction
         self.max_data += 1
     
     def get_data(self):
