@@ -1,3 +1,5 @@
+// frontend/src/app/components/AboutYourScore.tsx
+
 "use client";
 
 import React from "react";

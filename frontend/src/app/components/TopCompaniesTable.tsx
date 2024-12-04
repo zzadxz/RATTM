@@ -1,3 +1,5 @@
+// frontend/src/app/components/TopCompaniesTable.tsx
+
 import Image from "next/image";
 
 export interface Company {

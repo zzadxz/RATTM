@@ -1,3 +1,5 @@
+// frontend/src/app/components/TransactionsTable.tsx
+
 import React from "react";
 import { Transaction } from "@/services/transactionService";
 

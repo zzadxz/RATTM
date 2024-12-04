@@ -1,3 +1,5 @@
+// frontend/src/app/map/page.tsx
+
 "use client";
 
 import TransactionMap from "@/app/components/TransactionMap";
