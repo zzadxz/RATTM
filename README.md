@@ -16,7 +16,7 @@
 ---
 
 ## **About the Project**
-Our **Eco-Score Calculator** empowers users to make sustainable choices by quantifying the environmental impact of their daily spending. Our technology 
+Our **Eco-Score Calculator** empowers users to make sustainable choices by quantifying the environmental impact of their daily spending.
 
 ### **Why We Built This**
 With climate change worsening year after year, young people are becoming increasingly concerned about the environment. Despite this, most people are entirely unaware of the climate impacts that their daily purchases have. Even if they want to learn more about sustainability, there is a lack of accessible tools that track the emissions tied to daily spending. This leaves people uninformed and unable to make eco-conscious choices.
