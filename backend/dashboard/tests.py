@@ -271,23 +271,21 @@ class ViewTests(TestCase):
         self.factory = RequestFactory()
 
     def _setup_request_with_session(self, session_data=None):
-        """
         #Helper function to create a mock request with session data.
-        """
+
         request = self.factory.get("/dashboard/data/")
         request.session = session_data or {}
         return request
 
     def parse_json_response(self, response):
-        """
+
         #Helper to parse a JsonResponse into a Python object.
-        """
+
         return json.loads(response.content.decode('utf-8'))
 
     def test_get_line_graph_data(self):
-        """
         #Test get_line_graph_data method.
-        """
+
         # Mock return values
         self.mock_use_cases.past_12_month_names.return_value = ["Jan", "Feb", "Mar"]
         self.mock_use_cases.monthly_carbon_scores.return_value = [100, 200, 300]
@@ -315,9 +313,8 @@ class ViewTests(TestCase):
         self.mock_use_cases.monthly_green_transactions.assert_called_once_with("123")
 
     def test_get_total_green_transactions(self):
-        """
         #Test get_total_green_transactions method.
-        """
+
         self.mock_use_cases.total_green_transactions.return_value = 50
 
         request = self._setup_request_with_session({"user_id": "123"})
@@ -329,9 +326,8 @@ class ViewTests(TestCase):
         self.mock_use_cases.total_green_transactions.assert_called_once_with("123")
 
     def test_get_total_co2_score(self):
-        """
         #Test the total CO2 score retrieval.
-        """
+
         self.mock_use_cases.total_co2_score.return_value = 1000
 
         request = self._setup_request_with_session({"user_id": "123"})
@@ -343,9 +339,8 @@ class ViewTests(TestCase):
         self.mock_use_cases.total_co2_score.assert_called_once_with("123")
 
     def test_get_company_tiers(self):
-        """
         #Test get_company_tiers method.
-        """
+
         tiers = [5, 3, 2, 1]
         self.mock_use_cases.company_tiers.return_value = tiers
 
@@ -358,9 +353,8 @@ class ViewTests(TestCase):
         self.mock_use_cases.company_tiers.assert_called_once_with("123")
 
     def test_get_green_transaction_change(self):
-        """
         #Test the green transaction change retrieval.
-        """
+
         self.mock_use_cases.green_transaction_change.return_value = 20
 
         request = self._setup_request_with_session({"user_id": "123"})
