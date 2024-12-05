@@ -11,6 +11,8 @@ from map.calculations import (
     _get_closest_match, 
     _company_tier, 
 )
+from map.use_cases import MapUseCase
+from utils.abstract_data_access import AbstractDataAccess
 
 class ViewsTestCase(TestCase):
     """
@@ -150,6 +152,76 @@ class ViewsTestCase(TestCase):
         )
 
 
+class UseCaseTest(TestCase):
+    """
+    Tests for MapUseCase.
+    """
+
+    def setUp(self):
+        # Create a mock for AbstractDataAccess
+        self.mock_data_access = MagicMock(spec=AbstractDataAccess)
+        # Initialize MapUseCase with the mock data access
+        self.use_case = MapUseCase(data_access=self.mock_data_access)
+
+    @patch('map.use_cases._get_closest_match', return_value='Walmart Inc')
+    @patch('map.use_cases._company_tier', return_value=4)
+    def test_get_user_all_locations_and_company(self, mock_company_tier, mock_get_closest_match):
+        # Mock data
+        user_id = '123'
+        user_transactions = [
+            {'merchant_name': 'Walmart', 'latitude': 40.7128, 'longitude': -74.0060}
+        ]
+        esg_data = {'Walmart Inc': {'environment_score': 400}}
+
+        # Mock `get_table_from_database`
+        self.mock_data_access.get_table_from_database.side_effect = [
+            {'123': {'transactions': user_transactions}},  # User transactions
+            esg_data                                      # ESG data
+        ]
+
+        # Call the function
+        result = self.use_case.get_user_all_locations_and_company(user_id)
+
+        # Expected result
+        expected_result = [
+            {
+                "location": (40.7128, -74.0060),
+                "merchant_name": "Walmart",
+                "merchant_percentile": 4,
+            }
+        ]
+
+        # Assert the output matches the expected result
+        self.assertEqual(result, expected_result)
+
+
+    def test_get_user_all_locations_and_company_no_transactions(self):
+        """
+        Test that MapUseCase.get_user_all_locations_and_company handles users with no transactions.
+        """
+        user_id = '456'
+        user_transactions = []
+        esg_data = {}
+
+        # Mock the data_access.get_table_from_database method
+        self.mock_data_access.get_table_from_database.side_effect = [
+            {'456': {'transactions': user_transactions}},  # First call returns empty transactions
+            esg_data                                       # Second call returns empty ESG data
+        ]
+
+        # Call the method under test
+        result = self.use_case.get_user_all_locations_and_company(user_id)
+
+        expected_result = []
+
+        # Assert that the result is an empty list
+        self.assertEqual(result, expected_result)
+
+        # Verify that data_access.get_table_from_database was called twice
+        self.assertEqual(self.mock_data_access.get_table_from_database.call_count, 2)
+        self.mock_data_access.get_table_from_database.assert_any_call('Users')
+        self.mock_data_access.get_table_from_database.assert_any_call('esg')
+
 
 class CalculationsTest(TestCase):
     """
@@ -200,3 +272,71 @@ class CalculationsTest(TestCase):
         self.assertEqual(_company_tier(520), 3)
         self.assertEqual(_company_tier(521), 2)
         self.assertEqual(_company_tier(600), 1)
+
+class AbstractUseCaseTest(TestCase):
+    """
+    Test to ensure AbstractMapUseCase enforces the required interface methods.
+    """
+
+    def test_cannot_instantiate_abstract_class(self):
+        """
+        Ensure that attempting to instantiate AbstractMapUseCase raises a TypeError.
+        """
+        with self.assertRaises(TypeError):
+            AbstractMapUseCase()
+
+    def test_complete_concrete_implementation(self):
+        """
+        Ensure a complete implementation of AbstractMapUseCase works without errors.
+        """
+
+        class TestConcreteMapUseCase(AbstractMapUseCase):
+            """
+            A dummy implementation to validate the abstract class.
+            """
+            def __init__(self):
+                pass
+
+            def get_user_all_locations_and_company(self, user_id):
+                return [{"location": (40.7128, -74.0060), "merchant_name": "Test Merchant"}]
+
+        # Ensure no errors when instantiating and using the concrete class
+        test_instance = TestConcreteMapUseCase()
+        result = test_instance.get_user_all_locations_and_company("123")
+        self.assertEqual(
+            result,
+            [{"location": (40.7128, -74.0060), "merchant_name": "Test Merchant"}],
+        )
+
+    def test_incomplete_implementation(self):
+        """
+        Ensure an incomplete implementation raises TypeError when instantiated.
+        """
+
+        class IncompleteMapUseCase(AbstractMapUseCase):
+            """
+            A deliberately incomplete implementation.
+            """
+            def __init__(self):
+                pass
+
+        # Ensure an error is raised due to missing abstract methods
+        with self.assertRaises(TypeError):
+            IncompleteMapUseCase()
+
+    def test_partial_concrete_implementation_missing_method(self):
+        """
+        Ensure that an implementation missing 'get_user_all_locations_and_company'
+        raises a TypeError.
+        """
+
+        class PartialConcreteMapUseCase(AbstractMapUseCase):
+            """
+            A partial implementation missing one required method.
+            """
+            def __init__(self):
+                pass
+
+        # Attempt to instantiate should raise an error
+        with self.assertRaises(TypeError):
+            PartialConcreteMapUseCase()

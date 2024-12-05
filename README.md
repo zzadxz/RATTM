@@ -1,156 +1,202 @@
+# **RATTM X Cash App: Eco Score Calculator**
 
-# RATTM
+## **Authors**
+- **Authors**: Jennifer Chiou, Ben Henderson, Yoyo Liu, Kiarash Soutoudeh, Gabriel Thompson, Chong Wan
+---
 
-**RATTM** Rage Against the Turing Machine X Cash App
+## **Table of Contents**
+1. [About the Project](#about-the-project)
+4. [Features](#features)
+5. [Installation](#installation)
+6. [Usage](#usage)
+9. [License](#license)
+10. [Feedback](#feedback)
+11. [Contributions](#contributions)
 
-## CI/CD, Backend, & Frontend Services
-Backend on [Heroku](https://github.com/jnnchi/rattm-backend) \
-Frontend on [Vercel](https://vercel.com/)
+---
 
-## Prerequisites
+## **About the Project**
+Our **Eco-Score Calculator** empowers users to make sustainable choices by quantifying the environmental impact of their daily spending.
 
-Before running the project, ensure you have the following:
-- **Python** (Version 3.12 or above)
-- **Next.js** (Version 14 or above)
-- **npm** (Installed with Node.js)
-- Firebase credentials in the form of a `.json` file (details below)
-- An `.env` file with environment variables (details below)
+### **Why We Built This**
+With climate change worsening year after year, young people are becoming increasingly concerned about the environment. Despite this, most people are entirely unaware of the climate impacts that their daily purchases have. Even if they want to learn more about sustainability, there is a lack of accessible tools that track the emissions tied to daily spending. This leaves people uninformed and unable to make eco-conscious choices.
 
-## Steps to Run the Project
+RATTM bridges this gap by providing easily accessible and actionable metrics that quantify the environmental impact of their daily spending. By analyzing simulated user transaction data, we’ve developed an algorithm to calculate eco-scores using transaction amounts and ESG ratings of the companies they buy from. The user can compare changes in their ecoscore over time, and make small adjustments in their purchasing habits as they see fit.
 
-### 1. Clone the Repository
+### **What This Project Does**
+- Analyzes transaction data to calculate an **Environmental Friendliness Score**.
+- Displays eco-scores over time on an interactive dashboard.
+- Visualizes transactions on a map to provide location-based insights.
 
-```bash
-git clone https://github.com/zzadxz/RATTM.git
-cd RATTM
+---
+
+## **Features**
+- **Eco-Score Calculation**:
+  - Measures the environmental impact of user spending using transaction amounts and ESG ratings.
+  - Provides a simple score between 0 and 560, helping users track their sustainability progress.
+
+- **Dashboard**:
+  - Displays the user’s current EcoScore and number of green transactions, along with a graph of historical data of those metrics.
+  - Contains pie chart of ESG tiers of company the user purchased from.
+  - Contains table of the user’s most-purchased-from companies, and their respective ESG scores and amounts purchased from.
+
+- **Transactions**:
+  - Shows all of their transactions from their account in a table.
+  - For each transaction, displays the company being purchased from, whether the transaction was approved, the ESG score of the company, and the amount and date of transaction.
+  - Allows user to filter by whether the transaction was approved, the company name, and date of transaction.
+
+- **Map**:
+  - Displays markers on a map of the world, each representing the location of a purchase.
+  - All markers are clickable. Upon clicking them, a popup appears showing the name and ESG rating of the company.
+
+---
+
+## **Installation**
+Follow these steps to set up and run the project locally.
+
+### **Prerequisites**
+Ensure you have the following installed:
+
+- **[Python](https://www.python.org/downloads/)** (Version 3.12 or above)
+- **[Next.js](https://nextjs.org/docs/app/getting-started/installation)** with **npm** (Version 14 or above)
+- **[Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)**
+- **Environment Variables** in `.env` format (details below)
+
+### **Steps**
+
+#### Setting Up the Project
+1. **Clone the Repository**:
+ ```bash
+   git clone https://github.com/zzadxz/RATTM.git
+   cd RATTM
 ```
 
-The folder you should be now in will later be referred to as "the root"
-
-### 2. Set Up a Virtual Environment
-
-Create and activate a Python virtual environment:
+2. **Set Up a Virtual Environment**
 
 ```bash
-# One of the below for .venv
-python -m venv .venv
+# Create virtual environment
 python3 -m venv .venv
 
-# On MacOS/Linux:
-source .venv/bin/activate  
-# For Windows use:
-.venv\Scripts\activate
+# Activate virtual environment
+source .venv/bin/activate  # MacOS/Linux
+.venv\Scripts\activate     # Windows
 ```
 
-### 3. Install Python Dependencies
-
-Staying in the root, with the virtual environment activated, install the required Python dependencies:
-
+3. **Install Requirements**
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Add Firebase Credentials and Environment Variables
-
-- Create a `backend/django-api/Rattm/rattm-cred-firebase.json` file. This will store your Firebase credentials. Paste into the file the JSON in [this Discord message](https://discord.com/channels/1281256285618307082/1283811324018556938/1291457826463678505). This file should not be committed to the repository.
-
-- Create a `.env` file (in the root directory). The file should be of this format:
-
-    ```bash
-    FIREBASE_CREDENTIAL_PATH="[root project path]/backend/django-api/RattmWeb/rattm-cred-firebase.json"
-    MOCK_JSON_PATH="[root project path]/backend/django-api/resources/mockdata.json"
-    ```
-
-... where `[root project path]` is the absolute path to the root. You can find this by entering `pwd` into the terminal from the root directory.
-
-Alternatively, you could navigate to `rattm-cred-firebase.json` and `mockdata.json` in the VS code file tree, right click on them, and click "Copy Path" to get the absolute paths to these files.
-
-### 5. Install Next.js Dependencies
-
-Navigate to the `frontend` directory and install the necessary packages:
-
+4. **Install Frontend Requirements**
 ```bash
 cd frontend
 npm install
 ```
 
-### 6. Run the Backend (Django API)
+#### Set Up `.env` File
 
-Go to the `backend/django-api` folder and run the Django development server:
-
-```bash
-cd backend/django-api
-python manage.py runserver
+Within the `backend/` directory, create a `.env` file with the following contents.
+```
+SECRET_KEY=[Heroku Secret Key]
+FIREBASE_PRIVATE_KEY=[Firebase Private Key]
+FIREBASE_PRIVATE_KEY_ID=[Firebase Private Key ID]
+FIREBASE_CLIENT_EMAIL=[Firebase Client Email]
+FIREBASE_CLIENT_ID=[Firebase Client ID]
+FIREBASE_CERT_URL=[Firebase Cert URL]
 ```
 
-This will run the backend on `http://localhost:8000` (unless there's a port conflict, in which case the console will tell you otherwise)
+#### Set Up `.env.local` File
+Within the `frontend/` directory, create a file called `.env.local` with the following contents.
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=[Firebase API Key]
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=[Firebase Auth Domain]
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=[Firebase Project ID]
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=[Firebase Storage Bucket]
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=[Firebase Messaging Sender ID]
+NEXT_PUBLIC_FIREBASE_APP_ID=[Firebase App ID]
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=[Firebase Measurement ID]
+NEXT_PUBLIC_API_BASE_URL=rattm-f300025e7172.herokuapp.com/
+NEXT_PUBLIC_MAPBOX_KEY=[Mapbox Key]
+```
 
-### 7. Run the Frontend (Next.js)
+## Usage
 
-Open a new terminal window or tab, navigate to the frontend directory, and start the Next.js server:
-
+### Run Frontend Locally
 ```bash
-cd frontend
 npm run dev
 ```
+Open http://localhost:3000/ to view the locally hosted frontend.
 
-The frontend will be served on `http://localhost:3000` (unless the console says otherwise).
-
-## File Structure
-
-### Backend (Django API)
-
-```plaintext
-django-api/
-├── RattmWeb/                # Project folder
-│   ├── asgi.py              # ASGI config (for async support)
-│   ├── firebase.py          # Loads Firebase DB
-│   ├── rattm-cred-firebase.json  # Firebase credentials file (not committed)
-│   ├── settings.py          # Django settings
-│   ├── urls.py              # Project endpoints
-│   ├── views.py             # Return interfaces for endpoints
-│   ├── wsgi.py              # WSGI config (for web server)
-├── transaction/             # Transaction app folder
-│   ├── view.py              # Functions to upload and fetch data from Firestore
-│   ├── urls.py              # Transaction-specific endpoints
-├── manage.py                # File that runs everything
-├── routers.py               # Router setup (potentially not needed)
+### Run Backend Locally
+Open a new terminal.
+```bash
+cd backend
+heroku local:run python manage.py runserver
 ```
+Open 127.0.0.1:8000/[endpoint_name] to view the locally hosted backend.
 
-### Frontend (Next.js)
+Available backend endpoints:
+- /transaction
+  - /get
+  - /upload
+- /map
+  - /get_map_data
+- /dashboard
+  - /get_line_graph_data
+  - /get_this_month_green_transactions
+  - /get_total_green_transactions
+  - /get_top_5_companies
+  - /get_total_co2_score
+  - /get_this_month_co2_score
+  - /get_company_tiers
+  - /get_co2_score_change
+  - /get_green_transaction_change
+- /esg
+  - /get
+- /login
+  - /get_email (POST only)
 
-```plaintext
-frontend/
-├── src/
-│   ├── app/
-│   │   ├── modules/             # Contains subpages (ex: transaction section)
-│   │   │   └── transactions/    # Formats transaction data
-│   │   │       ├── index.tsx
-│   │   │       ├── index.styles.tsx
-│   ├── pages/
-│   │   └── main-site/           # Main page of the site
-│   │       ├── index.tsx
-│   │       ├── index.styles.tsx
-│   ├── components/              # (Not created yet) Mobile/Desktop views
-│   ├── fonts/                   # Fonts
-│   ├── favicon.icon             # Browser icon
-│   ├── globals.css              # Global styling
-│   ├── layout.tsx               # Layout for all pages (header/footer)
-│   ├── page.module.css          # Unclear purpose
-│   ├── page.tsx                 # Main page at localhost:3000
-```
+Usage guide (instructions on how to use the software)
 
-## Database Endpoints
+Examples or tutorials (videos, screenshots, or code snippets) are used to clarify how to use the software once it is downloaded
 
-- `localhost:8000/api/upload` — Uploads data to Firestore
-- `localhost:8000/api/get` — Fetches and shows data from Firestore
+### Navigating the Website
 
-You can view the Firestore project by going to:
-[Firestore Console](https://console.cloud.google.com/firestore/databases/-default-/data/panel/transactions/1LpRig3D7NipgPG67P3O?project=rattm-tli)
+From the root of the website, you can sign up/sign in by clicking the respective links on the navbar. Once signed in, you’ll be redirected to the dashboard. From here, you can click on any of the other navbar links (“About”, “Eco-Score Dashboard”, “Transactions”, “Map”) to view the respective pages. You can find a more detailed description of each of the pages under the “Features” section of this README.
 
-## Backend in directory of main repository 
-The backend is in backend/, hosted on heroku. 
-To configure the new backend path: 
-- heroku config:set PYTHONPATH=backend 
-- Procfile edit
-- update requirement.txt
+## **License**
+
+This project is licensed under the MIT License. You are free to use, modify, and distribute this project under the terms of the license. For full details, see the [LICENSE](LICENSE) file in the repository.
+
+---
+
+## **Feedback**
+
+We welcome feedback to help improve this project. Here’s how you can provide feedback:
+
+**GitHub Issues**:  
+   - Navigate to the repository's [Issues section](https://github.com/zzadxz/RATTM/issues).  
+   - Open a new issue describing the feedback or bug.
+   - Include relevant details, such as steps to reproduce the issue or suggestions for improvement.
+
+### Guidelines for Feedback:
+- **What counts as valid feedback**:  
+  - Suggestions for improving features or usability.
+  - Bug reports with clear steps to reproduce the issue.
+  - Requests for new features or functionality.
+
+- **What to expect**:  
+  - We aim to respond to all feedback within 5 business days.
+  - Accepted suggestions may be added to our roadmap or addressed in upcoming updates.
+
+---
+
+## **Contributions**
+
+At this time, we are not accepting contributions to this project. 
+
+### Guidelines:
+- If you encounter an issue or have feedback, please refer to the [Feedback](#feedback) section for instructions on how to share your thoughts.
+- Contributions, including pull requests, will not be reviewed or merged at this time.
+
+Thank you for your understanding!
