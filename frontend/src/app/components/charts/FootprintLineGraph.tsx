@@ -1,3 +1,5 @@
+// frontend/src/app/components/charts/FootprintLineGraph.tsx
+
 "use client";
 
 import { ApexOptions } from "apexcharts";

@@ -1,3 +1,5 @@
+// frontend/src/app/components/CardDataStats.tsx
+
 import React, { ReactNode } from "react";
 
 interface CardDataStatsProps {

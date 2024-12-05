@@ -1,4 +1,5 @@
 // src/app/components/Navbar.tsx
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -69,7 +70,7 @@ const Navbar = () => {
                   onClick={handleSignOut}
                   className="text-sm font-extrabold text-black"
                 >
-                  <Link href="/">SIGN OUT</Link>
+                  SIGN OUT
                 </button>
               ) : (
                 <>

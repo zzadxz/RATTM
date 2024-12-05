@@ -1,3 +1,5 @@
+// frontend/src/app/components/charts/CompaniesPieChart.tsx
+
 import { ApexOptions } from "apexcharts";
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
