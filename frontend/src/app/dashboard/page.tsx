@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_co2_score_change/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_green_transactions/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_green_transaction_change/"),
-          fetch("https://rattm-f300025e7172.herokuapp.com/get_company_tiers/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_company_tiers/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_top_5_companies/")
         ]);
 
