@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_co2_score_change/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_green_transactions/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_green_transaction_change/"),
-          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_company_tiers/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/get_company_tiers/"),
           fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_top_5_companies/")
         ]);
 
@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
 
       <div className="col-span-12 rounded-2xl bg-white pt-5 md:col-span-4 lg:pl-10 lg:pr-10">
         <CardDataStats
-          title="(out of 500)"
+          title="(out of 560)"
           total={totalCO2Score}
           circleColor={circleColor}
           onHoverChange={setIsHovered}

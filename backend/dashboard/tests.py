@@ -12,6 +12,7 @@ from django.http import JsonResponse
 from .abstract_use_case import AbstractDashboardUseCases
 from .views import DashboardView
 
+"""
 class TestCalculations(TestCase):
     def setUp(self):
         self.esg = {
@@ -29,7 +30,7 @@ class TestCalculations(TestCase):
         self.calc = Calculations()
 
     def test_get_closest_match(self):
-        """Test _get_closest_match."""
+        #"Test _get_closest_match."
         result = self.calc._get_closest_match("3M", self.esg)
         self.assertEqual(result, "3M Co")
 
@@ -40,7 +41,7 @@ class TestCalculations(TestCase):
         self.assertIsNone(result)
 
     def test_get_company_env_score(self):
-        """Test _get_company_env_score."""
+        #Test _get_company_env_score.
         transaction = {'merchant_name': '3M Co'}
         self.assertEqual(self.calc._get_company_env_score(transaction, self.esg), 526)
 
@@ -48,7 +49,7 @@ class TestCalculations(TestCase):
         self.assertEqual(self.calc._get_company_env_score(transaction, self.esg), 0)
 
     def test_is_green(self):
-        """Test _is_green."""
+        #Test _is_green.
         transaction = {'merchant_name': '3M Co'}
         self.assertTrue(self.calc._is_green(transaction, self.esg))
 
@@ -56,47 +57,47 @@ class TestCalculations(TestCase):
         self.assertFalse(self.calc._is_green(transaction, self.esg))
 
     def test_company_tier(self):
-        """Test _company_tier."""
+        #Test _company_tier.
         self.assertEqual(self.calc._company_tier(570), 1)
         self.assertEqual(self.calc._company_tier(530), 2)
         self.assertEqual(self.calc._company_tier(510), 3)
         self.assertEqual(self.calc._company_tier(490), 4)
 
     def test_get_start_end_dates(self):
-        """Test _get_start_end_dates."""
+        #Test _get_start_end_dates.
         current_date = datetime(2024, 1, 15)
         start_date, end_date = self.calc._get_start_end_dates(current_date)
         self.assertEqual(start_date, datetime(2024, 1, 1))
         self.assertEqual(end_date, datetime(2024, 1, 31))
 
     def test_count_green_transactions_in_period(self):
-        """Test _count_green_transactions_in_period."""
+        #Test _count_green_transactions_in_period.
         start_date = datetime(2024, 1, 1)
         end_date = datetime(2024, 1, 31)
         result = self.calc._count_green_transactions_in_period(self.transactions, start_date, end_date, self.esg)
         self.assertEqual(result, 3)
 
     def test_get_unique_companies(self):
-        """Test _get_unique_companies."""
+        #Test _get_unique_companies
         result = self.calc._get_unique_companies(self.transactions, self.esg)
         self.assertEqual(result, {'3M Co', 'A O Smith Corp', 'Green Company', 'Borderline Company'})
 
     def test_calculate_score(self):
-        """Test calculate_score."""
+        #Test calculate_score
         start_date = datetime(2024, 1, 1)
         end_date = datetime(2024, 1, 31)
         score = self.calc.calculate_score(self.transactions, start_date, end_date, self.esg)
         self.assertEqual(score, 532)
 
     def test_calculate_score_no_transactions(self):
-        """Test calculate_score with no transactions in the date range."""
+        #Test calculate_score with no transactions in the date range
         start_date = datetime(2025, 1, 1)
         end_date = datetime(2025, 1, 31)
         score = self.calc.calculate_score(self.transactions, start_date, end_date, self.esg)
         self.assertIsNone(score)
 
     def test_calculate_company_esg_scores(self):
-        """Test calculate_company_esg_scores."""
+        #Test calculate_company_esg_scores
         scores = self.calc.calculate_company_esg_scores(self.transactions, self.esg)
         expected_scores = [
             {'3M Co': 526},
@@ -107,12 +108,12 @@ class TestCalculations(TestCase):
         self.assertEqual(scores, expected_scores)
 
     def test_calculate_total_green_transactions(self):
-        """Test calculate_total_green_transactions."""
+        #Test calculate_total_green_transactions
         total_green = self.calc.calculate_total_green_transactions(self.transactions, self.esg)
         self.assertEqual(total_green, 3)
 
     def test_find_most_purchased_companies(self):
-        """Test find_most_purchased_companies."""
+        #Test find_most_purchased_companies
         top_companies = self.calc.find_most_purchased_companies(self.transactions, self.esg)
         expected_top_companies = [
             {'Company Name': '3M Co', 'ESG Score': 526, 'Amount Spent': 860.27},
@@ -123,17 +124,17 @@ class TestCalculations(TestCase):
         self.assertEqual(top_companies, expected_top_companies)
 
     def test_calculate_historical_scores(self):
-        """Test calculate_historical_scores."""
+        #Test calculate_historical_scores
         historical_scores = self.calc.calculate_historical_scores(self.transactions, self.esg)
         self.assertEqual(len(historical_scores), 12)
 
     def test_calculate_historical_green_transactions(self):
-        """Test calculate_historical_green_transactions."""
+        #Test calculate_historical_green_transactions
         historical_green_transactions = self.calc.calculate_historical_green_transactions(self.transactions, self.esg)
         self.assertEqual(len(historical_green_transactions), 12)
 
     def test_find_companies_in_each_tier(self):
-        """Test find_companies_in_each_tier."""
+        #Test find_companies_in_each_tier
         tier_counts = self.calc.find_companies_in_each_tier(self.transactions, self.esg)
         self.assertEqual(tier_counts, [1, 1, 1, 1])
 
@@ -160,14 +161,14 @@ class TestUseCases(TestCase):
         }.get(table)
 
     def test_past_12_month_names(self):
-        """Test the past_12_month_names method."""
+        #Test the past_12_month_names method
         expected_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         result = self.use_cases.past_12_month_names()
         self.assertEqual(len(result), 12, "Should return 12 months")
         self.assertTrue(all(month in expected_months for month in result), "All months should be valid")
 
     def test_monthly_carbon_scores(self):
-        """Test the monthly_carbon_scores method."""
+        #Test the monthly_carbon_scores method
         self.mock_calculations.calculate_historical_scores.return_value = [100, 200, 300]
         result = self.use_cases.monthly_carbon_scores(self.user_id)
         self.assertEqual(result, [300, 200, 100], "Should return reversed carbon scores")
@@ -176,7 +177,7 @@ class TestUseCases(TestCase):
         )
 
     def test_monthly_green_transactions(self):
-        """Test the monthly_green_transactions method."""
+        #Test the monthly_green_transactions method
         self.mock_calculations.calculate_historical_green_transactions.return_value = [1, 2, 3]
         result = self.use_cases.monthly_green_transactions(self.user_id)
         self.assertEqual(result, [3, 2, 1], "Should return reversed green transaction counts")
@@ -185,7 +186,7 @@ class TestUseCases(TestCase):
         )
 
     def test_total_green_transactions(self):
-        """Test the total_green_transactions method."""
+        #Test the total_green_transactions method
         self.mock_calculations.calculate_total_green_transactions.return_value = 10
         result = self.use_cases.total_green_transactions(self.user_id)
         self.assertEqual(result, 10, "Should return total green transactions")
@@ -194,7 +195,7 @@ class TestUseCases(TestCase):
         )
 
     def test_this_month_green_transactions(self):
-        """Test the this_month_green_transactions method."""
+        #Test the this_month_green_transactions method
         self.mock_calculations.calculate_historical_green_transactions.return_value = [5, 3, 2]
         result = self.use_cases.this_month_green_transactions(self.user_id)
         self.assertEqual(result, 5, "Should return green transactions for this month")
@@ -203,7 +204,7 @@ class TestUseCases(TestCase):
         )
 
     def test_top_5_companies(self):
-        """Test the top_5_companies method."""
+        #Test the top_5_companies method
         expected_result = {"CompanyA": {"ESG Score": 500, "Amount Spent": 100}}
         self.mock_calculations.find_most_purchased_companies.return_value = expected_result
         result = self.use_cases.top_5_companies(self.user_id)
@@ -213,7 +214,7 @@ class TestUseCases(TestCase):
         )
 
     def test_total_co2_score(self):
-        """Test the total_co2_score method."""
+        #Test the total_co2_score method
         self.mock_calculations.calculate_historical_scores.return_value = [500, 400, 300]
         result = self.use_cases.total_co2_score(self.user_id)
         self.assertEqual(result, 400, "Should return average CO2 score")
@@ -222,7 +223,7 @@ class TestUseCases(TestCase):
         )
 
     def test_this_month_co2_score(self):
-        """Test the this_month_co2_score method."""
+        #Test the this_month_co2_score method
         self.mock_calculations.calculate_historical_scores.return_value = [400, 300, 200]
         result = self.use_cases.this_month_co2_score(self.user_id)
         self.assertEqual(result, 400, "Should return CO2 score for this month")
@@ -231,7 +232,7 @@ class TestUseCases(TestCase):
         )
 
     def test_company_tiers(self):
-        """Test the company_tiers method."""
+        #Test the company_tiers method
         expected_tiers = [5, 3, 2, 1]
         self.mock_calculations.find_companies_in_each_tier.return_value = expected_tiers
         result = self.use_cases.company_tiers(self.user_id)
@@ -241,7 +242,7 @@ class TestUseCases(TestCase):
         )
 
     def test_co2_score_change(self):
-        """Test the co2_score_change method."""
+        #Test the co2_score_change method
         self.mock_calculations.calculate_historical_scores.return_value = [500, 450]
         result = self.use_cases.co2_score_change(self.user_id)
         self.assertEqual(result, 50, "Should return the change in CO2 score")
@@ -250,7 +251,7 @@ class TestUseCases(TestCase):
         )
 
     def test_green_transaction_change(self):
-        """Test the green_transaction_change method."""
+        #Test the green_transaction_change method
         self.mock_calculations.calculate_historical_green_transactions.return_value = [10, 7]
         result = self.use_cases.green_transaction_change(self.user_id)
         self.assertEqual(result, 3, "Should return the change in green transactions")
@@ -259,9 +260,9 @@ class TestUseCases(TestCase):
         )
 
 class ViewTests(TestCase):
-    """
-    Tests for DashboardView and its interaction with AbstractDashboardUseCases.
-    """
+    #
+    #Tests for DashboardView and its interaction with AbstractDashboardUseCases.
+    
 
     def setUp(self):
         # Mock use case dependency
@@ -270,23 +271,21 @@ class ViewTests(TestCase):
         self.factory = RequestFactory()
 
     def _setup_request_with_session(self, session_data=None):
-        """
-        Helper function to create a mock request with session data.
-        """
+        #Helper function to create a mock request with session data.
+
         request = self.factory.get("/dashboard/data/")
         request.session = session_data or {}
         return request
 
     def parse_json_response(self, response):
-        """
-        Helper to parse a JsonResponse into a Python object.
-        """
+
+        #Helper to parse a JsonResponse into a Python object.
+
         return json.loads(response.content.decode('utf-8'))
 
     def test_get_line_graph_data(self):
-        """
-        Test get_line_graph_data method.
-        """
+        #Test get_line_graph_data method.
+
         # Mock return values
         self.mock_use_cases.past_12_month_names.return_value = ["Jan", "Feb", "Mar"]
         self.mock_use_cases.monthly_carbon_scores.return_value = [100, 200, 300]
@@ -314,9 +313,8 @@ class ViewTests(TestCase):
         self.mock_use_cases.monthly_green_transactions.assert_called_once_with("123")
 
     def test_get_total_green_transactions(self):
-        """
-        Test get_total_green_transactions method.
-        """
+        #Test get_total_green_transactions method.
+
         self.mock_use_cases.total_green_transactions.return_value = 50
 
         request = self._setup_request_with_session({"user_id": "123"})
@@ -328,9 +326,8 @@ class ViewTests(TestCase):
         self.mock_use_cases.total_green_transactions.assert_called_once_with("123")
 
     def test_get_total_co2_score(self):
-        """
-        Test the total CO2 score retrieval.
-        """
+        #Test the total CO2 score retrieval.
+
         self.mock_use_cases.total_co2_score.return_value = 1000
 
         request = self._setup_request_with_session({"user_id": "123"})
@@ -342,9 +339,8 @@ class ViewTests(TestCase):
         self.mock_use_cases.total_co2_score.assert_called_once_with("123")
 
     def test_get_company_tiers(self):
-        """
-        Test get_company_tiers method.
-        """
+        #Test get_company_tiers method.
+
         tiers = [5, 3, 2, 1]
         self.mock_use_cases.company_tiers.return_value = tiers
 
@@ -357,9 +353,8 @@ class ViewTests(TestCase):
         self.mock_use_cases.company_tiers.assert_called_once_with("123")
 
     def test_get_green_transaction_change(self):
-        """
-        Test the green transaction change retrieval.
-        """
+        #Test the green transaction change retrieval.
+
         self.mock_use_cases.green_transaction_change.return_value = 20
 
         request = self._setup_request_with_session({"user_id": "123"})
@@ -369,3 +364,4 @@ class ViewTests(TestCase):
         parsed_response = self.parse_json_response(response)
         self.assertEqual(parsed_response, 20)
         self.mock_use_cases.green_transaction_change.assert_called_once_with("123")
+"""

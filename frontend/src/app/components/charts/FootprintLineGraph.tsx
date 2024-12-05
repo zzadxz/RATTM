@@ -189,7 +189,6 @@ const FootprintLineGraph: React.FC = () => {
                 <p className="font-semibold" style={{ color: color }}>
                   {name}
                 </p>
-                <p className="text-sm font-medium">10/01/2023 - 10/01/2024</p>
               </div>
             </div>
           ))}

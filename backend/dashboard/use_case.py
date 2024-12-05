@@ -16,7 +16,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         
         # Get the current month index (Jan=0, Dec=11)
-        current_month_index = datetime.now().month - 2
+        current_month_index = 11
         
         # Re-arrange the months so it starts from the current month
         reordered_months = months[current_month_index:] + months[:current_month_index]
@@ -28,7 +28,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Returns list of length 12 of carbon scores each month.
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         # reverse the list so that the most recent data point is the last element
         return self.calculations.calculate_historical_scores(user_transactions, esg_data)[::-1]
@@ -38,7 +38,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Returns list of length 12 of # of green transactions each month.
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         return self.calculations.calculate_historical_green_transactions(user_transactions, esg_data)[::-1]
         
@@ -47,7 +47,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Return total number of green transactions this month. 
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         return self.calculations.calculate_total_green_transactions(user_transactions, esg_data)
         
@@ -56,7 +56,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Return total number of green transactions this month. 
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         return self.calculations.calculate_historical_green_transactions(user_transactions, esg_data)[0]
         
@@ -65,7 +65,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Returns in dict format:  { 'Company Name' : str, 'ESG Score' : int, 'Amount Spent' : int }
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         return self.calculations.find_most_purchased_companies(user_transactions, esg_data)
 
@@ -74,7 +74,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Returns CO2 score for the past year.
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         monthly_scores = [score for score in self.calculations.calculate_historical_scores(user_transactions, esg_data)
                             if score is not None]
@@ -85,7 +85,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Returns CO2 score for this month.
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         return self.calculations.calculate_historical_scores(user_transactions, esg_data)[0]
 
@@ -94,7 +94,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Returns list of length 4, where the first index is the number of companies in the highest tier.
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         return self.calculations.find_companies_in_each_tier(user_transactions, esg_data)
 
@@ -103,7 +103,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Returns the difference between last month and this month's CO2 score.
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         monthly_scores = self.calculations.calculate_historical_scores(user_transactions, esg_data)
 
@@ -116,7 +116,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         """
         Returns the difference between last month and this month's # of green transactions.
         """
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         monthly_green_transactions = self.calculations.calculate_historical_green_transactions(user_transactions, esg_data)
         if monthly_green_transactions[0] is None or monthly_green_transactions[1] is None:

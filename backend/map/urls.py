@@ -7,7 +7,7 @@ from utils.firebase_data_access_implementation import FirebaseDataAccess
 
 map_view = MapView(
             MapUseCase(
-               FirebaseDataAccess()
+               FirebaseDataAccess
             )
         )
 

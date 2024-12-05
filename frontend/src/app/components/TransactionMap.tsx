@@ -16,10 +16,10 @@ const BRANDS_WITH_LOGOS = [
 
 const colorMap: { [key: number]: { textColor: string; description: string } } =
   {
-    1: { textColor: "red", description: "Awful" },
-    2: { textColor: "orange", description: "Pretty Bad" },
-    3: { textColor: "gold", description: "Decent" },
-    4: { textColor: "green", description: "Great" },
+    1: { textColor: "#FE5620", description: "Not Great" },
+    2: { textColor: "#FEC005", description: "Okay" },
+    3: { textColor: "#CCDA38", description: "Good" },
+    4: { textColor: "#4BAE50", description: "Great" },
   };
 
 interface MapPoint {
@@ -49,14 +49,17 @@ const TransactionMap: React.FC = () => {
       const map = new mapboxgl.Map({
         container: mapContainer.current || "",
         style: "mapbox://styles/mapbox/streets-v11",
-        center: [-79.390889, 43.667331],
-        zoom: 3,
+        center: [-97.390889, 35.667331],
+        zoom: 5,
       });
 
       data.forEach(
         ({ location, merchant_name, merchant_percentile }: MapPoint) => {
           const [latitude, longitude] = location;
-          const { textColor, description } = colorMap[merchant_percentile];
+          const { textColor, description } = colorMap[merchant_percentile] ?? {
+            textColor: "gray",
+            description: "Unknown",
+          };
 
           const el = document.createElement("div");
           if (BRANDS_WITH_LOGOS.includes(merchant_name.toLowerCase())) {

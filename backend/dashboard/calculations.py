@@ -64,7 +64,7 @@ class Calculations:
         """
         return sum(
             1 for transaction in transactions
-            if start_date <= datetime.strptime(transaction['time_completed'], "%Y-%m-%dT%H:%M:%S.%fZ") <= end_date
+            if start_date <= datetime.strptime(transaction['time_completed'], "%Y-%jT%H:%M:%S.%fZ") <= end_date
             and self._is_green(transaction, ESG_scores)
         )
 
@@ -88,7 +88,7 @@ class Calculations:
         """
         lst_of_transactions = []
         for transaction in transactions:
-            transaction_date = datetime.strptime(transaction['time_completed'], "%Y-%m-%dT%H:%M:%S.%fZ")
+            transaction_date = datetime.strptime(transaction['time_completed'], "%Y-%jT%H:%M:%S.%fZ")
             if start <= transaction_date <= end:
                 lst_of_transactions.append(transaction)
 

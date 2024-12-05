@@ -5,6 +5,7 @@ import "@/css/satoshi.css";
 import "@/css/style.css";
 import React from "react";
 import Navbar from "@/app/components/Navbar";
+import Head from "next/head";
 
 export default function RootLayout({
   children,
@@ -13,6 +14,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <title>Cash App Eco-Score</title>
+        <meta name="description" content="Calculate and improve your Eco-Score with RATTM's innovative tool." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <body suppressHydrationWarning={true}>
         <div className="dark:bg-boxdark-2 dark:text-bodydark">
           <div className="relative flex flex-1 flex-col">

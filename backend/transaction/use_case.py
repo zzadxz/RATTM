@@ -6,6 +6,7 @@ import os
 from .abstract_use_case import AbstractTransactionUseCase
 from utils.abstract_data_access import AbstractDataAccess
 from .calculations import Calculations
+from datetime import datetime, timedelta
 
 class TransactionUseCase(AbstractTransactionUseCase):
     def __init__(self, calculations: Calculations, data_access: AbstractDataAccess):
@@ -167,11 +168,30 @@ class TransactionUseCase(AbstractTransactionUseCase):
     # Get data from Firestore
     # endpoint: /transaction/get
     def get_data_from_firestore_use_case(self, user_id: str):
-        user_transactions = self.data_access.get_table_from_database('Users')[user_id]['transactions']
+        user_transactions = self.data_access.get_table_from_database('users')[user_id]['transactions']
         esg_data = self.data_access.get_table_from_database('esg')
         for t in user_transactions:
             score = self.calculations.get_company_env_score(t, esg_data)
+            t["time_completed"] = self.convert_day_of_year_to_iso(t["time_completed"])
             t['esg_score'] = round(score, 2) if score != 0 else "N/A"
         return user_transactions
 
+    def convert_day_of_year_to_iso(self, date_string: str) -> str:
+        try:
+            # Parse the format "YYYY-DDDTHH:MM:SS.SSSSSSZ"
+            year, day_of_year, time_part = (
+                date_string.split("T")[0].split("-")[0],
+                date_string.split("-")[1][:3],
+                date_string.split("T")[1][:8],  # Keep only HH:MM:SS from the time part
+            )
+
+            # Convert day-of-year to date
+            base_date = datetime(int(year), 1, 1) + timedelta(days=int(day_of_year) - 1)
+
+            # Combine the date and time part in "YYYY-MM-DDTHH:MM:SS" format
+            formatted_date = f"{base_date.strftime('%Y-%m-%d')}T{time_part}"
+            return formatted_date
+        except Exception as e:
+            print(f"Error parsing date: {date_string}. Error: {e}")
+            return "Invalid Date"
     

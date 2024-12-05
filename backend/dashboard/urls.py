@@ -6,7 +6,7 @@ from utils.firebase_data_access_implementation import FirebaseDataAccess
 # This is a builder for dashboard
 views = DashboardView(
             DashboardUseCases(
-                Calculations(), FirebaseDataAccess()
+                Calculations(), FirebaseDataAccess
             )
         )
 urlpatterns = [

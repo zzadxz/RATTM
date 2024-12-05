@@ -28,4 +28,5 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('map/', include('map.urls')),
+    path('user/', include('user.urls')),
 ]
