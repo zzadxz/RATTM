@@ -16,7 +16,7 @@ class DashboardUseCases(AbstractDashboardUseCases):
         months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         
         # Get the current month index (Jan=0, Dec=11)
-        current_month_index = datetime.now().month - 2
+        current_month_index = 11
         
         # Re-arrange the months so it starts from the current month
         reordered_months = months[current_month_index:] + months[:current_month_index]

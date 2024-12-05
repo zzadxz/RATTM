@@ -28,7 +28,7 @@ const FootprintLineGraph: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://rattm-f300025e7172.herokuapp.com/dashboard/get_line_graph_data/"
+          "http://127.0.0.1:8000/dashboard/get_line_graph_data/"
         );
         const data = await response.json();
 
@@ -189,7 +189,6 @@ const FootprintLineGraph: React.FC = () => {
                 <p className="font-semibold" style={{ color: color }}>
                   {name}
                 </p>
-                <p className="text-sm font-medium">10/01/2023 - 10/01/2024</p>
               </div>
             </div>
           ))}

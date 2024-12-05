@@ -35,21 +35,21 @@ const Map = () => {
               performance:
             </p>
             <p className="mb-3">
-              <span className="font-bold text-green-500">Great</span>: Companies
+              <span className="font-bold text-[#4BAE50]">Great</span>: Companies
               in the top 25% of ESG ratings, showcasing industry-leading
               sustainability and governance practices.
             </p>
             <p className="mb-3">
-              <span className="font-bold text-[#f9d849]">Good</span>: Companies
+              <span className="font-bold text-[#CCDA38]">Good</span>: Companies
               in the 25-50% range, performing above average but with room for
               improvement.
             </p>
             <p className="mb-3">
-              <span className="font-bold text-orange-500">Okay</span>: Companies
+              <span className="font-bold text-[#FEC005]">Okay</span>: Companies
               in the 50-75% range, demonstrating average ESG performance.
             </p>
             <p className="mb-3">
-              <span className="font-bold text-orange-500">Not Great</span>:
+              <span className="font-bold text-[#FE5620]">Not Great</span>:
               Companies in the bottom 25%, indicating significant areas for
               improvement in their ESG practices.
             </p>

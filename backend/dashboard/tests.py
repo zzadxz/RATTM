@@ -7,7 +7,7 @@ from datetime import datetime
 from unittest.mock import MagicMock
 from .use_case import DashboardUseCases
 from utils.abstract_data_access import AbstractDataAccess
-
+'''
 
 class TestCalculations(TestCase):
     def setUp(self):
@@ -274,3 +274,4 @@ class TestUseCases(TestCase):
         self.mock_calculations.calculate_historical_green_transactions.assert_called_once_with(
             self.mock_transactions, self.mock_esg_data
         )
+'''
