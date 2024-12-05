@@ -21,10 +21,11 @@ export default function Home() {
   if (loading) return null;
 
   return (
+    <>
     <div className="ml-20 mr-20 mt-4 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-12 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
       <div id="left-col" className="rounded-2xl md:col-span-6">
         <Image
-          src="/images/logo/rootpage-logo.png"
+          src="/images/logo/rootpage-logo.svg"
           alt="Eco-Score by RATTM"
           width={872}
           height={774}
@@ -37,9 +38,9 @@ export default function Home() {
       >
         <div className="max-w-sm rounded-lg bg-green-100 p-6 text-center shadow-md w-full">
           <h1 className="text-xl font-bold text-gray-900">
-            Welcome to RATTM&apos;s
+            Welcome to Cash App&apos;s
             <br />
-            Eco-Score calculator
+            Eco-Score Calculator
           </h1>
           <p className="mt-2 text-gray-700">Improve your Eco-Score today!</p>
         </div>
@@ -58,5 +59,6 @@ export default function Home() {
         )}
       </div>
     </div>
+    </>
   );
 }

@@ -36,7 +36,7 @@ const TransactionMap: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        "http://127.0.0.1:8000/map/get_map_data/",
+        "https://rattm-f300025e7172.herokuapp.com/map/get_map_data/",
         {
           method: "GET",
           headers: {

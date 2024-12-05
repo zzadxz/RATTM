@@ -44,13 +44,13 @@ const Dashboard: React.FC = () => {
           companyTiersResponse,
           topCompaniesResponse
         ] = await Promise.all([
-          fetch("http://127.0.0.1:8000/dashboard/get_total_co2_score/"),
-          fetch("http://127.0.0.1:8000/dashboard/get_this_month_co2_score/"),
-          fetch("http://127.0.0.1:8000/dashboard/get_co2_score_change/"),
-          fetch("http://127.0.0.1:8000/dashboard/get_this_month_green_transactions/"),
-          fetch("http://127.0.0.1:8000/dashboard/get_green_transaction_change/"),
-          fetch("http://127.0.0.1:8000/dashboard/get_company_tiers/"),
-          fetch("http://127.0.0.1:8000/dashboard/get_top_5_companies/")
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_total_co2_score/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_co2_score/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_co2_score_change/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_this_month_green_transactions/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_green_transaction_change/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/get_company_tiers/"),
+          fetch("https://rattm-f300025e7172.herokuapp.com/dashboard/get_top_5_companies/")
         ]);
 
         const [totalCO2Data, monthlyCO2Data, co2ChangeData, greenTransactionsData, greenTransactionsChangeData, companyTiersData, topCompaniesData] = 

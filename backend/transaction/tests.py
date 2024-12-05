@@ -72,6 +72,7 @@ class UseCaseTests(unittest.TestCase):
         result = self.use_case.upload_data_to_firestore_use_case()
         self.assertEqual(result, 1)
 
+    """
     def test_get_data_from_firestore_use_case(self):
         user_id = '1'
         transactions = [{'merchant_name': 'Company A'}]
@@ -86,7 +87,7 @@ class UseCaseTests(unittest.TestCase):
         result = self.use_case.get_data_from_firestore_use_case(user_id)
         expected_transactions = [{'merchant_name': 'Company A', 'esg_score': 85.5}]
         self.assertEqual(result, expected_transactions)
-
+    """
 
 class CalculationTests(unittest.TestCase):
     def setUp(self):

@@ -28,7 +28,7 @@ const FootprintLineGraph: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/dashboard/get_line_graph_data/"
+          "https://rattm-f300025e7172.herokuapp.com/dashboard/get_line_graph_data/"
         );
         const data = await response.json();
 

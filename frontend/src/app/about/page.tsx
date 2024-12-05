@@ -33,7 +33,7 @@ export default function About() {
         <p className="mt-2 text-lg font-medium text-black">
           Our algorithm prioritizes simplicity and transparency and provides you
           with a quick look at how eco-friendly your purchases are. By
-          normalizing the Environmental Impact Score (EIS) of common companies
+          normalizing the Environmental, Social, and Governance (ESG) score of common companies
           and tying it directly to spending, we give you a straightforward,
           actionable score that reflects your individual impact. It keeps you
           informed about how your purchases affect the environment without
